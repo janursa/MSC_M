@@ -1,14 +1,21 @@
 observations = {
-	'studies':['Saldana_2019_part1','Valles_2020','Chen_2018'],
+	'studies':['Chen_2018'],
+	# 'studies':['Saldana_2019','Valles_2020_part1','Chen_2018'],
 	'Chen_2018':{# the effect of Il10 on ALP and ARS
-		'exposure_period':None, #when this is none, the cells are exposed to the stimuli the whole time
+		'exposure_period':9*24, #when this is none, the cells are exposed to the stimuli the whole time
 		'culture_volume':None, #ml
 		'experiment_period':9, # days
+		# 'measurement_scheme':{
+		# 	'ALP': 3, #day
+		# 	'ARS': 9
+		# },
 		'measurement_scheme':{
-			'ALP': 3, #day
+			# 'ALP': 3, #day
 			'ARS': 9
 		},
-		'IDs': ['ctr','IL10_.01','IL10_.1','IL10_1','IL10_10','IL10_100'],
+		# 'IDs': ['ctr','IL10_.01','IL10_.1','IL10_1','IL10_10','IL10_100'],
+		'IDs': ['ctr','IL10_.01','IL10_.1','IL10_100'],
+		# 'IDs': ['ctr'],
 		'ctr':{
 			'inputs':{
 						"IL10": 0
@@ -75,7 +82,7 @@ observations = {
 		},
 		'IL10_10':{
 			'inputs':{
-						"IL10": 1
+						"IL10": 10
 					},
 			"expectations": {			
 				"ALP": {
@@ -91,7 +98,7 @@ observations = {
 		},
 		'IL10_100':{
 			'inputs':{
-						"IL10": 1
+						"IL10": 100
 					},
 			"expectations": {			
 				"ALP": {
@@ -106,7 +113,7 @@ observations = {
 
 		},
 	},
-	'Saldana_2019_part1':{# the effect of TNF-a and IL10 on ALP and ARS
+	'Valles_2020_part1':{# the effect of TNF-a and IL10 on ALP and ARS
 		'exposure_period':48, #hours
 		'culture_volume':2, #ml
 		'experiment_period':21, # days
@@ -115,7 +122,8 @@ observations = {
 			'ARS': 21
 		},
 		
-		'IDs': ['ctr','TNFa_.1','TNFa_1','TNFa_10','IL10_.1','IL10_1','IL10_10'],
+		# 'IDs': ['ctr','TNFa_.1','TNFa_1','TNFa_10','IL10_.1','IL10_1','IL10_10'],
+		'IDs': ['ctr','IL10_.1','IL10_1','IL10_10'],
 		'ctr':{
 			'inputs':{
 						"TNFa": 0, #ng/ml
@@ -237,7 +245,7 @@ observations = {
 		}
 
 	},
-	'Saldana_2019':{
+	'Saldana_2019':{ # the effect of TNF-a and IL10 on IL6 and PGE2
 		"IDs": ['MSC_0_0','MSC_0_.1','MSC_0_1','MSC_1_0','MSC_1_.1','MSC_1_1','MSC_10_0','MSC_10_.1','MSC_10_1'],
 		"MSC_0_0": {
 				"setup": {
@@ -366,8 +374,6 @@ observations = {
 				}
 			}
 	},
-
-	
 
 	"scale": 1,
 }
