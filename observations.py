@@ -1,20 +1,16 @@
 observations = {
-	'studies':['Chen_2018'],
-	# 'studies':['Saldana_2019','Valles_2020_part1','Chen_2018'],
+	'studies':['Qiao_2021'],
+	# 'studies':['Saldana_2019','Valles_2020_part1','Chen_2018','Qiao_2021'],
 	'Chen_2018':{# the effect of Il10 on ALP and ARS
-		'exposure_period':9*24, #when this is none, the cells are exposed to the stimuli the whole time
+		'exposure_time':9*24, #when this is none, the cells are exposed to the stimuli the whole time
 		'culture_volume':None, #ml
 		'experiment_period':9, # days
-		# 'measurement_scheme':{
-		# 	'ALP': 3, #day
-		# 	'ARS': 9
-		# },
 		'measurement_scheme':{
-			# 'ALP': 3, #day
-			'ARS': 9
+			'ALP': 3*24, #day
+			'ARS': 9*24
 		},
-		# 'IDs': ['ctr','IL10_.01','IL10_.1','IL10_1','IL10_10','IL10_100'],
-		'IDs': ['ctr','IL10_.01','IL10_.1','IL10_100'],
+		'IDs': ['ctr','IL10_.01','IL10_.1','IL10_1','IL10_10','IL10_100'],
+		# 'IDs': ['ctr','IL10_.1','IL10_1','IL10_100'],
 		# 'IDs': ['ctr'],
 		'ctr':{
 			'inputs':{
@@ -114,12 +110,12 @@ observations = {
 		},
 	},
 	'Valles_2020_part1':{# the effect of TNF-a and IL10 on ALP and ARS
-		'exposure_period':48, #hours
+		'exposure_time':48, #hours
 		'culture_volume':2, #ml
 		'experiment_period':21, # days
 		'measurement_scheme':{
-			'ALP': 14, #day
-			'ARS': 21
+			'ALP': 14*24, #day
+			'ARS': 21*24
 		},
 		
 		# 'IDs': ['ctr','TNFa_.1','TNFa_1','TNFa_10','IL10_.1','IL10_1','IL10_10'],
@@ -373,6 +369,63 @@ observations = {
 					"PGE2": 0.175
 				}
 			}
+	},
+	'Qiao_2021':{# the effect of IL8 on ALP
+		'exposure_time':9*24, 
+		'culture_volume':None, #ml
+		# 'experiment_period':9, # days
+		'measurement_scheme':{
+			'ALP': 9*24 #day
+		},
+		'IDs': ['ctr','IL8_1','IL8_10','IL8_100'],
+		'ctr':{
+			'inputs':{
+						"IL8": 0
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':12, 
+					'std': 5
+				}
+			}
+
+		},
+		'IL8_1':{
+			'inputs':{
+						"IL8": 1
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':21, 
+					'std': 5
+				}
+			}
+
+		},
+		'IL8_10':{
+			'inputs':{
+						"IL8": 10
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':45, 
+					'std': 15
+				}
+			}
+
+		},
+		'IL8_100':{
+			'inputs':{
+						"IL8": 100
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':115, 
+					'std': 10
+				}
+			}
+
+		}
 	},
 
 	"scale": 1,

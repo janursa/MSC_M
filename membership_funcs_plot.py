@@ -56,6 +56,44 @@ def plot_IL6():
     # ax.legend(loc=2, fontsize=16)
     # return fig,ax,'BMP2',tags_x_locs,tags
     return fig,ax,'IL6',[],[]
+def plot_IL10(above_48h):
+    fig,ax = plt.subplots(figsize=(5.5, 3))
+    range = np.arange(0, 100, .01)
+    #// Generate fuzzy membership functions
+    IL10_intervals_below_48h= [0,0.01,10,50,100]
+    IL10_intervals_above_48h= [0,0.01,0.1,10,100]
+    if above_48h:
+        IL10_intervals = IL10_intervals_above_48h
+    else:
+        IL10_intervals = IL10_intervals_below_48h
+    # print(IL10_intervals)
+    Neg = fuzz.trimf(range, [IL10_intervals[0], IL10_intervals[0],IL10_intervals[1]])
+    Low = fuzz.trimf(range, [IL10_intervals[0], IL10_intervals[1], IL10_intervals[2]])
+    Stim = fuzz.trimf(range, [IL10_intervals[1], IL10_intervals[2], IL10_intervals[3]])
+    Det = fuzz.trapmf(range, [IL10_intervals[2], IL10_intervals[3], IL10_intervals[-1], IL10_intervals[-1]])
+    
+    # Visualize these universes and membership functions
+    line1, = ax.plot(range, Neg, colors['neg'], linewidth=line_width, label='Neg',linestyle=linestyles['neg'])
+    line2, = ax.plot(range, Low,colors['low'] , linewidth=line_width, label='Low',linestyle=linestyles['low'])
+    line2.set_dashes([1, 1, 1, 1])
+    line3, = ax.plot(range, Stim, colors['medium'], linewidth=line_width, label='Stim',linestyle=linestyles['medium'])
+    line3.set_dashes([2, 1, 2, 1])
+    line4, = ax.plot(range, Det, colors['high'], linewidth=line_width, label='Det',linestyle=linestyles['high'])
+    line4.set_dashes([3, 1, 3, 1])
+
+    ax.set_title('IL10',fontname = 'Times New Roman Bold',size = 17)
+    fake_labels = [0,5,10,20,100]
+    ax.set_xticks(fake_labels) 
+    # ax.set_xticklabels([0,.5,1])
+    # ax.set_yticks([0,0.5,1])
+    # ax.set_yticklabels([0,0.5,1])
+    ax.set_xlabel('Membership ',**axis_font)
+
+
+    # tags = ['Negligible','Stimulatory','High','Destructive']
+    ax.legend(bbox_to_anchor=(1, 1),loc = 'upper right', fontsize=16)
+    # return fig,ax,'BMP2',tags_x_locs,tags
+    return fig,ax,'IL10',[],[]
 
 def post(ax,name,tags_x_locs,tags):
     """
@@ -124,9 +162,7 @@ def plot_legends():
     # ax.set_ylabel('Membership',**axis_font)
     ax.set_xlabel('Concentration (mM)',**axis_font)
     return fig,ax,'legends'
-## plot IL6
-fig,ax,name,tags_x_locs,tags = plot_IL6()
-post( ax,name,tags_x_locs,tags)
+
 
 # fig,ax,name = plot_legends()
 
@@ -134,9 +170,16 @@ def export_legend(axes):
     figLegend = pylab.figure(figsize = (1.5,1.3))
     pylab.figlegend(*axes.get_legend_handles_labels(), loc = 'upper left')
     figLegend.savefig(os.path.join(output_dir,'legend.svg'))
-export_legend(ax)
 
 
 
 
+if __name__ == '__main__':
+    ## plot IL6
+    # fig,ax,name,tags_x_locs,tags = plot_IL6()
+    # post( ax,name,tags_x_locs,tags)
+    ## plot IL10
+    fig,ax,name,tags_x_locs,tags = plot_IL10(above_48h=True)
+    post( ax,name,tags_x_locs,tags)
+    export_legend(ax)
 

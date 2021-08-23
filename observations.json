@@ -1,18 +1,21 @@
 {
     "studies": [
-        "Chen_2018"
+        "Qiao_2021"
     ],
     "Chen_2018": {
-        "exposure_period": 216,
+        "exposure_time": 216,
         "culture_volume": null,
         "experiment_period": 9,
         "measurement_scheme": {
-            "ARS": 9
+            "ALP": 72,
+            "ARS": 216
         },
         "IDs": [
             "ctr",
             "IL10_.01",
             "IL10_.1",
+            "IL10_1",
+            "IL10_10",
             "IL10_100"
         ],
         "ctr": {
@@ -107,12 +110,12 @@
         }
     },
     "Valles_2020_part1": {
-        "exposure_period": 48,
+        "exposure_time": 48,
         "culture_volume": 2,
         "experiment_period": 21,
         "measurement_scheme": {
-            "ALP": 14,
-            "ARS": 21
+            "ALP": 336,
+            "ARS": 504
         },
         "IDs": [
             "ctr",
@@ -360,6 +363,63 @@
             "expectations": {
                 "IL6": 1.15,
                 "PGE2": 0.175
+            }
+        }
+    },
+    "Qiao_2021": {
+        "exposure_time": 216,
+        "culture_volume": null,
+        "measurement_scheme": {
+            "ALP": 216
+        },
+        "IDs": [
+            "ctr",
+            "IL8_1",
+            "IL8_10",
+            "IL8_100"
+        ],
+        "ctr": {
+            "inputs": {
+                "IL8": 0
+            },
+            "expectations": {
+                "ALP": {
+                    "mean": 12,
+                    "std": 5
+                }
+            }
+        },
+        "IL8_1": {
+            "inputs": {
+                "IL8": 1
+            },
+            "expectations": {
+                "ALP": {
+                    "mean": 21,
+                    "std": 5
+                }
+            }
+        },
+        "IL8_10": {
+            "inputs": {
+                "IL8": 10
+            },
+            "expectations": {
+                "ALP": {
+                    "mean": 45,
+                    "std": 15
+                }
+            }
+        },
+        "IL8_100": {
+            "inputs": {
+                "IL8": 100
+            },
+            "expectations": {
+                "ALP": {
+                    "mean": 115,
+                    "std": 10
+                }
             }
         }
     },
