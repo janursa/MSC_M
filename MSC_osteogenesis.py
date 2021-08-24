@@ -25,7 +25,8 @@ free_params = {
     'ALP_maturity': [1,100], #correlation coeff between ALP and maturity
     'ARS_maturity': [1,100], #correlation coeff between ARS and maturity
     'a_Chen_2018': [0,100], #correlation coeff for the given study
-    'a_Valles_2020_part1':[0,100], #correlation coeff for the given study
+    'a_Valles_2020_IL10':[0,100], #correlation coeff for the given study
+    'a_Valles_2020_TNFa':[0,100], #correlation coeff for the given study
     'a_Qiao_2021':[0,100] #correlation coeff for the given study
 }
 

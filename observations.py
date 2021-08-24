@@ -1,6 +1,6 @@
 observations = {
 	'studies':['Qiao_2021'],
-	# 'studies':['Saldana_2019','Valles_2020_part1','Chen_2018','Qiao_2021'],
+	# 'studies':['Saldana_2019','Valles_2020_IL10','Valles_2020_TNFa','Chen_2018','Qiao_2021'],
 	'Chen_2018':{# the effect of Il10 on ALP and ARS
 		'exposure_time':9*24, #when this is none, the cells are exposed to the stimuli the whole time
 		'culture_volume':None, #ml
@@ -109,7 +109,7 @@ observations = {
 
 		},
 	},
-	'Valles_2020_part1':{# the effect of TNF-a and IL10 on ALP and ARS
+	'Valles_2020_IL10':{# the effect of IL10 on ALP and ARS
 		'exposure_time':48, #hours
 		'culture_volume':2, #ml
 		'experiment_period':21, # days
@@ -117,12 +117,9 @@ observations = {
 			'ALP': 14*24, #day
 			'ARS': 21*24
 		},
-		
-		# 'IDs': ['ctr','TNFa_.1','TNFa_1','TNFa_10','IL10_.1','IL10_1','IL10_10'],
 		'IDs': ['ctr','IL10_.1','IL10_1','IL10_10'],
 		'ctr':{
 			'inputs':{
-						"TNFa": 0, #ng/ml
 						"IL10": 0
 					},
 			"expectations": {			
@@ -137,60 +134,8 @@ observations = {
 			}
 
 		},
-		'TNFa_.1':{
-			'inputs':{
-						"TNFa": .1, #ng/ml
-						"IL10": 0
-					},
-			"expectations": {			
-				"ALP": {
-					'mean':180, 
-					'std': 45
-				},
-				"ARS": {
-					'mean':570, 
-					'std': 55
-				},
-			}
-
-		},
-		'TNFa_1':{
-			'inputs':{
-						"TNFa": 1, #ng/ml
-						"IL10": 0
-					},
-			"expectations": {			
-				"ALP": {
-					'mean':300, 
-					'std': 45
-				},
-				"ARS": {
-					'mean':670, 
-					'std': 50
-				},
-			}
-
-		},
-		'TNFa_10':{
-			'inputs':{
-						"TNFa": 10, #ng/ml
-						"IL10": 0
-					},
-			"expectations": {			
-				"ALP": {
-					'mean':200, 
-					'std': 50
-				},
-				"ARS": {
-					'mean':520, 
-					'std': 50
-				},
-			}
-
-		},
 		'IL10_.1':{
 			'inputs':{
-						"TNFa": 0, #ng/ml
 						"IL10": 0.1
 					},
 			"expectations": {			
@@ -207,7 +152,6 @@ observations = {
 		},
 		'IL10_1':{
 			'inputs':{
-						"TNFa": 0, #ng/ml
 						"IL10": 1
 					},
 			"expectations": {			
@@ -224,7 +168,6 @@ observations = {
 		},
 		'IL10_10':{
 			'inputs':{
-						"TNFa": 0, #ng/ml
 						"IL10": 10
 					},
 			"expectations": {			
@@ -240,6 +183,80 @@ observations = {
 
 		}
 
+	},
+	'Valles_2020_TNFa':{# the effect of TNF-a on ALP and ARS
+		'exposure_time':48, #hours
+		'culture_volume':2, #ml
+		'experiment_period':21, # days
+		'measurement_scheme':{
+			'ALP': 14*24, #day
+			'ARS': 21*24
+		},
+		'IDs': ['ctr','TNFa_.1','TNFa_1','TNFa_10'],
+		'ctr':{
+			'inputs':{
+						"TNFa": 0 #ng/ml
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':200, 
+					'std': 40
+				},
+				"ARS": {
+					'mean':550, 
+					'std': 50
+				},
+			}
+
+		},
+		'TNFa_.1':{
+			'inputs':{
+						"TNFa": .1 #ng/ml
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':180, 
+					'std': 45
+				},
+				"ARS": {
+					'mean':570, 
+					'std': 55
+				},
+			}
+
+		},
+		'TNFa_1':{
+			'inputs':{
+						"TNFa": 1 #ng/ml
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':300, 
+					'std': 45
+				},
+				"ARS": {
+					'mean':670, 
+					'std': 50
+				},
+			}
+
+		},
+		'TNFa_10':{
+			'inputs':{
+						"TNFa": 10 #ng/ml
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':200, 
+					'std': 50
+				},
+				"ARS": {
+					'mean':520, 
+					'std': 50
+				},
+			}
+
+		}
 	},
 	'Saldana_2019':{ # the effect of TNF-a and IL10 on IL6 and PGE2
 		"IDs": ['MSC_0_0','MSC_0_.1','MSC_0_1','MSC_1_0','MSC_1_.1','MSC_1_1','MSC_10_0','MSC_10_.1','MSC_10_1'],

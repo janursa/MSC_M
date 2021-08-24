@@ -96,9 +96,6 @@ class Fuzzy_IL10(Fuzzy_controller):
         # for item in self.consequents:
         #     item.view(sim=self.controler)
         outputs = self.controler.output
-#         print(outputs)
-        # outputs['early_diff'] = outputs['diff'] 
-        # outputs['late_diff'] = outputs['diff'] 
         return outputs
 class Fuzzy_IL8(Fuzzy_controller):
     def __init__(self,params):
