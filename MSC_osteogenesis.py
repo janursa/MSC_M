@@ -8,34 +8,110 @@ from skfuzzy import control as ctrl
 import tellurium as te
 import json
 from observations import observations
-from fuzzy_controllers import Fuzzy_IL10, Fuzzy_IL8
+from fuzzy_controllers import Fuzzy_IL10, Fuzzy_IL8,Fuzzy_TNFa,Fuzzy_Mg,Fuzzy_IL1b
+all_params = {
+    'ALP_M_n':1, # n in the equation ALP = a*(M^n + ALP_0)
+    'ALP_0':.2, # the default value of ALP when maturity is zero
+    'OC_0':.2, # the default value of OC when maturity is zero
+    'ARS_0':.2, # the default value of ARS when maturity is zero
+    'Mg_S':5, # stimulatory conc of Mg
+    'Mg_D':30, # detrimental conc of Mg
+    'IL10_d':50, # detrimental threshold for >48 exposure
+    'IL1b_d':50, # detrimental threshold IL1b
+    'IL8_M':25, # medium threshold for IL8
+    'maturity_t':.5, # early maturity threshold
+    'early_diff_L':.25, # center of low membership function
+    'early_diff_H':.75, # center of high membership function
+    'late_diff_L':.25, # center of low membership function
+    'late_diff_H':.75, # center of high membership function
+    'a_early_diff_u':2, # scale factor, upregulatory
+    'a_early_diff_d':2, # scale factor, downregulatory
+    'a_late_diff_u':2, # scale factor
+    'a_late_diff_d':2, # scale factor
+    'diff_time':30*24, # days required for full differentiation
+
+    'a_Chen_2018_maturity_t':.5,
+    'a_Chen_2018_ALP':2,
+    'a_Chen_2018_ARS':2,
+
+    'a_Valles_2020_IL10_maturity_t':.5, 
+    'a_Valles_2020_IL10_ALP':2,
+    'a_Valles_2020_IL10_ARS':2,
+    
+    'a_Valles_2020_TNFa_maturity_t':.5,
+    'a_Valles_2020_TNFa_ALP':2,
+    'a_Valles_2020_TNFa_ARS':2,
+
+    'a_Qiao_2021_IL8_maturity_t':.5, 
+    'a_Qiao_2021_IL8_ALP':2, 
+    'a_Qiao_2021_IL1b_maturity_t':1, 
+    'a_Qiao_2021_IL1b_ALP':2, 
+
+    'a_Ber_2016_maturity_t':.5, # correction coeff of maturity threshold for the given study considering that cells are inherintly different
+    'a_Ber_2016_ALP':.5, # correlation ALP to maturity
+    'a_Ber_2016_OC':.5, 
+
+    'a_Qiao_2021_Mg_maturity_t':.5,
+    'a_Qiao_2021_Mg_ALP':10,
+    'a_Qiao_2021_Mg_OC':.2,
+}
 free_params = {
-    'IL10_det':[10,100], # detrimental threshold for >48 exposure
-    'IL8_M':[0,50], # medium threshold for IL8
-    'maturity_t':[0,1], # early maturity threshold
-    'early_diff_L':[0.05,0.45], # center of low membership function
-    'early_diff_H':[0.55,0.95], # center of high membership function
-    'late_diff_L':[0.05,0.45], # center of low membership function
-    'late_diff_H':[0.55,0.95], # center of high membership function
+    'ALP_M_n':[0,10], # n in the equation ALP = a*(M^n + ALP_0)
+    'ALP_0':[0,1], # the default value of ALP when maturity is zero
+    # 'OC_0':[0,1], # the default value of OC when maturity is zero
+    # 'ARS_0':[0,1], # the default value of ARS when maturity is zero
+    # 'Mg_S':[2,10], # stimulatory conc of Mg
+    # 'Mg_D':[20,40], # detrimental conc of Mg
+    # 'IL10_d':[10,100], # detrimental threshold for >48 exposure
+    'IL1b_H':[10,100], # high threshold IL1b
+    # 'IL8_M':[0,50], # medium threshold for IL8
+    # 'maturity_t':[0,1], # early maturity threshold
+    # 'early_diff_L':[0.05,0.45], # center of low membership function
+    # 'early_diff_H':[0.55,0.95], # center of high membership function
+    # 'late_diff_L':[0.05,0.45], # center of low membership function
+    # 'late_diff_H':[0.55,0.95], # center of high membership function
     'a_early_diff_u':[1,100], # scale factor, upregulatory
-    'a_early_diff_d':[1,100], # scale factor, downregulatory
-    'a_late_diff_u':[1,100], # scale factor
-    'a_late_diff_d':[1,100], # scale factor
+    # 'a_early_diff_d':[1,100], # scale factor, downregulatory
+    # 'a_late_diff_u':[1,100], # scale factor
+    # 'a_late_diff_d':[1,100], # scale factor
     'diff_time':[15*24,45*24], # days required for full differentiation
-    'ALP_maturity': [1,100], #correlation coeff between ALP and maturity
-    'ARS_maturity': [1,100], #correlation coeff between ARS and maturity
-    'a_Chen_2018': [0,100], #correlation coeff for the given study
-    'a_Valles_2020_IL10':[0,100], #correlation coeff for the given study
-    'a_Valles_2020_TNFa':[0,100], #correlation coeff for the given study
-    'a_Qiao_2021':[0,100] #correlation coeff for the given study
+
+    # 'a_Chen_2018_maturity_t':[0,1],
+    # 'a_Chen_2018_ALP':[0,10],
+    # 'a_Chen_2018_ARS':[0,10],
+
+    # 'a_Valles_2020_IL10_maturity_t':[0,1], 
+    # 'a_Valles_2020_IL10_ALP':[0,1000],
+    # 'a_Valles_2020_IL10_ARS':[0,1000],
+    
+    # 'a_Valles_2020_TNFa_maturity_t':[0,1],
+    # 'a_Valles_2020_TNFa_ALP':[0,1000],
+    # 'a_Valles_2020_TNFa_ARS':[0,1000],
+
+    # 'a_Qiao_2021_IL8_maturity_t':[0,1], 
+    # 'a_Qiao_2021_IL8_ALP':[0,200], 
+    # 'a_Qiao_2021_IL1b_maturity_t':[0,1], 
+    'a_Qiao_2021_IL1b_ALP':[0,200], 
+
+    # 'a_Ber_2016_maturity_t':[0,1], # correction coeff of maturity threshold for the given study considering that cells are inherintly different
+    # 'a_Ber_2016_ALP':[0,1], # correlation ALP to maturity
+    # 'a_Ber_2016_OC':[0,1], 
+
+    # 'a_Qiao_2021_Mg_maturity_t':[0,1],
+    # 'a_Qiao_2021_Mg_ALP':[0,50],
+    # 'a_Qiao_2021_Mg_OC':[0,1],
 }
 
 class Osteogenesis:
-    def __init__(self,params):
+    def __init__(self,params,debug=False):
+        self.debug = debug
         self.params = params
         self.controlers = {'IL10_above_48h':Fuzzy_IL10(self.params,above_48h=True),
                             'IL10_below_48h':Fuzzy_IL10(self.params,above_48h=False),
-                            'IL8':Fuzzy_IL8(self.params)}
+                            'IL8':Fuzzy_IL8(self.params),
+                            'IL1b':Fuzzy_IL1b(self.params),
+                            'TNFa':Fuzzy_TNFa(self.params),
+                            'Mg':Fuzzy_Mg(self.params)}
     def interactions(self,fs):
         """
         defines the interaction between different fuzzy values
@@ -51,34 +127,87 @@ class Osteogenesis:
         x: fuzzy output
         factor: scale factor
         """
+        # if x >= 0.5:
+        #     f=(factor_u-1)*(x-0.5)*2+1
+        #     return f
+        # else:
+        #     f = (1/factor_d)*(1-2*(1-factor_d)*x)
+        #     return f
         if x >= 0.5:
-            f=2*(factor_u-1)*(x-0.5)+1
+            factor = factor_u
+        else:
+            factor = factor_d
+        f=(factor-1)*abs(x-0.5)*2+1
+        if x >= 0.5:
             return f
         else:
-            f = (1/factor_d)*(2*(factor_d-1)*x+1)
-            return f
-    def calculate_maturity(self,f_values,checkpoint):
+            return 1/f
+    @staticmethod
+    def adjust_maturity_t(study,maturity_t):
+        """
+        correct maturity threshold bsed on each study
+        """
+        
+        return maturity_t*correction_coeff
+
+    def calculate_maturation(self,study,f_values,checkpoint,target):
         
         k0 = 1/(self.params['diff_time']) # base diff rate 1/hour
-        # print(f_values)
-        f_early = f_values['early_diff'] 
-        f_late = f_values['late_diff'] 
-
-        k_early = k0*self.scale(f_early,factor_u = self.params['a_early_diff_u'], factor_d = self.params['a_early_diff_d'])
-        k_late = k0*self.scale(f_late,factor_u = self.params['a_late_diff_u'], factor_d = self.params['a_late_diff_d'])
-        
-        maturity_t = self.params['maturity_t']*self.params['diff_time'] # because given maturity_t in the parameters is between 0 and 1 1
-
-        if checkpoint < maturity_t:
-            maturity = k_early*checkpoint # no for loop
-            return maturity
+        #// k_early and k_late are the corrected maturation rate
+        if 'early_diff' in f_values:
+            f_early = f_values['early_diff'] # fuzzy output for early maturation
+            k_early = 2*k0 * self.scale(x = f_early,factor_u = self.params['a_early_diff_u'], factor_d = self.params['a_early_diff_d']) # 2 is because the normal f value is 0.5
         else:
-            # maturity_0 = k_early*maturity_t
-            # maturity_1 = k_late*(checkpoint-maturity_t)
-            # return maturity_0+maturity_1
-            maturity = k_late*(checkpoint)
+            k_early = k0
+        if 'late_diff' in f_values:
+            f_late = f_values['late_diff'] 
+            k_late = 2*k0 * self.scale(x = f_late,factor_u = self.params['a_late_diff_u'], factor_d = self.params['a_late_diff_d'])
+        else:
+            k_late = k0
+        #// calculate maturity related parameters
+        maturity_t_correction_factor = self.params['a_'+study+'_maturity_t'] # to correct maturity threshold for each experiment considering that cells are inherintly differenmt
+        adjusted_maturity_t = maturity_t_correction_factor * self.params['maturity_t']
+        maturity_t_scalled = adjusted_maturity_t*self.params['diff_time'] # because given maturity_t in the parameters is between 0 and 1 1
+        
+        def calculate_maturity(checkpoint,maturity_t_h,k_early = None,k_late = None):
+            if checkpoint < maturity_t_h: # if the given time is below the threshold
+                maturity = checkpoint*k_early
+            else:
+                maturity = maturity_t_h*k_early + (checkpoint-maturity_t_h)*k_late
+
+            if maturity > 1: # should be between 0 and 1
+                maturity = 1
             return maturity
-    def simulate(self,inputs,measurement_scheme,exposure_time): 
+
+        #// calculate ALP, OC, and ARS based on maturity
+        maturity = calculate_maturity(checkpoint = checkpoint,maturity_t_h=maturity_t_scalled,
+                k_early=k_early,k_late=k_late)
+        # print('checkpoint {} fs {} maturity {}'.format(checkpoint,f_values, maturity))
+
+        if target == 'ALP':
+            ALP_M_coeff = self.params['a_'+study+'_ALP']
+            if maturity < adjusted_maturity_t:
+                ALP = (maturity**self.params['ALP_M_n'] + self.params['ALP_0']) * ALP_M_coeff
+            else:
+                ALP =(adjusted_maturity_t + self.params['ALP_0']) * ALP_M_coeff
+            if self.debug:
+                print('checkpoint {}, fs {}, maturity {}, maturity_t {}, ALP {}'.format(checkpoint,f_values, round(maturity,4),round(adjusted_maturity_t,4),round(ALP,4)))
+
+            return ALP
+        elif target == 'ARS':
+            ARS_M_coeff = self.params['a_'+study+'_ARS']
+            ARS = (maturity + self.params['ARS_0']) * ARS_M_coeff
+            return ARS
+        elif target == 'OC':
+            OC_M_coeff = self.params['a_'+study+'_OC']
+            OC = (maturity + self.params['OC_0']) * OC_M_coeff
+            return OC
+        else:
+            raise('invlid input')
+
+
+
+    def simulate(self,study,inputs,measurement_scheme,exposure_time): 
         """
         simulates one single run 
         """
@@ -87,35 +216,46 @@ class Osteogenesis:
         else:
             IL10_controler = self.controlers['IL10_below_48h']
         IL8_controller = self.controlers['IL8']
+        IL1b_controller = self.controlers['IL1b']
+        TNFa_controller = self.controlers['TNFa']
+        Mg_controller = self.controlers['Mg']
 
-        fs = {'IL10':None,'IL8':None}
+        fs = {'IL10':None,'IL8':None,'IL1b':None, 'TNFa':None, 'Mg':None}
         if 'IL10' in inputs.keys():
             f_IL10 = IL10_controler.forward({'IL10':inputs['IL10']})
             fs['IL10'] = f_IL10
         if 'IL8' in inputs.keys():
             f_IL8 = IL8_controller.forward({'IL8':inputs['IL8']})
             fs['IL8'] = f_IL8
+        if 'IL1b' in inputs.keys():
+            f_IL1b = IL1b_controller.forward({'IL1b':inputs['IL1b']})
+            fs['IL1b'] = f_IL1b
+        if 'TNFa' in inputs.keys():
+            f_TNFa = TNFa_controller.forward({'TNFa':inputs['TNFa']})
+            fs['TNFa'] = f_TNFa
+        if 'Mg' in inputs.keys():
+            ff = Mg_controller.forward({'Mg':inputs['Mg']})
+            fs['Mg'] = ff
 
         final_f_values = self.interactions(fs)
         results= {}
-        for target,checkpoint in measurement_scheme.items():
-            checkpoint = checkpoint #time in hours
 
-            maturity =  self.calculate_maturity(f_values=final_f_values,
-                                                checkpoint = checkpoint)
-            if target == 'ALP':
-                correction = self.params['ALP_maturity']
-            elif target == 'ARS':
-                correction = self.params['ARS_maturity']
-            results[target] = maturity*correction
-
+        for target,checkpoints in measurement_scheme.items():
+            results[target] = []
+            for checkpoint in checkpoints:
+                result=  self.calculate_maturation(study = study, f_values=final_f_values,
+                                                checkpoint = checkpoint,target=target)
+                results[target].append(result)
 
         return results
 
 class MSC_model:
-    def __init__(self,params):
-        self.params = params
-        self.osteogenesis = Osteogenesis(params)
+    def __init__(self,free_params,debug=False):
+        self.debug=debug
+        for key,value in free_params.items():
+            all_params[key] = value
+        self.params = all_params
+        self.osteogenesis = Osteogenesis(self.params,debug=self.debug)
         # TODO: another model should be created for inflammatory reponse
     def simulate_studies(self):
         """
@@ -123,10 +263,8 @@ class MSC_model:
         """
         studies_results = {}
         for study in observations['studies']:
-            if study == 'Chen_2018' or study == 'Valles_2020_part1' or study == 'Qiao_2021':
-                results = self.simulate_osteogenesis_study(study)
-            else:
-                raise('Not defined')
+            results = self.simulate_osteogenesis_study(study)
+            
             studies_results[study]= results
         return studies_results
 
@@ -134,18 +272,16 @@ class MSC_model:
         """
         Simulte one study
         """
-        # print('Simulates osteogenesis for study {}'.format(study))
         measurement_scheme = observations[study]['measurement_scheme']
         exposure_time = observations[study]['exposure_time']
         IDs = observations[study]['IDs']
-        correction_factor = self.params['a_'+study]
         results = {}
         for ID in IDs:
             inputs = observations[study][ID]['inputs']
-            ID_results = self.osteogenesis.simulate(inputs,measurement_scheme,exposure_time=exposure_time)
-            #// correct the results
-            for target,value in ID_results.items():
-                ID_results[target] = value*correction_factor
+            if self.debug:
+                print('\n',ID)
+            ID_results = self.osteogenesis.simulate(study=study,inputs=inputs,measurement_scheme=measurement_scheme,exposure_time=exposure_time)
+            
             results[ID] = ID_results
                 
         return results
@@ -159,7 +295,7 @@ class MSC_model:
             ID_observations = observations[study][ID]['expectations']
             tag_errors = []
             for target in measurement_scheme.keys():
-                abs_diff =abs(ID_results[target]-ID_observations[target]['mean'])
+                abs_diff =abs(np.array(ID_results[target])-np.array(ID_observations[target]['mean']))
                 means = [ID_observations[target]['mean'],ID_results[target]]
                 mean = np.mean(means)
                 tag_error = abs_diff/mean
@@ -181,7 +317,6 @@ class MSC_model:
         return error
 if __name__ == '__main__':
     params = {}
-    for key,value in free_params.items():
-        params[key] = np.mean(value)
-    obj = MSC_model(params)
-    print(obj.run())
+    
+    obj = MSC_model(free_params={})
+    print('\n',obj.run())

@@ -1,13 +1,14 @@
 observations = {
-	'studies':['Qiao_2021'],
-	# 'studies':['Saldana_2019','Valles_2020_IL10','Valles_2020_TNFa','Chen_2018','Qiao_2021'],
+	# 'studies':['Qiao_2021_IL8'],
+	'studies':['Qiao_2021_IL1b'],
+	# 'studies':['Saldana_2019','Valles_2020_IL10','Valles_2020_TNFa','Chen_2018','Qiao_2021_IL8'],
 	'Chen_2018':{# the effect of Il10 on ALP and ARS
 		'exposure_time':9*24, #when this is none, the cells are exposed to the stimuli the whole time
 		'culture_volume':None, #ml
 		'experiment_period':9, # days
 		'measurement_scheme':{
-			'ALP': 3*24, #day
-			'ARS': 9*24
+			'ALP': [3*24], #hour
+			'ARS': [9*24]
 		},
 		'IDs': ['ctr','IL10_.01','IL10_.1','IL10_1','IL10_10','IL10_100'],
 		# 'IDs': ['ctr','IL10_.1','IL10_1','IL10_100'],
@@ -18,12 +19,12 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':2, 
-					'std': 0
+					'mean':[2], 
+					'std': [0]
 				},
 				"ARS": {
-					'mean':1, 
-					'std': .1
+					'mean':[1], 
+					'std': [.1]
 				},
 			}
 
@@ -34,12 +35,12 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':2.5, 
-					'std': .5
+					'mean':[2.5], 
+					'std': [.5]
 				},
 				"ARS": {
-					'mean':1.7, 
-					'std': .15
+					'mean':[1.7], 
+					'std': [.15]
 				},
 			}
 
@@ -50,12 +51,12 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':5.6, 
-					'std': .2
+					'mean':[5.6], 
+					'std': [.2]
 				},
 				"ARS": {
-					'mean':4, 
-					'std': .6
+					'mean':[4], 
+					'std': [.6]
 				},
 			}
 
@@ -66,12 +67,12 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean': 4.1, 
-					'std': .5
+					'mean': [4.1], 
+					'std': [.5]
 				},
 				"ARS": {
-					'mean': 3, 
-					'std': .4
+					'mean': [3], 
+					'std': [.4]
 				},
 			}
 
@@ -82,12 +83,12 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean': 1.2, 
-					'std': .3
+					'mean': [1.2], 
+					'std': [.3]
 				},
 				"ARS": {
-					'mean': 0.5, 
-					'std': .1
+					'mean': [0.5], 
+					'std': [.1]
 				},
 			}
 
@@ -98,12 +99,12 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean': 1.5, 
-					'std': .15
+					'mean': [1.5], 
+					'std': [.15]
 				},
 				"ARS": {
-					'mean': 0.4, 
-					'std': .15
+					'mean': [0.4], 
+					'std': [.15]
 				},
 			}
 
@@ -114,22 +115,23 @@ observations = {
 		'culture_volume':2, #ml
 		'experiment_period':21, # days
 		'measurement_scheme':{
-			'ALP': 14*24, #day
-			'ARS': 21*24
+			'ALP': [14*24], #hour
+			'ARS': [21*24]
 		},
-		'IDs': ['ctr','IL10_.1','IL10_1','IL10_10'],
+		# 'IDs': ['ctr','IL10_.1','IL10_1','IL10_10'],
+		'IDs': ['ctr','IL10_10'],
 		'ctr':{
 			'inputs':{
 						"IL10": 0
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':200, 
-					'std': 40
+					'mean':[200], 
+					'std': [40]
 				},
 				"ARS": {
-					'mean':550, 
-					'std': 50
+					'mean':[550], 
+					'std': [50]
 				},
 			}
 
@@ -140,12 +142,12 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':290, 
-					'std': 25
+					'mean':[290], 
+					'std': [25]
 				},
 				"ARS": {
-					'mean':550, 
-					'std': 70
+					'mean':[550], 
+					'std': [70]
 				},
 			}
 
@@ -156,12 +158,12 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':350, 
-					'std': 70
+					'mean':[350], 
+					'std': [70]
 				},
 				"ARS": {
-					'mean':800, 
-					'std': 60
+					'mean':[800], 
+					'std': [60]
 				},
 			}
 
@@ -172,12 +174,12 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':420, 
-					'std': 80
+					'mean':[420], 
+					'std': [80]
 				},
 				"ARS": {
-					'mean':850, 
-					'std': 100
+					'mean':[850], 
+					'std': [100]
 				},
 			}
 
@@ -189,8 +191,8 @@ observations = {
 		'culture_volume':2, #ml
 		'experiment_period':21, # days
 		'measurement_scheme':{
-			'ALP': 14*24, #day
-			'ARS': 21*24
+			'ALP': [14*24], #hour
+			'ARS': [21*24]
 		},
 		'IDs': ['ctr','TNFa_.1','TNFa_1','TNFa_10'],
 		'ctr':{
@@ -199,12 +201,12 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':200, 
-					'std': 40
+					'mean':[200], 
+					'std': [40]
 				},
 				"ARS": {
-					'mean':550, 
-					'std': 50
+					'mean':[550], 
+					'std': [50]
 				},
 			}
 
@@ -215,12 +217,12 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':180, 
-					'std': 45
+					'mean':[180], 
+					'std': [45]
 				},
 				"ARS": {
-					'mean':570, 
-					'std': 55
+					'mean':[570], 
+					'std': [55]
 				},
 			}
 
@@ -231,12 +233,12 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':300, 
-					'std': 45
+					'mean':[300], 
+					'std': [45]
 				},
 				"ARS": {
-					'mean':670, 
-					'std': 50
+					'mean':[670], 
+					'std': [50]
 				},
 			}
 
@@ -247,12 +249,12 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':200, 
-					'std': 50
+					'mean':[200], 
+					'std': [50]
 				},
 				"ARS": {
-					'mean':520, 
-					'std': 50
+					'mean':[520], 
+					'std': [50]
 				},
 			}
 
@@ -387,12 +389,12 @@ observations = {
 				}
 			}
 	},
-	'Qiao_2021':{# the effect of IL8 on ALP
+	'Qiao_2021_IL8':{# the effect of IL8 on ALP
 		'exposure_time':9*24, 
 		'culture_volume':None, #ml
 		# 'experiment_period':9, # days
 		'measurement_scheme':{
-			'ALP': 9*24 #day
+			'ALP': [9*24] #hour
 		},
 		'IDs': ['ctr','IL8_1','IL8_10','IL8_100'],
 		'ctr':{
@@ -401,8 +403,8 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':12, 
-					'std': 5
+					'mean':[12], 
+					'std': [5]
 				}
 			}
 
@@ -413,8 +415,8 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':21, 
-					'std': 5
+					'mean':[21], 
+					'std': [5]
 				}
 			}
 
@@ -425,8 +427,8 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':45, 
-					'std': 15
+					'mean':[45], 
+					'std': [15]
 				}
 			}
 
@@ -437,12 +439,158 @@ observations = {
 					},
 			"expectations": {			
 				"ALP": {
-					'mean':115, 
-					'std': 10
+					'mean':[115], 
+					'std': [10]
 				}
 			}
 
 		}
+	},
+	'Qiao_2021_IL1b':{# the effect of IL8 on ALP
+		'exposure_time':9*24, 
+		'culture_volume':None, #ml
+		# 'experiment_period':9, # days
+		'measurement_scheme':{
+			'ALP': [9*24] #hour
+		},
+		'IDs': ['ctr','IL1b_1','IL1b_10','IL1b_100'],
+		'ctr':{
+			'inputs':{
+						"IL1b": 0
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':[11], 
+					'std': [5]
+				}
+			}
+
+		},
+		'IL1b_1':{
+			'inputs':{
+						"IL1b": 1
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':[30], 
+					'std': [5]
+				}
+			}
+
+		},
+		'IL1b_10':{
+			'inputs':{
+						"IL1b": 10
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':[39], 
+					'std': [8]
+				}
+			}
+
+		},
+		'IL1b_100':{
+			'inputs':{
+						"IL1b": 100
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':[22], 
+					'std': [6]
+				}
+			}
+
+		}
+	},
+	'Ber_2016':{ # the effect of Mg on ALP and OC
+		'exposure_time':21*24, 
+		'culture_volume':None, #ml
+		# 'experiment_period':7, # days
+		'measurement_scheme':{
+			'ALP': [7*24,14*24,21*24], #hour
+			'OC':[7*24,14*24,21*24]
+		},
+		'IDs': ['Mg_.8','Mg_5'],
+		'Mg_.8':{
+			'inputs':{
+						"Mg": 0.8
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':[0.30,0.53,0.57], 
+					'std': [0,0,0]
+				},
+				'OC':{
+					'mean':[0.53,0.71,0.8], 
+					'std': [0,0,0]
+				}
+			}
+
+		},
+		'Mg_5':{
+			'inputs':{
+						"Mg": 5
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':[0.34,0.39, 0.61], 
+					'std': [0,0,0]
+				},
+				'OC':{
+					'mean':[0.28,0.22,0.27], 
+					'std': [0,0,0]
+				}
+			}
+
+		},
+	},
+	'Qiao_2021_Mg':{# the effect of Mg on ALP
+		'exposure_time':7*24, 
+		'culture_volume':None, #ml
+		# 'experiment_period':7, # days
+		'measurement_scheme':{
+			'ALP': [3*24,7*24] #hour
+		},
+		'IDs': ['Mg_.08','Mg_.8','Mg_8'],
+		# 'IDs': ['Mg_10'],
+		'Mg_.08':{
+			'inputs':{
+						"Mg": 0.08
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':[7,10], 
+					'std': [2,3]
+				}
+			}
+
+		},
+		'Mg_.8':{
+			'inputs':{
+						"Mg": 0.8
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':[9,15], 
+					'std': [2,3]
+				}
+			}
+
+		},
+		'Mg_8':{
+			'inputs':{
+						"Mg": 8
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':[13,20], 
+					'std': [4,3]
+				}
+			}
+
+		},
+		
 	},
 
 	"scale": 1,
