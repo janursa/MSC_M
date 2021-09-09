@@ -39,6 +39,15 @@ class Plot_bar:
 			self.tick_font_size = 30
 			self.title_font_size = 30 
 			self.delta = .1
+		elif study == 'Chen_2018':
+			self.graph_size = [10,10]
+			self.bar_width = .2
+			self.error_bar_width = .2
+			self.colors = ['lime' , 'violet', 'yellowgreen', 'peru', 'skyblue']
+			self.legend_font_size = 30
+			self.tick_font_size = 30
+			self.title_font_size = 30 
+			self.delta = .1
 		else:
 			raise ValueError('input not defined')
 	def plot(self,simulation_results):

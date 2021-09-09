@@ -20,7 +20,8 @@ class Calibrate:
 
 	def optimize(self):
 		# Call instance of PSO
-		results = differential_evolution(self.cost_function,bounds=list(self.free_params.values()),disp=True,maxiter=self.max_iters)
+		results = differential_evolution(self.cost_function,bounds=list(self.free_params.values()),disp=True,maxiter=self.max_iters,
+			workers=2)
 
 		inferred_params = {}
 		for key,value in zip(free_params.keys(),results.x):
