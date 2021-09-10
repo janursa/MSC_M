@@ -1,6 +1,6 @@
 {
     "studies": [
-        "Chen_2018"
+        "Valles_2020_TNFa"
     ],
     "Chen_2018": {
         "exposure_time": 216,
@@ -175,6 +175,8 @@
         },
         "IDs": [
             "ctr",
+            "IL10_.1",
+            "IL10_1",
             "IL10_10"
         ],
         "ctr": {
