@@ -44,10 +44,8 @@ all_params = {
     'a_Valles_2020_TNFa_ALP':2,
     'a_Valles_2020_TNFa_ARS':2,
 
-    'a_Qiao_2021_IL8_maturity_t':.5, 
-    'a_Qiao_2021_IL8_ALP':2, 
-    'a_Qiao_2021_IL1b_maturity_t':1, 
-    'a_Qiao_2021_IL1b_ALP':2, 
+    'a_Qiao_2021_maturity_t':.5, 
+    'a_Qiao_2021_ALP':2, 
 
     'a_Ber_2016_maturity_t':.5, # correction coeff of maturity threshold for the given study considering that cells are inherintly different
     'a_Ber_2016_ALP':.5, # correlation ALP to maturity
@@ -66,14 +64,14 @@ free_params = {
     'ARS_0':[0,1], # the default value of ARS when maturity is zero
     # 'Mg_S':[2,10], # stimulatory conc of Mg
     # 'Mg_D':[20,40], # detrimental conc of Mg
-    'IL10_d':[10,100], # detrimental threshold for >48 exposure
-    # 'IL1b_H':[10,100], # high threshold IL1b
-    # 'IL8_M':[0,50], # medium threshold for IL8
-    'maturity_t':[0,1], # early maturity threshold
-    'early_diff_L':[0.1,0.4], # center of low membership function
-    'early_diff_H':[0.6,0.9], # center of high membership function
-    'late_diff_L':[0.1,0.4], # center of low membership function
-    'late_diff_H':[0.6,0.9], # center of high membership function
+    # 'IL10_d':[10,100], # detrimental threshold for >48 exposure
+    'IL1b_H':[10,100], # high threshold IL1b
+    'IL8_M':[1,99], # medium threshold for IL8
+    # 'maturity_t':[0,1], # early maturity threshold
+    # 'early_diff_L':[0.1,0.4], # center of low membership function
+    # 'early_diff_H':[0.6,0.9], # center of high membership function
+    # 'late_diff_L':[0.1,0.4], # center of low membership function
+    # 'late_diff_H':[0.6,0.9], # center of high membership function
     'a_early_diff_u':[0,5], # scale factor, upregulatory
     'a_early_diff_d':[0,1], # scale factor, downregulatory
     'a_late_diff_u':[0,5], # scale factor
@@ -89,13 +87,11 @@ free_params = {
     # 'a_Valles_2020_IL10_ARS':[0,1000],
     
     # 'a_Valles_2020_TNFa_maturity_t':[0,1],
-    'a_Valles_2020_TNFa_ALP':[0,1000],
-    'a_Valles_2020_TNFa_ARS':[0,1000],
+    # 'a_Valles_2020_TNFa_ALP':[0,1000],
+    # 'a_Valles_2020_TNFa_ARS':[0,1000],
 
-    # 'a_Qiao_2021_IL8_maturity_t':[0,1], 
-    # 'a_Qiao_2021_IL8_ALP':[0,200], 
-    # 'a_Qiao_2021_IL1b_maturity_t':[0,1], 
-    # 'a_Qiao_2021_IL1b_ALP':[0,200], 
+    'a_Qiao_2021_maturity_t':[0,1], 
+    'a_Qiao_2021_ALP':[0,200], 
 
     # 'a_Ber_2016_maturity_t':[0,1], # correction coeff of maturity threshold for the given study considering that cells are inherintly different
     # 'a_Ber_2016_ALP':[0,1], # correlation ALP to maturity
@@ -122,9 +118,16 @@ class Osteogenesis:
         """
         defines the interaction between different fuzzy values
         """
-        for key,value in fs.items():
-            if value != None:
-                return value
+        
+        IL8_flag = 'IL8' in fs.keys()
+        IL1b_flag = 'IL1b' in fs.keys()
+        if  IL8_flag & IL1b_flag:
+            print(fs)
+            exit(2)
+        else:
+            for key,value in fs.items():
+                if value != None:
+                    return value
 
     def scale(self,x,factor_u, factor_d): 
         """
@@ -155,7 +158,17 @@ class Osteogenesis:
         """
         
         return maturity_t*correction_coeff
+    @staticmethod
+    def determine_correction_factor(study,params,f_type='maturity_t'):
+        """
+        To correct maturity threshold for each experiment considering that cells are inherintly differenmt
+        """
+        if (study == 'Qiao_2021_IL8_IL1b' or study == 'Qiao_2021_IL8' or study == 'Qiao_2021_IL1b'):
+            study = 'Qiao_2021'
 
+        prefix = 'a_'+study
+        tag = prefix+'_'+f_type
+        return params[tag]
     def calculate_maturation(self,study,f_values,checkpoint,target):
         
         k0 = 1/(self.params['diff_time']) # base diff rate 1/hour
@@ -171,7 +184,7 @@ class Osteogenesis:
         else:
             k_late = k0
         #// calculate maturity related parameters
-        maturity_t_correction_factor = self.params['a_'+study+'_maturity_t'] # to correct maturity threshold for each experiment considering that cells are inherintly differenmt
+        maturity_t_correction_factor = self.determine_correction_factor(study = study, params = self.params, f_type='maturity_t') # to correct maturity threshold for each experiment considering that cells are inherintly differenmt
         adjusted_maturity_t = maturity_t_correction_factor * self.params['maturity_t']
         maturity_t_scalled = adjusted_maturity_t*self.params['diff_time'] # because given maturity_t in the parameters is between 0 and 1 1
         
@@ -192,7 +205,7 @@ class Osteogenesis:
             print('checkpoint {} fs {} maturity {}'.format(checkpoint,f_values, round(maturity,3)))
 
         if target == 'ALP':
-            ALP_M_coeff = self.params['a_'+study+'_ALP']
+            ALP_M_coeff = self.determine_correction_factor(study = study, params = self.params, f_type='ALP')
             if maturity < adjusted_maturity_t:
                 ALP = (maturity + self.params['ALP_0'])**self.params['ALP_M_n'] * ALP_M_coeff
             else:
@@ -202,11 +215,11 @@ class Osteogenesis:
 
             return ALP
         elif target == 'ARS':
-            ARS_M_coeff = self.params['a_'+study+'_ARS']
+            ARS_M_coeff = self.determine_correction_factor(study = study, params = self.params, f_type='ARS')
             ARS = (maturity + self.params['ARS_0'])**self.params['ARS_M_n'] * ARS_M_coeff
             return ARS
         elif target == 'OC':
-            OC_M_coeff = self.params['a_'+study+'_OC']
+            OC_M_coeff = self.determine_correction_factor(study = study, params = self.params, f_type='OC')
             OC = (maturity + self.params['OC_0'])**self.params['OC_M_n'] * OC_M_coeff
             return OC
         else:
@@ -228,19 +241,37 @@ class Osteogenesis:
         Mg_controller = self.controlers['Mg']
 
         fs = {'IL10':None,'IL8':None,'IL1b':None, 'TNFa':None, 'Mg':None}
-        if 'IL10' in inputs.keys():
+
+        IL8_flag = 'IL8' in inputs.keys()
+        IL1b_flag = 'IL1b' in inputs.keys()
+        IL10_flag = 'IL10' in inputs.keys()
+        TNFa_flag = 'TNFa' in inputs.keys()
+        Mg_flag = 'Mg' in inputs.keys()
+
+        if IL8_flag & IL1b_flag:
+            pass
+        elif IL8_flag:
+            pass
+        elif IL1b_flag:
+            pass
+        elif IL10_flag:
+            pass
+        elif Mg_flag:
+            pass
+
+        if IL10_flag:
             f_IL10 = IL10_controler.forward({'IL10':inputs['IL10']})
             fs['IL10'] = f_IL10
-        if 'IL8' in inputs.keys():
+        if IL8_flag:
             f_IL8 = IL8_controller.forward({'IL8':inputs['IL8']})
             fs['IL8'] = f_IL8
-        if 'IL1b' in inputs.keys():
+        if IL1b_flag:
             f_IL1b = IL1b_controller.forward({'IL1b':inputs['IL1b']})
             fs['IL1b'] = f_IL1b
-        if 'TNFa' in inputs.keys():
+        if TNFa_flag:
             f_TNFa = TNFa_controller.forward({'TNFa':inputs['TNFa']})
             fs['TNFa'] = f_TNFa
-        if 'Mg' in inputs.keys():
+        if Mg_flag:
             ff = Mg_controller.forward({'Mg':inputs['Mg']})
             fs['Mg'] = ff
 

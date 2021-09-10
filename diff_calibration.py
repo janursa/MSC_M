@@ -7,7 +7,7 @@ from MSC_osteogenesis import *
 ##// optimize //##
 class Calibrate:
 	def __init__(self,free_params):
-		self.max_iters = 50
+		self.max_iters = 10
 		self.free_params = free_params
 	def cost_function(self,calib_params_values):
 		# calculate the error for each target by comparing the results to the original model

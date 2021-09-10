@@ -1,6 +1,6 @@
 {
     "studies": [
-        "Valles_2020_TNFa"
+        "Qiao_2021_IL8_IL1b"
     ],
     "Chen_2018": {
         "exposure_time": 216,
@@ -658,6 +658,51 @@
                     ],
                     "std": [
                         6
+                    ]
+                }
+            }
+        }
+    },
+    "Qiao_2021_IL8_IL1b": {
+        "exposure_time": 216,
+        "culture_volume": null,
+        "measurement_scheme": {
+            "ALP": [
+                216
+            ]
+        },
+        "IDs": [
+            "ctr",
+            "IL1b_IL8"
+        ],
+        "ctr": {
+            "inputs": {
+                "IL1b": 0,
+                "IL8": 0
+            },
+            "expectations": {
+                "ALP": {
+                    "mean": [
+                        11
+                    ],
+                    "std": [
+                        5
+                    ]
+                }
+            }
+        },
+        "IL1b_IL8": {
+            "inputs": {
+                "IL1b": 100,
+                "IL8": 100
+            },
+            "expectations": {
+                "ALP": {
+                    "mean": [
+                        41
+                    ],
+                    "std": [
+                        8
                     ]
                 }
             }

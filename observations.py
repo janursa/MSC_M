@@ -5,6 +5,7 @@ observations = {
 	# 'studies':['Valles_2020_IL10'],#TODO: check the kill again
 	# 'studies':['Valles_2020_TNFa'], #TODO: check the kill again
 	# 'studies':['Saldana_2019','Valles_2020_IL10','Valles_2020_TNFa','Chen_2018','Qiao_2021_IL8','Qiao_2021_IL1b'],
+	'studies': ['Qiao_2021_IL8_IL1b'],
 	'Chen_2018':{# the effect of Il10 on ALP and ARS
 		'exposure_time':9*24, #when this is none, the cells are exposed to the stimuli the whole time
 		'culture_volume':None, #ml
@@ -501,6 +502,41 @@ observations = {
 				"ALP": {
 					'mean':[22], 
 					'std': [6]
+				}
+			}
+
+		}
+	},
+	'Qiao_2021_IL8_IL1b':{# the synnergic effect of IL8 and IL1b on ALP
+		'exposure_time':9*24, 
+		'culture_volume':None, #ml
+		# 'experiment_period':9, # days
+		'measurement_scheme':{
+			'ALP': [9*24] #hour
+		},
+		'IDs': ['ctr','IL1b_IL8'],
+		'ctr':{
+			'inputs':{
+						"IL1b": 0,
+						"IL8": 0
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':[11], 
+					'std': [5]
+				}
+			}
+
+		},
+		'IL1b_IL8':{
+			'inputs':{
+						"IL1b": 100,
+						"IL8": 100
+					},
+			"expectations": {			
+				"ALP": {
+					'mean':[41], 
+					'std': [8]
 				}
 			}
 
