@@ -16,6 +16,7 @@ import matplotlib.font_manager
 import matplotlib
 import matplotlib.ticker as ticker
 from matplotlib import rcParams
+from skfuzzy import control as ctrl
 rcParams["mathtext.default"]='rm'
 rcParams['mathtext.fontset'] = 'stixsans'
 del matplotlib.font_manager.weight_dict['roman']
@@ -26,74 +27,107 @@ axis_font = {'fontname':'Times New Roman', 'size':'18'}
 title_font = {'fontname':'Times New Roman', 'size':'20'}
 legend_font = { 'family':'Times New Roman','size':'18'}
 # colors = ['indigo','darkred','teal','royalblue','seagreen','tan']
-colors = {'neg':'indigo' , 'low':'darkred', 'medium':'royalblue', 'high':'olive','veryhigh':'red'}
-linestyles = {'neg':'solid' , 'low':'dashed', 'medium':'dashed', 'high':'dashed','veryhigh':'dashed'}
+colors = ['black','indigo' ,'darkred','royalblue','olive','red']
+line_patterns = [[1,1,1,1],[2,1,2,1],[4,2,4,2],[8,4,8,4],[8,2,8,4]]
+
 format = ".svg"
 
-def plot_IL6():
+def plot_IL8():
     fig,ax = plt.subplots(figsize=(5.5, 3))
-    range = np.arange(0, 1, .01)
-    sigma = 0.05
-    #// Generate fuzzy membership functions
-    L = fuzz.gaussmf(range, 0,sigma)
-    M = fuzz.gaussmf(range, .5,sigma)
-    H = fuzz.gaussmf(range, 1,sigma)
+    range = np.arange(0, 100, .1)
+    # Generate fuzzy membership functions
+    neg = fuzz.trimf(range, [0,0,25])
+    medium = fuzz.trimf(range, [0,25,100])
+    high = fuzz.trimf(range, [25,100,100])
+    fakes = {"25":25,"100":100}
+    fake_neg = fuzz.trimf(range, [0,0,fakes["25"]])
+    fake_medium = fuzz.trimf(range, [0,fakes["25"],fakes["100"]])
+    fake_high = fuzz.trimf(range, [fakes["25"],fakes["100"],fakes["100"]])
     # Visualize these universes and membership functions
-    line1, = ax.plot(range, L, colors['low'], linewidth=line_width, label='N',linestyle=linestyles['low'])
-    line2, = ax.plot(range, M,colors['medium'] , linewidth=line_width, label='L',linestyle=linestyles['medium'])
-    line2.set_dashes([1, 1, 1, 1])
-    line3, = ax.plot(range, H, colors['high'], linewidth=line_width, label='M',linestyle=linestyles['high'])
+    line1, = ax.plot(range, fake_neg, colors['neg'], linewidth=line_width, label='N',linestyle=linestyles['neg'])
+    line3, = ax.plot(range, fake_medium, colors['low'], linewidth=line_width, label='M',linestyle=linestyles['medium'])
     line3.set_dashes([2, 1, 2, 1])
+    line4, = ax.plot(range, fake_high, colors['medium'], linewidth=line_width, label='H',linestyle = linestyles['high'])
+    line4.set_dashes([4, 2, 4, 2])
 
-    # ax.set_title('BMP2',fontname = 'Times New Roman Bold',size = 17)
-    ax.set_xticks([0,.5,1]) 
-    ax.set_xticklabels([0,.5,1])
+    ax.set_xticks([0,fakes["25"],fakes["100"]]) 
+    ax.set_xticklabels([0,r'$c_{1}$',100])
     ax.set_yticks([0,0.5,1])
     ax.set_yticklabels([0,0.5,1])
-    ax.set_xlabel('Membership ',**axis_font)
-    # tags_x_locs = [(0+fakes["0.008"])/2,(fakes["10"]+fakes["20"])/2,(fakes["50"]+fakes["200"])/2,(fakes["500"]+fakes["2000"])/2]
-    # tags = ['Negligible','Stimulatory','High','Destructive']
+    # ax.set_ylabel('Membership',**axis_font)
+    ax.set_xlabel('Concentration (ng/ml)',**axis_font)
+    tags_x_locs = [0,1.4*fakes["25"],.8*fakes["100"]]
+    tags = ['Negligible','Low Stimulatory','High Stimulatory']
     # ax.legend(loc=2, fontsize=16)
-    # return fig,ax,'BMP2',tags_x_locs,tags
-    return fig,ax,'IL6',[],[]
-def plot_IL10(above_48h):
+    return fig,ax,'IL8',tags_x_locs,tags
+def plot_IL1b():
     fig,ax = plt.subplots(figsize=(5.5, 3))
-    range = np.arange(0, 100, .01)
-    #// Generate fuzzy membership functions
-    IL10_intervals_below_48h= [0,0.01,10,50,100]
-    IL10_intervals_above_48h= [0,0.01,0.1,10,100]
-    if above_48h:
-        IL10_intervals = IL10_intervals_above_48h
-    else:
-        IL10_intervals = IL10_intervals_below_48h
-    # print(IL10_intervals)
-    Neg = fuzz.trimf(range, [IL10_intervals[0], IL10_intervals[0],IL10_intervals[1]])
-    Low = fuzz.trimf(range, [IL10_intervals[0], IL10_intervals[1], IL10_intervals[2]])
-    Stim = fuzz.trimf(range, [IL10_intervals[1], IL10_intervals[2], IL10_intervals[3]])
-    Det = fuzz.trapmf(range, [IL10_intervals[2], IL10_intervals[3], IL10_intervals[-1], IL10_intervals[-1]])
-    
+    max_value = 200
+    range = np.arange(0, max_value, .1)
+    # Generate fuzzy membership functions
+    neg = fuzz.trimf(range, [0,0,10])
+    stim = fuzz.trimf(range, [0,10,50])
+    high = fuzz.trapmf(range, [10,50,max_value,max_value])
+    fakes = {"10":50,"50":150}
+    fake_neg = fuzz.trimf(range, [0,0,fakes["10"]])
+    fake_stim = fuzz.trimf(range, [0,fakes["10"],fakes["50"]])
+    fake_high = fuzz.trapmf(range, [fakes["10"],fakes["50"],max_value,max_value])
     # Visualize these universes and membership functions
-    line1, = ax.plot(range, Neg, colors['neg'], linewidth=line_width, label='Neg',linestyle=linestyles['neg'])
-    line2, = ax.plot(range, Low,colors['low'] , linewidth=line_width, label='Low',linestyle=linestyles['low'])
-    line2.set_dashes([1, 1, 1, 1])
-    line3, = ax.plot(range, Stim, colors['medium'], linewidth=line_width, label='Stim',linestyle=linestyles['medium'])
+    line1, = ax.plot(range, fake_neg, colors['neg'], linewidth=line_width, label='N',linestyle=linestyles['neg'])
+    line3, = ax.plot(range, fake_stim, colors['low'], linewidth=line_width, label='M',linestyle=linestyles['medium'])
     line3.set_dashes([2, 1, 2, 1])
-    line4, = ax.plot(range, Det, colors['high'], linewidth=line_width, label='Det',linestyle=linestyles['high'])
-    line4.set_dashes([3, 1, 3, 1])
+    line4, = ax.plot(range, fake_high, colors['medium'], linewidth=line_width, label='H',linestyle = linestyles['high'])
+    line4.set_dashes([4, 2, 4, 2])
 
-    ax.set_title('IL10',fontname = 'Times New Roman Bold',size = 17)
-    fake_labels = [0,5,10,20,100]
-    ax.set_xticks(fake_labels) 
-    # ax.set_xticklabels([0,.5,1])
-    # ax.set_yticks([0,0.5,1])
-    # ax.set_yticklabels([0,0.5,1])
-    ax.set_xlabel('Membership ',**axis_font)
+    ax.set_xticks([0,fakes["10"],fakes["50"],max_value]) 
+    ax.set_xticklabels([0,10,r'$c_{2}$',max_value])
+    ax.set_yticks([0,0.5,1])
+    ax.set_yticklabels([0,0.5,1])
+    # ax.set_ylabel('Membership',**axis_font)
+    ax.set_xlabel('Concentration (ng/ml)',**axis_font)
+    tags_x_locs = [0,1.4*fakes["10"],.8*max_value]
+    tags = ['Negligible','Stimulatory','High']
+    # ax.legend(loc=2, fontsize=16)
+    return fig,ax,'IL1b',tags_x_locs,tags
 
+def plot_MG():
+    fig = pylab.figure(figsize=(6.5, 3))
+    ax = fig.add_subplot(111)
+    max_value = 60
+    factor = ctrl.Antecedent(np.arange(0, max_value, .005), 'Mg')
+    intervals_real = [0,0.08,0.8,1.8,5,40,60]
+    intervals = [0,6,15,25,30,45,60] #fake ones
+    # Generate fuzzy membership functions
+    Des_e = fuzz.trapmf(factor.universe, [intervals[0], intervals[0],intervals[1],intervals[2]])
+    Phy = fuzz.trimf(factor.universe, [intervals[1],intervals[2],intervals[4]])
+    Stim = fuzz.trimf(factor.universe, [intervals[2],intervals[4],intervals[5]])
+    Neut = fuzz.trimf(factor.universe, [intervals[4],intervals[5],intervals[6]])
+    Tox = fuzz.trapmf(factor.universe, [intervals[5],intervals[6],intervals[-1],intervals[-1]])
+    Des_l = fuzz.trapmf(factor.universe, [intervals[3],intervals[6],intervals[-1],intervals[-1]])
 
-    # tags = ['Negligible','Stimulatory','High','Destructive']
-    ax.legend(bbox_to_anchor=(1, 1),loc = 'upper right', fontsize=16)
-    # return fig,ax,'BMP2',tags_x_locs,tags
-    return fig,ax,'IL10',[],[]
+    factors = [Des_e,Phy,Stim,Neut,Tox,Des_l]
+    # Visualize these universes and membership functions
+    for i in range(len(factors)):
+        if i == 0:
+            linestyle = 'solid'
+        else:
+            linestyle = 'dashed'
+        
+        line, =ax.plot(factor.universe, factors[i],colors[i], linewidth=line_width,linestyle=linestyle)
+
+        if i == 0:
+            pass
+        else:
+            line.set_dashes(line_patterns[i-1])
+    
+    #ax.set_title('BMP membership')
+    ax.set_xticks(intervals) 
+    ax.set_xticklabels(intervals_real)
+    # ax.set_ylabel('Membership',**axis_font)
+    ax.set_xlabel('Concentration (mM)',**axis_font)
+    tags_x_locs = [intervals[0],intervals[2],intervals[4],intervals[5],intervals[6]]
+    tags = ['Des_e','Physiological','Stimulatory','Neutral','Toxic']
+    return fig,ax,'Mg$^{2+}$ ions',tags_x_locs,tags
 
 def post(ax,name,tags_x_locs,tags):
     """
@@ -119,16 +153,15 @@ def post(ax,name,tags_x_locs,tags):
     for i in range(len(tags)): 
         tags_x_loc = tags_x_locs[i]
         tag = tags[i]
-        cs = list(colors.values())
         pos = 1.1
         if tag == 'Inhibitory':
             tags_x_loc = tags_x_loc+4
             pos = 0.1
-            ax.text(tags_x_loc,pos,tag,size = 17, color = cs[i], rotation=20, fontname = 'Times New Roman',
+            ax.text(tags_x_loc,pos,tag,size = 17, color = colors[i], rotation=20, fontname = 'Times New Roman',
                horizontalalignment='center',
             verticalalignment='bottom')
         else:
-            ax.text(tags_x_loc,pos,tag,size = 17, color = cs[i], rotation='horizontal', fontname = 'Times New Roman',
+            ax.text(tags_x_loc,pos,tag,size = 17, color = colors[i], rotation='horizontal', fontname = 'Times New Roman',
                horizontalalignment='center',
             verticalalignment='bottom')
 
@@ -162,24 +195,41 @@ def plot_legends():
     # ax.set_ylabel('Membership',**axis_font)
     ax.set_xlabel('Concentration (mM)',**axis_font)
     return fig,ax,'legends'
-
-
+## plot IL8
+# fig,ax,name,tags_x_locs,tags = plot_IL8()
+# post( ax,name,tags_x_locs,tags)
+# ## plot IL1b
+# fig,ax,name,tags_x_locs,tags = plot_IL1b()
+# post( ax,name,tags_x_locs,tags)
+# ## plot Mg
+fig,ax,name,tags_x_locs,tags = plot_MG()
+post( ax,name,tags_x_locs,tags)
+# 
+# ## plot TGF
+# fig,ax,name,tags_x_locs,tags = plot_TGF()
+# post( ax,name,tags_x_locs,tags )
+# ## plot CD
+# fig,ax,name,tags_x_locs,tags = plot_CD()
+# post( ax,name,tags_x_locs,tags )
+# # plot AE
+# fig,ax,name,tags_x_locs,tags = plot_AE()
+# post( ax,name,tags_x_locs,tags)
+# # plot maturity
+# fig,ax,name,tags_x_locs,tags = plot_maturity()
+# post( ax,name,tags_x_locs,tags)
+# ## plot MG
+# fig,ax,name,tags_x_locs,tags= plot_MG()
+# post( ax,name,tags_x_locs,tags)
 # fig,ax,name = plot_legends()
+# post( ax,name)
 
 def export_legend(axes):
     figLegend = pylab.figure(figsize = (1.5,1.3))
     pylab.figlegend(*axes.get_legend_handles_labels(), loc = 'upper left')
     figLegend.savefig(os.path.join(output_dir,'legend.svg'))
+export_legend(ax)
 
 
 
 
-if __name__ == '__main__':
-    ## plot IL6
-    # fig,ax,name,tags_x_locs,tags = plot_IL6()
-    # post( ax,name,tags_x_locs,tags)
-    ## plot IL10
-    fig,ax,name,tags_x_locs,tags = plot_IL10(above_48h=True)
-    post( ax,name,tags_x_locs,tags)
-    export_legend(ax)
 

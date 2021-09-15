@@ -8,7 +8,7 @@ from skfuzzy import control as ctrl
 import tellurium as te
 import json
 from observations import observations
-from fuzzy_controllers import Fuzzy_IL10, Fuzzy_IL8,Fuzzy_TNFa,Fuzzy_Mg,Fuzzy_IL1b
+from fuzzy_controllers import Fuzzy_IL10, Fuzzy_IL8_IL1b,Fuzzy_TNFa,Fuzzy_Mg
 all_params = {
     'ALP_M_n':1, # n in the equation ALP = a*(M^n + ALP_0)
     'ARS_M_n':1,
@@ -19,11 +19,12 @@ all_params = {
     'Mg_S':5, # stimulatory conc of Mg
     'Mg_D':30, # detrimental conc of Mg
     'IL10_d':50, # detrimental threshold for >48 exposure
-    'IL1b_H':50, # detrimental threshold IL1b
+    'IL1b_H':120, # detrimental threshold IL1b
     'IL8_M':25, # medium threshold for IL8
     'maturity_t':.5, # early maturity threshold
     'early_diff_L':.25, # center of low membership function
-    'early_diff_H':.75, # center of high membership function
+    'early_diff_H':.65, # center of high membership function
+    'early_diff_VH':.85, # center of high membership function
     'late_diff_L':.25, # center of low membership function
     'late_diff_H':.75, # center of high membership function
     'a_early_diff_u':1, # scale factor, upregulatory
@@ -32,50 +33,51 @@ all_params = {
     'a_late_diff_d':2, # scale factor
     'diff_time':30*24, # days required for full differentiation
 
-    'a_Chen_2018_maturity_t':.5,
+    'a_Chen_2018_maturity_t':1,
     'a_Chen_2018_ALP':2,
     'a_Chen_2018_ARS':2,
 
-    'a_Valles_2020_IL10_maturity_t':.5, 
+    'a_Valles_2020_IL10_maturity_t':1, 
     'a_Valles_2020_IL10_ALP':2,
     'a_Valles_2020_IL10_ARS':2,
     
-    'a_Valles_2020_TNFa_maturity_t':.5,
+    'a_Valles_2020_TNFa_maturity_t':1,
     'a_Valles_2020_TNFa_ALP':2,
     'a_Valles_2020_TNFa_ARS':2,
 
-    'a_Qiao_2021_maturity_t':.5, 
+    'a_Qiao_2021_maturity_t':1, 
     'a_Qiao_2021_ALP':2, 
 
-    'a_Ber_2016_maturity_t':.5, # correction coeff of maturity threshold for the given study considering that cells are inherintly different
+    'a_Ber_2016_maturity_t':1, # correction coeff of maturity threshold for the given study considering that cells are inherintly different
     'a_Ber_2016_ALP':.5, # correlation ALP to maturity
     'a_Ber_2016_OC':.5, 
 
-    'a_Qiao_2021_Mg_maturity_t':.5,
+    'a_Qiao_2021_Mg_maturity_t':1,
     'a_Qiao_2021_Mg_ALP':10,
     'a_Qiao_2021_Mg_OC':.2,
 }
 free_params = {
     'ALP_M_n':[0,10], # n in the equation ALP = a*(M^n + ALP_0)
-    'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
+    # 'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
     # 'OC_M_n':[0,10], # n in the equation OC = a*(M^n + OC_0)
     'ALP_0':[0,1], # the default value of ALP when maturity is zero
     # 'OC_0':[0,1], # the default value of OC when maturity is zero
-    'ARS_0':[0,1], # the default value of ARS when maturity is zero
+    # 'ARS_0':[0,1], # the default value of ARS when maturity is zero
     # 'Mg_S':[2,10], # stimulatory conc of Mg
     # 'Mg_D':[20,40], # detrimental conc of Mg
     # 'IL10_d':[10,100], # detrimental threshold for >48 exposure
-    'IL1b_H':[10,100], # high threshold IL1b
+    'IL1b_H':[11,199], # high threshold IL1b
     'IL8_M':[1,99], # medium threshold for IL8
-    # 'maturity_t':[0,1], # early maturity threshold
-    # 'early_diff_L':[0.1,0.4], # center of low membership function
-    # 'early_diff_H':[0.6,0.9], # center of high membership function
+    'maturity_t':[0,1], # early maturity threshold
+    'early_diff_L':[0.1,0.4], # center of low membership function
+    'early_diff_H':[0.51,0.74], # center of high membership function
+    'early_diff_VH':[0.76,0.99], # center of high membership function
     # 'late_diff_L':[0.1,0.4], # center of low membership function
     # 'late_diff_H':[0.6,0.9], # center of high membership function
     'a_early_diff_u':[0,5], # scale factor, upregulatory
     'a_early_diff_d':[0,1], # scale factor, downregulatory
-    'a_late_diff_u':[0,5], # scale factor
-    'a_late_diff_d':[0,1], # scale factor
+    # 'a_late_diff_u':[0,5], # scale factor
+    # 'a_late_diff_d':[0,1], # scale factor
     'diff_time':[15*24,45*24], # days required for full differentiation
 
     # 'a_Chen_2018_maturity_t':[0,1],
@@ -90,7 +92,7 @@ free_params = {
     # 'a_Valles_2020_TNFa_ALP':[0,1000],
     # 'a_Valles_2020_TNFa_ARS':[0,1000],
 
-    'a_Qiao_2021_maturity_t':[0,1], 
+    # 'a_Qiao_2021_maturity_t':[0,1], 
     'a_Qiao_2021_ALP':[0,200], 
 
     # 'a_Ber_2016_maturity_t':[0,1], # correction coeff of maturity threshold for the given study considering that cells are inherintly different
@@ -109,8 +111,7 @@ class Osteogenesis:
         self.controlers = {
                             'IL10_above_48h':Fuzzy_IL10(self.params,above_48h=True),
                             'IL10_below_48h':Fuzzy_IL10(self.params,above_48h=False),
-                            'IL8':Fuzzy_IL8(self.params),
-                            'IL1b':Fuzzy_IL1b(self.params),
+                            'IL8_IL1b':Fuzzy_IL8_IL1b(self.params),
                             'TNFa':Fuzzy_TNFa(self.params),
                             'Mg':Fuzzy_Mg(self.params)
                             }
@@ -119,15 +120,9 @@ class Osteogenesis:
         defines the interaction between different fuzzy values
         """
         
-        IL8_flag = 'IL8' in fs.keys()
-        IL1b_flag = 'IL1b' in fs.keys()
-        if  IL8_flag & IL1b_flag:
-            print(fs)
-            exit(2)
-        else:
-            for key,value in fs.items():
-                if value != None:
-                    return value
+        for key,value in fs.items():
+            if value != None:
+                return value
 
     def scale(self,x,factor_u, factor_d): 
         """
@@ -235,8 +230,7 @@ class Osteogenesis:
             IL10_controler = self.controlers['IL10_above_48h']
         else:
             IL10_controler = self.controlers['IL10_below_48h']
-        IL8_controller = self.controlers['IL8']
-        IL1b_controller = self.controlers['IL1b']
+        IL8_IL1b_controller = self.controlers['IL8_IL1b']
         TNFa_controller = self.controlers['TNFa']
         Mg_controller = self.controlers['Mg']
 
@@ -248,25 +242,15 @@ class Osteogenesis:
         TNFa_flag = 'TNFa' in inputs.keys()
         Mg_flag = 'Mg' in inputs.keys()
 
-        if IL8_flag & IL1b_flag:
-            pass
-        elif IL8_flag:
-            pass
-        elif IL1b_flag:
-            pass
-        elif IL10_flag:
-            pass
-        elif Mg_flag:
-            pass
 
         if IL10_flag:
             f_IL10 = IL10_controler.forward({'IL10':inputs['IL10']})
             fs['IL10'] = f_IL10
         if IL8_flag:
-            f_IL8 = IL8_controller.forward({'IL8':inputs['IL8']})
+            f_IL8 = IL8_IL1b_controller.forward({'IL8':inputs['IL8']})
             fs['IL8'] = f_IL8
         if IL1b_flag:
-            f_IL1b = IL1b_controller.forward({'IL1b':inputs['IL1b']})
+            f_IL1b = IL8_IL1b_controller.forward({'IL1b':inputs['IL1b']})
             fs['IL1b'] = f_IL1b
         if TNFa_flag:
             f_TNFa = TNFa_controller.forward({'TNFa':inputs['TNFa']})
@@ -310,6 +294,8 @@ class MSC_model:
         """
         Simulte one study
         """
+        if self.debug:
+            print('\n **** ', study,'*** \n')
         measurement_scheme = observations[study]['measurement_scheme']
         exposure_time = observations[study]['exposure_time']
         IDs = observations[study]['IDs']

@@ -21,16 +21,7 @@ class Plot_bar:
 			self.tick_font_size = 30
 			self.title_font_size = 30 
 			self.delta = .1
-		elif study == 'Qiao_2021_IL8':
-			self.graph_size = [10,10]
-			self.bar_width = .2
-			self.error_bar_width = .2
-			self.colors = ['lime' , 'violet', 'yellowgreen', 'peru', 'skyblue']
-			self.legend_font_size = 30
-			self.tick_font_size = 30
-			self.title_font_size = 30 
-			self.delta = .1
-		elif study == 'Qiao_2021_IL1b':
+		elif study == 'Qiao_2021_IL1b' or study == 'Qiao_2021_IL8' or study == 'Qiao_2021_IL8_IL1b':
 			self.graph_size = [10,10]
 			self.bar_width = .2
 			self.error_bar_width = .2
@@ -156,6 +147,8 @@ class Plot_bar:
 				adj_labels.append('10')
 			elif label == 'IL1b_100':
 				adj_labels.append('100')
+			elif label == 'IL1b_IL8':
+				adj_labels.append('IL8+IL1b')
 			else:
 				raise ValueError('not defined')
 		return adj_labels
