@@ -42,10 +42,10 @@ class Fuzzy_controller:
     def define_rules(self):
         pass
     def forward(self,inputs):
-        # print('inputs: {}'.format(inputs))
+        # print('default_inputs: {}'.format(self.default_inputs))
         for key,value in inputs.items():
             self.default_inputs[key] = value
-
+        # print('real inputs: {}'.format(self.default_inputs))
         for key,value in self.default_inputs.items():
             self.controler.input[key] = value
         self.controler.compute()
@@ -110,8 +110,9 @@ class Fuzzy_IL8_IL1b(Fuzzy_controller):
         self.define_antecedents()
         self.define_consequents()
         self.define_rules()
+        self.reset()
+    def reset(self):
         self.default_inputs = {'IL8':0,'IL1b':0}
-
     def define_antecedents(self):
         #// define antecedents
         intervals = [0,self.params['IL8_M'],100]

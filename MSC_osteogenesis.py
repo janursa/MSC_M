@@ -244,22 +244,26 @@ class Osteogenesis:
 
 
         if IL10_flag:
+            IL10_controler.reset()
             f_IL10 = IL10_controler.forward({'IL10':inputs['IL10']})
             fs['IL10'] = f_IL10
-        if IL8_flag:
-            f_IL8 = IL8_IL1b_controller.forward({'IL8':inputs['IL8']})
-            fs['IL8'] = f_IL8
-        if IL1b_flag:
-            f_IL1b = IL8_IL1b_controller.forward({'IL1b':inputs['IL1b']})
-            fs['IL1b'] = f_IL1b
+
+        if IL8_flag or IL1b_flag:
+            IL8_IL1b_controller.reset()
+            ff = IL8_IL1b_controller.forward(inputs)
+            print('inputs ',inputs,' output ',ff)
+            fs['IL8_IL1b'] = ff
         if TNFa_flag:
+            TNFa_controller.reset()
             f_TNFa = TNFa_controller.forward({'TNFa':inputs['TNFa']})
             fs['TNFa'] = f_TNFa
         if Mg_flag:
+            Mg_controller.reset()
             ff = Mg_controller.forward({'Mg':inputs['Mg']})
             fs['Mg'] = ff
 
         final_f_values = self.interactions(fs)
+        # print('fs ',fs, ' final fs',final_f_values)
         results= {}
 
         for target,checkpoints in measurement_scheme.items():
@@ -304,6 +308,7 @@ class MSC_model:
             inputs = observations[study][ID]['inputs']
             if self.debug:
                 print('\n',ID)
+                print('inputs:',inputs)
             ID_results = self.osteogenesis.simulate(study=study,inputs=inputs,measurement_scheme=measurement_scheme,exposure_time=exposure_time)
             
             results[ID] = ID_results
