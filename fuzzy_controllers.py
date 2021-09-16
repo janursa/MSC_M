@@ -17,7 +17,7 @@ class Fuzzy_controller:
         range_value = np.arange(0, 1, .01)
         early_diff = ctrl.Consequent(range_value, 'early_diff')
         late_diff = ctrl.Consequent(range_value, 'late_diff')
-        
+
         #// define membership functions
         sigma = .05
         diff_intervals = [0,self.params['early_diff_L'],.5,self.params['early_diff_H'],self.params['early_diff_VH'], 1]
@@ -96,7 +96,7 @@ class Fuzzy_IL10(Fuzzy_controller):
         ]
         rules = early_diff_rules+late_diff_rules
         self.controler = ctrl.ControlSystemSimulation(ctrl.ControlSystem(rules))
-        
+
     def forward(self,inputs):
         self.controler.input['IL10'] = inputs['IL10']
         self.controler.compute()
@@ -126,7 +126,7 @@ class Fuzzy_IL8_IL1b(Fuzzy_controller):
         #// store
         self.antecedents['IL8']=IL8
 
-        intervals = [0,10,self.params['IL1b_H'],200]
+        intervals = [0,self.params['IL1b_S'],self.params['IL1b_H'],200]
         IL1b = ctrl.Antecedent(np.arange(intervals[0], intervals[-1], .005), 'IL1b')
         IL1b['Neg'] = fuzz.trimf(IL1b.universe, [intervals[0], intervals[0],intervals[1]])
         IL1b['Stim'] = fuzz.trimf(IL1b.universe, [intervals[0], intervals[1], intervals[2]])
@@ -148,10 +148,10 @@ class Fuzzy_IL8_IL1b(Fuzzy_controller):
             ctrl.Rule(IL1b['Neg'] & IL8['Med'] , early_diff['VH']),
             ctrl.Rule(IL1b['Neg'] & IL8['High'] , early_diff['EH']),
             # only IL1b
-            ctrl.Rule(IL1b['Stim'] & IL8['Neg'] , early_diff['H']),
+            ctrl.Rule(IL1b['Stim'] & IL8['Neg'] , early_diff['VH']),
             ctrl.Rule(IL1b['High'] & IL8['Neg'] , early_diff['M']),
             # combined
-            ctrl.Rule(IL1b['NNeg'] & IL8['NNeg'] , early_diff['VH'])            
+            ctrl.Rule(IL1b['NNeg'] & IL8['NNeg'] , early_diff['VH'])
 
         ]
         rules = early_diff_rules
@@ -180,7 +180,7 @@ class Fuzzy_TNFa(Fuzzy_controller):
         range_value = np.arange(.5, 1, .01)
         early_diff = ctrl.Consequent(range_value, 'early_diff')
         late_diff = ctrl.Consequent(range_value, 'late_diff')
-        
+
         #// define membership functions
         sigma = .05
         diff_intervals = [.5, 1]
@@ -209,7 +209,7 @@ class Fuzzy_TNFa(Fuzzy_controller):
         ]
         rules = early_diff_rules+late_diff_rules
         self.controler = ctrl.ControlSystemSimulation(ctrl.ControlSystem(rules))
-        
+
 
 class Fuzzy_Mg(Fuzzy_controller):
     def __init__(self,params):
@@ -222,7 +222,7 @@ class Fuzzy_Mg(Fuzzy_controller):
         neut = np.mean([self.params['Mg_S'],self.params['Mg_D']])
         intervals = [0,0.08,0.8,1.8,self.params['Mg_S'],neut,self.params['Mg_D'],60]
         factor = ctrl.Antecedent(np.arange(0, 60, .005), 'Mg')
-  
+
         factor['Des_e'] = fuzz.trapmf(factor.universe, [intervals[0], intervals[0],intervals[1],intervals[2]])
         factor['Phy'] = fuzz.trimf(factor.universe, [intervals[1],intervals[2],intervals[4]])
         factor['Stim'] = fuzz.trimf(factor.universe, [intervals[2],intervals[4],intervals[5]])
@@ -240,10 +240,10 @@ class Fuzzy_Mg(Fuzzy_controller):
         late_range_value = np.arange(0, .5, .01)
         early_diff = ctrl.Consequent(early_range_value, 'early_diff')
         late_diff = ctrl.Consequent(late_range_value, 'late_diff')
-        
+
         #// define membership functions
         sigma = .05
-        
+
         early_diff_intervals = [0,.5, 1]
         early_diff['L']=fuzz.gaussmf(early_range_value, early_diff_intervals[0], sigma)
         early_diff['M']=fuzz.gaussmf(early_range_value, early_diff_intervals[1], sigma)
@@ -273,5 +273,3 @@ class Fuzzy_Mg(Fuzzy_controller):
         ]
         rules = early_diff_rules+late_diff_rules
         self.controler = ctrl.ControlSystemSimulation(ctrl.ControlSystem(rules))
-        
-        

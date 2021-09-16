@@ -20,6 +20,7 @@ all_params = {
     'Mg_D':30, # detrimental conc of Mg
     'IL10_d':50, # detrimental threshold for >48 exposure
     'IL1b_H':120, # detrimental threshold IL1b
+    'IL1b_S':10,
     'IL8_M':25, # medium threshold for IL8
     'maturity_t':.5, # early maturity threshold
     'early_diff_L':.25, # center of low membership function
@@ -66,12 +67,13 @@ free_params = {
     # 'Mg_S':[2,10], # stimulatory conc of Mg
     # 'Mg_D':[20,40], # detrimental conc of Mg
     # 'IL10_d':[10,100], # detrimental threshold for >48 exposure
-    'IL1b_H':[11,199], # high threshold IL1b
+    'IL1b_H':[30,199], # high threshold IL1b
+    'IL1b_S':[1,29], # stimulatory threshold of IL1b
     'IL8_M':[1,99], # medium threshold for IL8
     'maturity_t':[0,1], # early maturity threshold
     'early_diff_L':[0.1,0.4], # center of low membership function
-    'early_diff_H':[0.51,0.74], # center of high membership function
-    'early_diff_VH':[0.76,0.99], # center of high membership function
+    'early_diff_H':[0.5,1], # center of high membership function
+    'early_diff_VH':[0.5,1], # center of high membership function
     # 'late_diff_L':[0.1,0.4], # center of low membership function
     # 'late_diff_H':[0.6,0.9], # center of high membership function
     'a_early_diff_u':[0,5], # scale factor, upregulatory
