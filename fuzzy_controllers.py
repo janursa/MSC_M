@@ -60,6 +60,9 @@ class Fuzzy_IL10(Fuzzy_controller):
         self.define_antecedents(above_48h)
         self.define_consequents()
         self.define_rules()
+        self.reset()
+    def reset(self):
+        self.default_inputs = {'IL10':0}
     def define_antecedents(self,above_48h):
         #// define antecedents
         # the marks of IL10 memberships
@@ -163,6 +166,9 @@ class Fuzzy_TNFa(Fuzzy_controller):
         self.define_antecedents()
         self.define_consequents()
         self.define_rules()
+        self.reset()
+    def reset(self):
+        self.default_inputs = {'TNFa':0}
     def define_antecedents(self):
         #// define antecedents
         intervals = [0,1,10]
@@ -217,6 +223,9 @@ class Fuzzy_Mg(Fuzzy_controller):
         self.define_antecedents()
         self.define_consequents()
         self.define_rules()
+        self.reset()
+    def reset(self):
+        self.default_inputs = {'Mg':0}
     def define_antecedents(self):
         #// define antecedents
         neut = np.mean([self.params['Mg_S'],self.params['Mg_D']])
