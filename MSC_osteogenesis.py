@@ -37,20 +37,20 @@ all_params = {
     'a_Chen_2018_ALP':2,
     'a_Chen_2018_ARS':2,
 
-    'a_Valles_2020_IL10_maturity_t':1, 
+    'a_Valles_2020_IL10_maturity_t':1,
     'a_Valles_2020_IL10_ALP':2,
     'a_Valles_2020_IL10_ARS':2,
-    
+
     'a_Valles_2020_TNFa_maturity_t':1,
     'a_Valles_2020_TNFa_ALP':2,
     'a_Valles_2020_TNFa_ARS':2,
 
-    'a_Qiao_2021_maturity_t':1, 
-    'a_Qiao_2021_ALP':2, 
+    'a_Qiao_2021_maturity_t':1,
+    'a_Qiao_2021_ALP':2,
 
     'a_Ber_2016_maturity_t':1, # correction coeff of maturity threshold for the given study considering that cells are inherintly different
     'a_Ber_2016_ALP':.5, # correlation ALP to maturity
-    'a_Ber_2016_OC':.5, 
+    'a_Ber_2016_OC':.5,
 
     'a_Qiao_2021_Mg_maturity_t':1,
     'a_Qiao_2021_Mg_ALP':10,
@@ -84,20 +84,20 @@ free_params = {
     # 'a_Chen_2018_ALP':[0,10],
     # 'a_Chen_2018_ARS':[0,10],
 
-    # 'a_Valles_2020_IL10_maturity_t':[0,1], 
+    # 'a_Valles_2020_IL10_maturity_t':[0,1],
     # 'a_Valles_2020_IL10_ALP':[0,1000],
     # 'a_Valles_2020_IL10_ARS':[0,1000],
-    
+
     # 'a_Valles_2020_TNFa_maturity_t':[0,1],
     # 'a_Valles_2020_TNFa_ALP':[0,1000],
     # 'a_Valles_2020_TNFa_ARS':[0,1000],
 
-    # 'a_Qiao_2021_maturity_t':[0,1], 
-    'a_Qiao_2021_ALP':[0,200], 
+    # 'a_Qiao_2021_maturity_t':[0,1],
+    'a_Qiao_2021_ALP':[0,200],
 
     # 'a_Ber_2016_maturity_t':[0,1], # correction coeff of maturity threshold for the given study considering that cells are inherintly different
     # 'a_Ber_2016_ALP':[0,1], # correlation ALP to maturity
-    # 'a_Ber_2016_OC':[0,1], 
+    # 'a_Ber_2016_OC':[0,1],
 
     # 'a_Qiao_2021_Mg_maturity_t':[0,1],
     # 'a_Qiao_2021_Mg_ALP':[0,50],
@@ -119,12 +119,12 @@ class Osteogenesis:
         """
         defines the interaction between different fuzzy values
         """
-        
+
         for key,value in fs.items():
             if value != None:
                 return value
 
-    def scale(self,x,factor_u, factor_d): 
+    def scale(self,x,factor_u, factor_d):
         """
         Scale the fuzzy controller's output cosidering that the origin is x=0.5
         The scalling is done differently for x > 0.5 than x < 0.5
@@ -151,7 +151,7 @@ class Osteogenesis:
         """
         correct maturity threshold bsed on each study
         """
-        
+
         return maturity_t*correction_coeff
     @staticmethod
     def determine_correction_factor(study,params,f_type='maturity_t'):
@@ -165,7 +165,7 @@ class Osteogenesis:
         tag = prefix+'_'+f_type
         return params[tag]
     def calculate_maturation(self,study,f_values,checkpoint,target):
-        
+
         k0 = 1/(self.params['diff_time']) # base diff rate 1/hour
         #// k_early and k_late are the corrected maturation rate
         if 'early_diff' in f_values:
@@ -174,7 +174,7 @@ class Osteogenesis:
         else:
             k_early = k0
         if 'late_diff' in f_values:
-            f_late = f_values['late_diff'] 
+            f_late = f_values['late_diff']
             k_late = k0 * self.scale(x = f_late,factor_u = self.params['a_late_diff_u'], factor_d = self.params['a_late_diff_d'])
         else:
             k_late = k0
@@ -182,7 +182,7 @@ class Osteogenesis:
         maturity_t_correction_factor = self.determine_correction_factor(study = study, params = self.params, f_type='maturity_t') # to correct maturity threshold for each experiment considering that cells are inherintly differenmt
         adjusted_maturity_t = maturity_t_correction_factor * self.params['maturity_t']
         maturity_t_scalled = adjusted_maturity_t*self.params['diff_time'] # because given maturity_t in the parameters is between 0 and 1 1
-        
+
         def calculate_maturity(checkpoint,maturity_t_h,k_early = None,k_late = None):
             if checkpoint < maturity_t_h: # if the given time is below the threshold
                 maturity = checkpoint*k_early
@@ -222,9 +222,9 @@ class Osteogenesis:
 
 
 
-    def simulate(self,study,inputs,measurement_scheme,exposure_time): 
+    def simulate(self,study,inputs,measurement_scheme,exposure_time):
         """
-        simulates one single run 
+        simulates one single run
         """
         if exposure_time > 48: # fuzzy controller is defined differently based on the exposure time
             IL10_controler = self.controlers['IL10_above_48h']
@@ -251,7 +251,7 @@ class Osteogenesis:
         if IL8_flag or IL1b_flag:
             IL8_IL1b_controller.reset()
             ff = IL8_IL1b_controller.forward(inputs)
-            print('inputs ',inputs,' output ',ff)
+            # print('inputs ',inputs,' output ',ff)
             fs['IL8_IL1b'] = ff
         if TNFa_flag:
             TNFa_controller.reset()
@@ -290,7 +290,7 @@ class MSC_model:
         studies_results = {}
         for study in observations['studies']:
             results = self.simulate_osteogenesis_study(study)
-            
+
             studies_results[study]= results
         return studies_results
 
@@ -308,11 +308,11 @@ class MSC_model:
             inputs = observations[study][ID]['inputs']
             if self.debug:
                 print('\n',ID)
-                print('inputs:',inputs)
+                # print('inputs:',inputs)
             ID_results = self.osteogenesis.simulate(study=study,inputs=inputs,measurement_scheme=measurement_scheme,exposure_time=exposure_time)
-            
+
             results[ID] = ID_results
-                
+
         return results
     def cost_study(self,study,study_results):
         """
@@ -346,6 +346,6 @@ class MSC_model:
         return error
 if __name__ == '__main__':
     params = {}
-    
+
     obj = MSC_model(free_params={})
     print('\n',obj.run())
