@@ -38,13 +38,9 @@ all_params = {
     'a_Chen_2018_ALP':2,
     'a_Chen_2018_ARS':2,
 
-    'a_Valles_2020_IL10_maturity_t':1,
-    'a_Valles_2020_IL10_ALP':2,
-    'a_Valles_2020_IL10_ARS':2,
-
-    'a_Valles_2020_TNFa_maturity_t':1,
-    'a_Valles_2020_TNFa_ALP':2,
-    'a_Valles_2020_TNFa_ARS':2,
+    'a_Valles_2020_maturity_t':1,
+    'a_Valles_2020_ALP':2,
+    'a_Valles_2020_ARS':2,
 
     'a_Qiao_2021_maturity_t':1,
     'a_Qiao_2021_ALP':2,
@@ -162,6 +158,9 @@ class Osteogenesis:
         """
         if (study == 'Qiao_2021_IL8_IL1b' or study == 'Qiao_2021_IL8' or study == 'Qiao_2021_IL1b'):
             study = 'Qiao_2021'
+
+        if (study == 'Valles_2020_TNFa' or study == 'Valles_2020_IL10' ):
+            study = 'Valles_2020'
 
         prefix = 'a_'+study
         tag = prefix+'_'+f_type
