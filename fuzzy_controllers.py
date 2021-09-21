@@ -132,8 +132,8 @@ class Fuzzy_IL10(Fuzzy_controller):
         else:
             intervals = [0,1,10,100]
             IL10['Neg'] = fuzz.trimf(IL10.universe, [intervals[0], intervals[0],intervals[1]])
-            IL10['HighStim'] = fuzz.trimf(IL10.universe, [intervals[0], intervals[1], intervals[2]])
-            IL10['LowStim'] = fuzz.trimf(IL10.universe, [intervals[1], intervals[2], intervals[3]])
+            IL10['LowStim'] = fuzz.trimf(IL10.universe, [intervals[0], intervals[1], intervals[2]])
+            IL10['HighStim'] = fuzz.trimf(IL10.universe, [intervals[1], intervals[2], intervals[3]])
             IL10['Inhib'] = fuzz.trapmf(IL10.universe, [intervals[2], intervals[3], intervals[-1], intervals[-1]])
             
         #// store
