@@ -9,7 +9,7 @@ if __name__ == '__main__':
 	# inferred_params['a_early_diff_u'] = 3
 	# inferred_params['ALP_M_n'] = 5
 	# inferred_params['a_Qiao_2021_IL1b_ALP'] = 60
-	# inferred_params['diff_time'] = 1000
+	inferred_params['diff_time'] = 800
 	
 	
 	obj = MSC_model(free_params = inferred_params,debug=True)

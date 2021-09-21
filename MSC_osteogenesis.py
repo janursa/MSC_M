@@ -18,7 +18,6 @@ all_params = {
     'ARS_0':.2, # the default value of ARS when maturity is zero
     'Mg_S':5, # stimulatory conc of Mg
     'Mg_D':30, # detrimental conc of Mg
-    'IL10_d':50, # detrimental threshold for >48 exposure
     'IL1b_H':120, # detrimental threshold IL1b
     'IL1b_S':10,
     'IL8_M':25, # medium threshold for IL8
@@ -56,16 +55,15 @@ all_params = {
 free_params = {
     'ALP_M_n':[0,10], # n in the equation ALP = a*(M^n + ALP_0)
     'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
-    'OC_M_n':[0,10], # n in the equation OC = a*(M^n + OC_0)
+    # 'OC_M_n':[0,10], # n in the equation OC = a*(M^n + OC_0)
     'ALP_0':[0,1], # the default value of ALP when maturity is zero
-    'OC_0':[0,1], # the default value of OC when maturity is zero
     'ARS_0':[0,1], # the default value of ARS when maturity is zero
-    'Mg_S':[2,10], # stimulatory conc of Mg
-    'Mg_D':[20,40], # detrimental conc of Mg
-    'IL10_d':[10,100], # detrimental threshold for >48 exposure
-    'IL1b_H':[30,199], # high threshold IL1b
-    'IL1b_S':[1,29], # stimulatory threshold of IL1b
-    'IL8_M':[1,99], # medium threshold for IL8
+    # 'OC_0':[0,1], # the default value of OC when maturity is zero
+    # 'Mg_S':[2,10], # stimulatory conc of Mg
+    # 'Mg_D':[20,40], # detrimental conc of Mg
+    # 'IL1b_H':[30,199], # high threshold IL1b
+    # 'IL1b_S':[1,29], # stimulatory threshold of IL1b
+    # 'IL8_M':[1,99], # medium threshold for IL8
     'maturity_t':[0,1], # early maturity threshold
     'early_diff_L':[0.1,0.4], # center of low membership function
     'early_diff_H':[0.5,1], # center of high membership function
@@ -79,27 +77,23 @@ free_params = {
     'diff_time':[15*24,45*24], # days required for full differentiation
 
     # 'a_Chen_2018_maturity_t':[0,1],
-    'a_Chen_2018_ALP':[0,10],
-    'a_Chen_2018_ARS':[0,10],
+    # 'a_Chen_2018_ALP':[0,10],
+    # 'a_Chen_2018_ARS':[0,10],
 
-    # 'a_Valles_2020_IL10_maturity_t':[0,1],
-    'a_Valles_2020_IL10_ALP':[0,1000],
-    'a_Valles_2020_IL10_ARS':[0,1000],
-
-    # 'a_Valles_2020_TNFa_maturity_t':[0,1],
-    'a_Valles_2020_TNFa_ALP':[0,1000],
-    'a_Valles_2020_TNFa_ARS':[0,1000],
+    # 'a_Valles_2020_maturity_t':[0,1],
+    'a_Valles_2020_ALP':[0,1000],
+    'a_Valles_2020_ARS':[0,1000],
 
     # 'a_Qiao_2021_maturity_t':[0,1],
-    'a_Qiao_2021_ALP':[0,200],
+    # 'a_Qiao_2021_ALP':[0,200],
 
     # 'a_Ber_2016_maturity_t':[0,1], # correction coeff of maturity threshold for the given study considering that cells are inherintly different
-    'a_Ber_2016_ALP':[0,1], # correlation ALP to maturity
-    'a_Ber_2016_OC':[0,1],
+    # 'a_Ber_2016_ALP':[0,1], # correlation ALP to maturity
+    # 'a_Ber_2016_OC':[0,1],
 
     # 'a_Qiao_2021_Mg_maturity_t':[0,1],
-    'a_Qiao_2021_Mg_ALP':[0,50],
-    'a_Qiao_2021_Mg_OC':[0,1],
+    # 'a_Qiao_2021_Mg_ALP':[0,50],
+    # 'a_Qiao_2021_Mg_OC':[0,1],
 }
 
 class Osteogenesis:
