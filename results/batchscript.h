@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --partition=all
-#SBATCH --time=00:60:00                           # Maximum time requested
+#SBATCH --time=03:00:00                           # Maximum time requested
 #SBATCH --nodes=1                                 # Number of nodes
 #SBATCH --chdir   ./      # directory must already exist!
 #SBATCH --job-name  calib
@@ -11,4 +11,4 @@
 unset LD_PRELOAD
 source /etc/profile.d/modules.sh
 
-python3 diff_calibration.py
+python3 ../diff_calibration.py

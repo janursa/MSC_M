@@ -7,7 +7,7 @@ from MSC_osteogenesis import *
 ##// optimize //##
 class Calibrate:
 	def __init__(self,free_params):
-		self.max_iters = 30
+		self.max_iters = 300
 		self.free_params = free_params
 	def cost_function(self,calib_params_values):
 		# calculate the error for each target by comparing the results to the original model
@@ -21,6 +21,7 @@ class Calibrate:
 	def optimize(self):
 		# Call instance of PSO
 		# results = differential_evolution(self.cost_function,bounds=list(self.free_params.values()),disp=True,maxiter=self.max_iters,workers=-1)
+		# results = differential_evolution(self.cost_function,bounds=list(self.free_params.values()),disp=True,maxiter=self.max_iters,workers=1)
 		results = differential_evolution(self.cost_function,bounds=list(self.free_params.values()),disp=True,maxiter=self.max_iters)
 
 		inferred_params = {}

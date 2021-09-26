@@ -16,13 +16,16 @@ plt.rcParams["font.family"] = "serif"
 plt.style.use('seaborn-deep')
 plt.rcParams["font.serif"] = ["Times New Roman"] + plt.rcParams["font.serif"]
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+results_file =os.path.join(dir_path,'results')
+
 class settings:
 	params_keys = free_params.keys()
 	studies = {
-		'IL8':'inferred_params_IL8.json',
-		'IL1b':'inferred_params_IL1b.json',
-		'IL8_all':'inferred_params_IL8_all.json',
-		'IL1b_all':'inferred_params_IL1b_all.json'
+		'chen_valles':'inferred_params_chen_valles.json',
+		'valles':'inferred_params_valles.json',
+		'chen':'inferred_params_chen.json'
+
 	}
 	axis_font = {'fontname':'Times New Roman', 'size':'15'}
 	legend_font = { 'family':'Times New Roman','size':'13'}
@@ -33,7 +36,7 @@ class settings:
 ##/ read the inferred params from the files and normalized them based on the range of the free params
 data = {} # stores data based on study tag
 for study,file in settings.studies.items():
-	with open(file) as ff:
+	with open(os.path.join(results_file,file)) as ff:
 		params = json.load(ff)
 	normalized_params = {}
 	for key,value in params.items():
@@ -61,5 +64,3 @@ for label in (ax.get_xticklabels() + ax.get_yticklabels()):
 plt.legend(bbox_to_anchor=(0.05, 1.07), loc='upper left', borderaxespad=0.,prop=settings.legend_font,ncol=4)
 plt.xlabel('Scaled values',fontsize = 17, family = settings.axis_font['fontname'])
 plt.savefig("posteriors_dispesity.svg",bbox_inches="tight")
-
-
