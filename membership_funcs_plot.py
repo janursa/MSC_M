@@ -20,8 +20,9 @@ from skfuzzy import control as ctrl
 rcParams["mathtext.default"]='rm'
 rcParams['mathtext.fontset'] = 'stixsans'
 del matplotlib.font_manager.weight_dict['roman']
-cwd = os.getcwd()
-output_dir = os.path.join(cwd,"graphs")
+# cwd = os.getcwd()
+file_dir = pl.Path(__file__).parent.absolute()
+output_dir = os.path.join(file_dir,"graphs")
 line_width  = 2
 axis_font = {'fontname':'Times New Roman', 'size':'18'}
 title_font = {'fontname':'Times New Roman', 'size':'20'}
@@ -33,7 +34,7 @@ line_patterns = [[8,2,8,2],[2,1,2,1],[8,1,8,1],[2,2,2,2],[4,1,4,1]]
 format = ".svg"
 
 def plot_IL8():
-    fig,ax = plt.subplots(figsize=(5.5, 3))
+    fig,ax = plt.subplots(figsize=(4, 3))
     max_value = 10
     factor = ctrl.Antecedent(np.arange(0, max_value, .005), 'TNFa')
     intervals_real = [0,10,100]
@@ -67,9 +68,9 @@ def plot_IL8():
 
 
 def plot_IL1b():
-    fig,ax = plt.subplots(figsize=(5.5, 3))
+    fig,ax = plt.subplots(figsize=(4, 3))
     max_value = 15
-    factor = ctrl.Antecedent(np.arange(0, max_value, .005), 'TNFa')
+    factor = ctrl.Antecedent(np.arange(0, max_value, .005), 'IL1b')
     intervals_real = [0,10,50,200]
     intervals = [0,5,10,15] #fake ones
     # Generate fuzzy membership functions
@@ -134,6 +135,8 @@ def plot_MG():
     
     #ax.set_title('BMP membership')
     ax.set_xticks(intervals) 
+    intervals_real[4] = r'$c_{1}$'
+    intervals_real[5] = r'$c_{2}$'
     ax.set_xticklabels(intervals_real)
     # ax.set_ylabel('Membership',**axis_font)
     ax.set_xlabel('Concentration (mM)',**axis_font)
@@ -142,7 +145,7 @@ def plot_MG():
     return fig,ax,'Mg$^{2+}$ ions',tags_x_locs,tags
 
 def plot_IL10_above48():
-    fig,ax = plt.subplots(figsize=(5.5, 3))
+    fig,ax = plt.subplots(figsize=(5, 3))
     intervals_real = [0,0.1,1,10,100]
     intervals = [0,6,12,18,20] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'IL10')
@@ -175,7 +178,7 @@ def plot_IL10_above48():
     return fig,ax,'IL10 above 48',tags_x_locs,tags
 
 def plot_IL10_below48():
-    fig,ax = plt.subplots(figsize=(5.5, 3))
+    fig,ax = plt.subplots(figsize=(5, 3))
     intervals_real = [0,1,10,100]
     intervals = [0,6,12,20] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'IL10')
@@ -207,7 +210,7 @@ def plot_IL10_below48():
     tags = ['Neg.','Low Stim.','High Stim.','High']
     return fig,ax,'IL10 below 48',tags_x_locs,tags
 def plot_TNFa():
-    fig,ax = plt.subplots(figsize=(5.5, 3))
+    fig,ax = plt.subplots(figsize=(4, 3))
     max_value = 10
     factor = ctrl.Antecedent(np.arange(0, max_value, .005), 'TNFa')
     intervals_real = [0,1,10]

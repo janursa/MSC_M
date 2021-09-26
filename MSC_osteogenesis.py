@@ -148,8 +148,11 @@ class Osteogenesis:
     @staticmethod
     def determine_correction_factor(study,params,f_type='maturity_t'):
         """
-        To correct maturity threshold for each experiment considering that cells are inherintly differenmt
+        To correct maturity threshold for each experiment considering that cells 
+        are inherintly differenmt
+        
         """
+
         if (study == 'Qiao_2021_IL8_IL1b' or study == 'Qiao_2021_IL8' or study == 'Qiao_2021_IL1b'):
             study = 'Qiao_2021'
 
@@ -337,7 +340,11 @@ class MSC_model:
     def run(self):
         results = self.simulate_studies()
         errors = self.cost_studies(results)
-        error = np.mean([np.mean(list(study_errors.values())) for study_errors in errors.values()])
+        errors_list = []
+        for study,study_errors in errors.items():
+            errors_list+=list(study_errors.values())
+        #// to sum up the errors
+        error = np.mean(errors_list) # we put the errors on all of the IDs here and finally just sum them up
         return error
 if __name__ == '__main__':
     params = {}
