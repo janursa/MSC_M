@@ -141,7 +141,7 @@ def plot_MG():
     # ax.set_ylabel('Membership',**axis_font)
     ax.set_xlabel('Concentration (mM)',**axis_font)
     tags_x_locs = [intervals[0]+2,intervals[2],intervals[4],intervals[5],intervals[6],48]
-    tags = ['Inhib. ED','Phys.','Stim.','Neut.','Inhib.','Inhib. LD']
+    tags = ['Inhib. ED','Phys.','Stim. ED','Neut.','Inhib.','Inhib. LD']
     return fig,ax,'Mg$^{2+}$ ions',tags_x_locs,tags
 
 def plot_IL10_above48():
@@ -175,7 +175,7 @@ def plot_IL10_above48():
     ax.set_xlabel('Concentration (ng/ml)',**axis_font)
     tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3]+1]
     tags = ['Neg.','High Stim.','Low Stim.','High']
-    return fig,ax,'IL10 above 48',tags_x_locs,tags
+    return fig,ax,'IL10 above 48 h',tags_x_locs,tags
 
 def plot_IL10_below48():
     fig,ax = plt.subplots(figsize=(5, 3))
@@ -208,19 +208,19 @@ def plot_IL10_below48():
     ax.set_xlabel('Concentration (ng/ml)',**axis_font)
     tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3]]
     tags = ['Neg.','Low Stim.','High Stim.','High']
-    return fig,ax,'IL10 below 48',tags_x_locs,tags
+    return fig,ax,'IL10 below 48 h',tags_x_locs,tags
 def plot_TNFa():
-    fig,ax = plt.subplots(figsize=(4, 3))
-    max_value = 10
-    factor = ctrl.Antecedent(np.arange(0, max_value, .005), 'TNFa')
-    intervals_real = [0,1,10]
-    intervals = [0,3,10] #fake ones
+    fig,ax = plt.subplots(figsize=(5, 3))
+    intervals_real = [0,1,10,100]
+    intervals = [0,6,12,20] #fake ones
+    factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'TNFa')
     # Generate fuzzy membership functions
     neg = fuzz.trimf(factor.universe, [intervals[0], intervals[0],intervals[1]])
     stim = fuzz.trimf(factor.universe, [intervals[0], intervals[1], intervals[2]])
-    high = fuzz.trimf(factor.universe, [intervals[1], intervals[2], intervals[2]])
+    high = fuzz.trimf(factor.universe, [intervals[1], intervals[2], intervals[3]])
+    inhib = fuzz.trimf(factor.universe, [intervals[2], intervals[3], intervals[3]])
 
-    factors = [neg,stim,high]
+    factors = [neg,stim,high,inhib]
     for i in range(len(factors)):
         if i == 0:
             linestyle = 'solid'
@@ -237,9 +237,9 @@ def plot_TNFa():
     ax.set_xticks(intervals) 
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Concentration (mM)',**axis_font)
-    tags_x_locs = [intervals[0],intervals[1],intervals[2]]
-    tags = ['Neg.','Stim.','High']
-    return fig,ax,'TNFa',tags_x_locs,tags
+    tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3]]
+    tags = ['Neg.','Stim.','High', 'Inhib.']
+    return fig,ax,'TNF-$\\alpha$',tags_x_locs,tags
 
 def plot_earlyDiff():
     fig,ax = plt.subplots(figsize=(5.5, 3))

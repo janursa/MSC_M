@@ -170,12 +170,13 @@ class Fuzzy_TNFa(Fuzzy_controller):
         self.default_inputs = {'TNFa':0}
     def define_antecedents(self):
         #// define antecedents
-        intervals = [0,1,10]
+        intervals = [0,1,10,100]
         factor = ctrl.Antecedent(np.arange(intervals[0], intervals[-1], .005), 'TNFa')
  
         factor['Neg'] = fuzz.trimf(factor.universe, [intervals[0], intervals[0],intervals[1]])
         factor['Stim'] = fuzz.trimf(factor.universe, [intervals[0], intervals[1], intervals[2]])
-        factor['High'] = fuzz.trimf(factor.universe, [intervals[1], intervals[2], intervals[2]])
+        factor['High'] = fuzz.trimf(factor.universe, [intervals[1], intervals[2], intervals[3]])
+        factor['Inhib'] = fuzz.trimf(factor.universe, [intervals[2], intervals[3], intervals[3]])
 
         #// store
         self.antecedents['TNFa']=factor
@@ -188,10 +189,12 @@ class Fuzzy_TNFa(Fuzzy_controller):
         early_diff_rules = [
             ctrl.Rule(factor['Stim'] , early_diff['H']),
             ctrl.Rule(factor['Neg'] | factor['High'] , early_diff['M']),
+            ctrl.Rule(factor['Inhib']  , early_diff['L']),
         ]
         late_diff_rules = [
             ctrl.Rule(factor['Stim'] , late_diff['H']),
             ctrl.Rule(factor['Neg'] | factor['High'] , late_diff['M']),
+            ctrl.Rule(factor['Inhib'] , late_diff['L']),
         ]
         rules = early_diff_rules+late_diff_rules
         self.controler = ctrl.ControlSystemSimulation(ctrl.ControlSystem(rules))
