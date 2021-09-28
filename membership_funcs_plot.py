@@ -34,11 +34,10 @@ line_patterns = [[8,2,8,2],[2,1,2,1],[8,1,8,1],[2,2,2,2],[4,1,4,1]]
 format = ".svg"
 
 def plot_IL8():
-    fig,ax = plt.subplots(figsize=(4, 3))
-    max_value = 10
-    factor = ctrl.Antecedent(np.arange(0, max_value, .005), 'TNFa')
+    fig,ax = plt.subplots(figsize=(3.5, 3))
     intervals_real = [0,10,100]
-    intervals = [0,3,10] #fake ones
+    intervals = [0,3,7] #fake ones
+    factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'TNFa')
     # Generate fuzzy membership functions
     neg = fuzz.trimf(factor.universe, [intervals[0], intervals[0],intervals[1]])
     lowStim = fuzz.trimf(factor.universe, [intervals[0], intervals[1], intervals[2]])
@@ -62,17 +61,17 @@ def plot_IL8():
     intervals_real[1] = r'$c_{1}$'
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Concentration (mM)',**axis_font)
-    tags_x_locs = [intervals[0],intervals[1],intervals[2]]
+    tags_x_locs = [intervals[0],intervals[1],intervals[2]-.5]
     tags = ['Neg.','Low Stim.','High Stim.']
     return fig,ax,'IL8',tags_x_locs,tags
 
 
 def plot_IL1b():
-    fig,ax = plt.subplots(figsize=(4, 3))
-    max_value = 15
-    factor = ctrl.Antecedent(np.arange(0, max_value, .005), 'IL1b')
+    fig,ax = plt.subplots(figsize=(3.5, 3))
     intervals_real = [0,10,50,200]
-    intervals = [0,5,10,15] #fake ones
+    intervals = [0,5,10,12] #fake ones
+    factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'IL1b')
+
     # Generate fuzzy membership functions
     neg = fuzz.trimf(factor.universe, [intervals[0], intervals[0],intervals[1]])
     stim = fuzz.trimf(factor.universe, [intervals[0], intervals[1], intervals[2]])
@@ -97,7 +96,7 @@ def plot_IL1b():
     intervals_real[2] = r'$c_{3}$'
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Concentration (mM)',**axis_font)
-    tags_x_locs = [intervals[0],intervals[1],intervals[2]+2]
+    tags_x_locs = [intervals[0],intervals[1],intervals[2]+1]
     tags = ['Neg.','Stim.','High']
     return fig,ax,'IL1b',tags_x_locs,tags
 
@@ -174,7 +173,7 @@ def plot_IL10_above48():
     # ax.set_ylabel('Membership',**axis_font)
     ax.set_xlabel('Concentration (ng/ml)',**axis_font)
     tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3]+1]
-    tags = ['Neg.','High Stim.','Low Stim.','High']
+    tags = ['Neg.','High Stim.','Low Stim.','Inhib.']
     return fig,ax,'IL10 above 48 h',tags_x_locs,tags
 
 def plot_IL10_below48():
@@ -207,7 +206,7 @@ def plot_IL10_below48():
     # ax.set_ylabel('Membership',**axis_font)
     ax.set_xlabel('Concentration (ng/ml)',**axis_font)
     tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3]]
-    tags = ['Neg.','Low Stim.','High Stim.','High']
+    tags = ['Neg.','Low Stim.','High Stim.','Inhib.']
     return fig,ax,'IL10 below 48 h',tags_x_locs,tags
 def plot_TNFa():
     fig,ax = plt.subplots(figsize=(5, 3))
@@ -238,7 +237,7 @@ def plot_TNFa():
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Concentration (mM)',**axis_font)
     tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3]]
-    tags = ['Neg.','Stim.','High', 'Inhib.']
+    tags = ['Neg.','Stim.','Neut.', 'Inhib.']
     return fig,ax,'TNF-$\\alpha$',tags_x_locs,tags
 
 def plot_earlyDiff():
