@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --partition=all
-#SBATCH --time=03:00:00                           # Maximum time requested
+#SBATCH --time=00:30:00                           # Maximum time requested
 #SBATCH --nodes=1                                 # Number of nodes
 #SBATCH --chdir   ./      # directory must already exist!
 #SBATCH --job-name  calib
@@ -10,5 +10,7 @@
 #SBATCH --mail-user jalil.nourisa@hzg.de            # Email to which notifications will be sent. It defaults to 
 unset LD_PRELOAD
 source /etc/profile.d/modules.sh
-
-python3 ../diff_calibration.py
+module load maxwell gcc/8.2
+module load mpi/openmpi-x86_64
+export PYTHONPATH=/usr/lib64/python3.6/site-packages/openmpi
+python3 ../diff_calibration.py 10

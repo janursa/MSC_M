@@ -1,7 +1,7 @@
 from scipy.optimize import differential_evolution
 import numpy as np
 import json
-
+import sys
 from MSC_osteogenesis import *
 
 ##// optimize //##
@@ -18,11 +18,11 @@ class Calibrate:
 		error = obj.run()
 		return error
 
-	def optimize(self):
+	def optimize(self,n_proc):
 		# Call instance of PSO
 		# results = differential_evolution(self.cost_function,bounds=list(self.free_params.values()),disp=True,maxiter=self.max_iters,workers=-1)
 		# results = differential_evolution(self.cost_function,bounds=list(self.free_params.values()),disp=True,maxiter=self.max_iters,workers=1)
-		results = differential_evolution(self.cost_function,bounds=list(self.free_params.values()),disp=True,maxiter=self.max_iters)
+		results = differential_evolution(self.cost_function,bounds=list(self.free_params.values()),disp=True,maxiter=self.max_iters,workers=n_proc)
 
 		inferred_params = {}
 		for key,value in zip(free_params.keys(),results.x):
@@ -35,5 +35,7 @@ class Calibrate:
 
 if __name__ == '__main__':
 	##/ calibrate
+	n_proc = sys.argv[1]
+	print('number of assigned processers:',n_proc)
 	calib_obj = Calibrate(free_params)
-	calib_obj.optimize()
+	calib_obj.optimize(n_proc)
