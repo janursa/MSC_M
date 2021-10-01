@@ -1,6 +1,0 @@
-ERROR: ld.so: object 'libdlfaker.so' from LD_PRELOAD cannot be preloaded: ignored.
-ERROR: ld.so: object 'libvglfaker.so' from LD_PRELOAD cannot be preloaded: ignored.
-/home/nourisaj/.local/lib/python3.6/site-packages/scipy/optimize/_differentialevolution.py:497: UserWarning:
-
-differential_evolution: the 'workers' keyword has overridden updating='immediate' to updating='deferred'
-
