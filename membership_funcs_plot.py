@@ -152,9 +152,9 @@ def plot_IL10_above48():
     Neg = fuzz.trimf(factor.universe, [intervals[0], intervals[0],intervals[1]])
     HighStim = fuzz.trimf(factor.universe, [intervals[0], intervals[1], intervals[2]])
     LowStim = fuzz.trimf(factor.universe, [intervals[1], intervals[2], intervals[3]])
-    High = fuzz.trapmf(factor.universe, [intervals[2], intervals[3], intervals[-1], intervals[-1]])
+    Inhib = fuzz.trapmf(factor.universe, [intervals[2], intervals[3], intervals[-1], intervals[-1]])
 
-    factors = [Neg,HighStim,LowStim,High]
+    factors = [Neg,HighStim,LowStim,Inhib]
     for i in range(len(factors)):
         if i == 0:
             linestyle = 'solid'
@@ -185,9 +185,9 @@ def plot_IL10_below48():
     Neg = fuzz.trimf(factor.universe, [intervals[0], intervals[0],intervals[1]])
     LowStim = fuzz.trimf(factor.universe, [intervals[0], intervals[1], intervals[2]])
     HighStim = fuzz.trimf(factor.universe, [intervals[1], intervals[2], intervals[3]])
-    High = fuzz.trimf(factor.universe, [intervals[2], intervals[3], intervals[3]])
+    Inhib = fuzz.trimf(factor.universe, [intervals[2], intervals[-1], intervals[-1]])
 
-    factors = [Neg,LowStim,HighStim,High]
+    factors = [Neg,LowStim,HighStim,Inhib]
     for i in range(len(factors)):
         if i == 0:
             linestyle = 'solid'

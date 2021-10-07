@@ -1,9 +1,9 @@
 
 observations = {
-	'studies':['Qiao_2021_Mg'],
+	# 'studies':['Qiao_2021_Mg'],
 	# 'studies': ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b'],
 	# 'studies':['Ber_2016'],
-	# 'studies':['Chen_2018'],
+	'studies':['Chen_2018'],
 	# 'studies':['Valles_2020_IL10'],
 	# 'studies':['Valles_2020_TNFa'],
 	# 'studies':['Valles_2020_TNFa','Valles_2020_IL10'],
@@ -553,6 +553,7 @@ observations = {
 	'Ber_2016':{ # the effect of Mg on ALP and OC
 		'exposure_time':21*24,
 		'culture_volume':None, #ml
+		'cell_type':'HUCPV',
 		# 'experiment_period':7, # days
 		'measurement_scheme':{
 			'ALP': [7*24,14*24,21*24], #hour

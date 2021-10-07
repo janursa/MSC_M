@@ -1,14 +1,20 @@
 from scipy.optimize import differential_evolution
 import numpy as np
 import json
-import matplotlib.pyplot as plt
+import sys
+# import matplotlib.pyplot as plt
 import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
-import tellurium as te
 import json
 from observations import observations
-from fuzzy_controllers import Fuzzy_IL10, Fuzzy_IL8_IL1b,Fuzzy_TNFa,Fuzzy_Mg
+# from fuzzy_controllers import *
+from pympler import muppy,tracker
+
+sys.path.insert(0,'/Users/matin/Downloads/testProjs/MSC_M/fuzzy_cpp/build/binds')
+from fuzzy_cpp import * 
+
+
 all_params = {
     'ALP_M_n':1, # n in the equation ALP = a*(M^n + ALP_0)
     'ARS_M_n':1,
@@ -76,24 +82,24 @@ free_params = {
     'a_late_diff_d':[0,1], # scale factor
     'diff_time':[15*24,45*24], # days required for full differentiation
 
-    'a_Chen_2018_maturity_t':[0,1],
+    # 'a_Chen_2018_maturity_t':[0,1],
     'a_Chen_2018_ALP':[0,10],
     'a_Chen_2018_ARS':[0,10],
 
-    'a_Valles_2020_maturity_t':[0,1],
-    'a_Valles_2020_ALP':[0,1000],
-    'a_Valles_2020_ARS':[0,1000],
+    # # 'a_Valles_2020_maturity_t':[0,1],
+    # 'a_Valles_2020_ALP':[0,1000],
+    # 'a_Valles_2020_ARS':[0,1000],
 
-    'a_Qiao_2021_maturity_t':[0,1],
-    'a_Qiao_2021_ALP':[0,200],
+    # # 'a_Qiao_2021_maturity_t':[0,1],
+    # 'a_Qiao_2021_ALP':[0,200],
 
-    'a_Ber_2016_maturity_t':[0,1], # correction coeff of maturity threshold for the given study considering that cells are inherintly different
-    'a_Ber_2016_ALP':[0,1], # correlation ALP to maturity
-    'a_Ber_2016_OC':[0,1],
+    # # 'a_Ber_2016_maturity_t':[0,1], # correction coeff of maturity threshold for the given study considering that cells are inherintly different
+    # 'a_Ber_2016_ALP':[0,1], # correlation ALP to maturity
+    # 'a_Ber_2016_OC':[0,1],
 
-    'a_Qiao_2021_Mg_maturity_t':[0,1],
-    'a_Qiao_2021_Mg_ALP':[0,50],
-    'a_Qiao_2021_Mg_OC':[0,1],
+    # # 'a_Qiao_2021_Mg_maturity_t':[0,1],
+    # 'a_Qiao_2021_Mg_ALP':[0,50],
+    # 'a_Qiao_2021_Mg_OC':[0,1],
 }
 
 class Osteogenesis:
@@ -101,12 +107,15 @@ class Osteogenesis:
         self.debug = debug
         self.params = params
         self.controlers = {
-                            'IL10_above_48h':Fuzzy_IL10(self.params,above_48h=True),
-                            'IL10_below_48h':Fuzzy_IL10(self.params,above_48h=False),
-                            'IL8_IL1b':Fuzzy_IL8_IL1b(self.params),
+                            'IL10_above_48h':Fuzzy_IL10(self.params, True),
+                            'IL10_below_48h':Fuzzy_IL10(self.params, False),
+                            # 'IL8_IL1b':Fuzzy_IL8_IL1b(self.params),
                             'TNFa':Fuzzy_TNFa(self.params),
-                            'Mg':Fuzzy_Mg(self.params)
+                            # 'Mg':Fuzzy_Mg(self.params)
                             }
+        
+        
+
     def interactions(self,fs):
         """
         defines the interaction between different fuzzy values
@@ -228,9 +237,9 @@ class Osteogenesis:
             IL10_controler = self.controlers['IL10_above_48h']
         else:
             IL10_controler = self.controlers['IL10_below_48h']
-        IL8_IL1b_controller = self.controlers['IL8_IL1b']
+        # IL8_IL1b_controller = self.controlers['IL8_IL1b']
         TNFa_controller = self.controlers['TNFa']
-        Mg_controller = self.controlers['Mg']
+        # Mg_controller = self.controlers['Mg']
 
         fs = {'IL10':None,'IL8':None,'IL1b':None, 'TNFa':None, 'Mg':None}
 
@@ -249,7 +258,6 @@ class Osteogenesis:
         if IL8_flag or IL1b_flag:
             IL8_IL1b_controller.reset()
             ff = IL8_IL1b_controller.forward(inputs)
-            # print('inputs ',inputs,' output ',ff)
             fs['IL8_IL1b'] = ff
         if TNFa_flag:
             TNFa_controller.reset()
@@ -261,7 +269,6 @@ class Osteogenesis:
             fs['Mg'] = ff
 
         final_f_values = self.interactions(fs)
-        # print('fs ',fs, ' final fs',final_f_values)
         results= {}
 
         for target,checkpoints in measurement_scheme.items():
@@ -308,7 +315,6 @@ class MSC_model:
                 print('\n',ID)
                 # print('inputs:',inputs)
             ID_results = self.osteogenesis.simulate(study=study,inputs=inputs,measurement_scheme=measurement_scheme,exposure_time=exposure_time)
-
             results[ID] = ID_results
 
         return results
@@ -347,7 +353,10 @@ class MSC_model:
         error = np.mean(errors_list) # we put the errors on all of the IDs here and finally just sum them up
         return error
 if __name__ == '__main__':
-    params = {}
-
-    obj = MSC_model(free_params={})
-    print('\n',obj.run())
+    tr = tracker.SummaryTracker()
+    for i in range(100000):
+        obj = MSC_model(free_params={})
+        obj.run()
+        if i%500==0:
+            print('Iteration ',i)
+            tr.print_diff() 

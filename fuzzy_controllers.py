@@ -10,6 +10,7 @@ class Fuzzy_controller:
         self.consequents = {}
         self.params = params
         self.default_inputs = {}
+
     def define_antecedents(self):
         pass
     def define_consequents(self):
@@ -65,27 +66,21 @@ class Fuzzy_IL8_IL1b(Fuzzy_controller):
     def reset(self):
         self.default_inputs = {'IL8':0,'IL1b':0}
     def define_antecedents(self):
-        #// define antecedents
+        #// define Il8
         intervals = [0,self.params['IL8_M'],100]
         IL8 = ctrl.Antecedent(np.arange(intervals[0], intervals[-1], .005), 'IL8')
-
-
         IL8['Neg'] = fuzz.trimf(IL8.universe, [intervals[0], intervals[0],intervals[1]])
         IL8['LowStim'] = fuzz.trimf(IL8.universe, [intervals[0], intervals[1], intervals[2]])
         IL8['HighStim'] = fuzz.trimf(IL8.universe, [intervals[1], intervals[2], intervals[2]])
         IL8['NNeg'] = fuzz.trapmf(IL8.universe, [intervals[0], intervals[1],intervals[-1],intervals[-1]])
-
-        #// store
         self.antecedents['IL8']=IL8
-
+        #// define IL1b
         intervals = [0,self.params['IL1b_S'],self.params['IL1b_H'],200]
         IL1b = ctrl.Antecedent(np.arange(intervals[0], intervals[-1], .005), 'IL1b')
         IL1b['Neg'] = fuzz.trimf(IL1b.universe, [intervals[0], intervals[0],intervals[1]])
         IL1b['Stim'] = fuzz.trimf(IL1b.universe, [intervals[0], intervals[1], intervals[2]])
         IL1b['High'] = fuzz.trapmf(IL1b.universe, [intervals[1], intervals[2], intervals[3],intervals[3]])
         IL1b['NNeg'] = fuzz.trapmf(IL1b.universe, [intervals[0], intervals[1],intervals[-1],intervals[-1]])
-
-
         self.antecedents['IL1b']=IL1b
 
     def define_rules(self):
@@ -134,7 +129,7 @@ class Fuzzy_IL10(Fuzzy_controller):
             IL10['Neg'] = fuzz.trimf(IL10.universe, [intervals[0], intervals[0],intervals[1]])
             IL10['LowStim'] = fuzz.trimf(IL10.universe, [intervals[0], intervals[1], intervals[2]])
             IL10['HighStim'] = fuzz.trimf(IL10.universe, [intervals[1], intervals[2], intervals[3]])
-            IL10['Inhib'] = fuzz.trapmf(IL10.universe, [intervals[2], intervals[3], intervals[-1], intervals[-1]])
+            IL10['Inhib'] = fuzz.trimf(IL10.universe, [intervals[2], intervals[-1],intervals[-1]])
             
         #// store
         self.antecedents['IL10']=IL10
@@ -156,9 +151,7 @@ class Fuzzy_IL10(Fuzzy_controller):
             ctrl.Rule(IL10['Inhib'] , late_diff['L'])
         ]
         rules = early_diff_rules+late_diff_rules
-        self.controler = ctrl.ControlSystemSimulation(ctrl.ControlSystem(rules))
-
- 
+        self.controler = ctrl.ControlSystemSimulation(ctrl.ControlSystem(rules)) 
 class Fuzzy_TNFa(Fuzzy_controller):
     def __init__(self,params):
         super().__init__(params)
@@ -198,8 +191,6 @@ class Fuzzy_TNFa(Fuzzy_controller):
         ]
         rules = early_diff_rules+late_diff_rules
         self.controler = ctrl.ControlSystemSimulation(ctrl.ControlSystem(rules))
-
-
 class Fuzzy_Mg(Fuzzy_controller):
     def __init__(self,params):
         super().__init__(params)
@@ -264,4 +255,6 @@ class Fuzzy_Mg(Fuzzy_controller):
             ctrl.Rule(factor['Adv_Des_l'] , late_diff['M']),
         ]
         rules = early_diff_rules+late_diff_rules
-        self.controler = ctrl.ControlSystemSimulation(ctrl.ControlSystem(rules))
+        # self.controler = ctrl.ControlSystemSimulation(ctrl.ControlSystem(rules))
+        ctrl.ControlSystem(rules)
+
