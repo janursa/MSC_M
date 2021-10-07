@@ -1,1 +1,0 @@
-/Library/Developer/CommandLineTools/usr/bin/c++  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -bundle -Wl,-headerpad_max_install_names -Xlinker -undefined -Xlinker dynamic_lookup -o myBinds.cpython-37m-darwin.so CMakeFiles/myBinds.dir/mybinds.cpp.o 
