@@ -2,7 +2,8 @@ import pathlib
 current_file = pathlib.Path(__file__).parent.absolute()
 import os
 import sys
-ABC_path = '/Users/matin/Downloads/testProjs/ABayesianC'
+# ABC_path = '/Users/matin/Downloads/testProjs/ABayesianC'
+ABC_path = '/home/nourisaj/projects/ABayesianC/'
 sys.path.insert(1,ABC_path)
 from ABayesianC import tools
 import json
@@ -27,7 +28,7 @@ class Optimize(object):
 
 settings = {
 	"MPI_flag": True,
-	"sample_n": 100000,
+	"sample_n": 5000000,
 	"top_n": 100,
     "replica_n": 1,
 	"output_path": "ABC",

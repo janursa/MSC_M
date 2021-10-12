@@ -3,6 +3,7 @@ import numpy as np
 import json
 import sys
 import pathlib
+import os
 current_file = pathlib.Path(__file__).parent.absolute()
 dir_to_dirs = os.path.join(current_file,'..')
 sys.path.insert(0,dir_to_dirs)

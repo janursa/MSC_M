@@ -2,6 +2,10 @@ from scipy.optimize import differential_evolution
 import numpy as np
 import json
 import sys
+import os
+import pathlib
+current_file = pathlib.Path(__file__).parent.absolute()
+
 # import matplotlib.pyplot as plt
 import numpy as np
 import skfuzzy as fuzz
@@ -9,10 +13,10 @@ from skfuzzy import control as ctrl
 import json
 from observations import observations
 # from fuzzy_controllers import *
-from pympler import muppy,tracker
-
-sys.path.insert(0,'/Users/matin/Downloads/testProjs/MSC_M/models/fuzzy_cpp/build/binds')
-from fuzzy_cpp import * 
+# from pympler import muppy,tracker
+dir_to_binds = os.path.join(current_file,'fuzzy_cpp/build/binds')
+sys.path.insert(0,dir_to_binds)
+from fuzzy_cpp import *
 
 
 all_params = {
@@ -60,31 +64,31 @@ free_params = {
     'ALP_0':[0,1], # the default value of ALP when maturity is zero
     'ARS_0':[0,1], # the default value of ARS when maturity is zero
 
-    # 'Mg_S':[2,10], # stimulatory conc of Mg
-    # 'Mg_D':[20,40], # detrimental conc of Mg
-    # 'IL1b_H':[30,199], # high threshold IL1b
-    # 'IL1b_S':[1,29], # stimulatory threshold of IL1b
-    # 'IL8_M':[1,99], # medium threshold for IL8
+    'Mg_S':[2,10], # stimulatory conc of Mg
+    'Mg_D':[20,40], # detrimental conc of Mg
+    'IL1b_H':[30,199], # high threshold IL1b
+    'IL1b_S':[1,29], # stimulatory threshold of IL1b
+    'IL8_M':[1,99], # medium threshold for IL8
 
-    # 'maturity_t':[0,1], # early maturity threshold
-    # 'early_diff_L':[0.1,0.4], # center of low membership function
-    # 'early_diff_H':[0.5,0.75], # center of high membership function
-    # 'early_diff_VH':[0.6,1], # center of high membership function
-    # 'late_diff_L':[0.1,0.4], # center of low membership function
-    # 'late_diff_H':[0.6,0.9], # center of high membership function
-    # 'a_early_diff_u':[0,5], # scale factor, upregulatory
-    # 'a_early_diff_d':[0,1], # scale factor, downregulatory
-    # 'a_late_diff_u':[0,5], # scale factor
-    # 'a_late_diff_d':[0,1], # scale factor
+    'maturity_t':[0,1], # early maturity threshold
+    'early_diff_L':[0.1,0.4], # center of low membership function
+    'early_diff_H':[0.5,0.75], # center of high membership function
+    'early_diff_VH':[0.6,1], # center of high membership function
+    'late_diff_L':[0.1,0.4], # center of low membership function
+    'late_diff_H':[0.6,0.9], # center of high membership function
+    'a_early_diff_u':[0,5], # scale factor, upregulatory
+    'a_early_diff_d':[0,1], # scale factor, downregulatory
+    'a_late_diff_u':[0,5], # scale factor
+    'a_late_diff_d':[0,1], # scale factor
     'diff_time':[15*24,45*24], # days required for full differentiation
 
-    # 'a_Chen_2018_ALP':[0,10],
-    # 'a_Chen_2018_ARS':[0,10],
+    'a_Chen_2018_ALP':[0,10],
+    'a_Chen_2018_ARS':[0,10],
 
     'a_Valles_2020_ALP':[0,1000],
     'a_Valles_2020_ARS':[0,1000],
 
-    # 'a_Qiao_2021_ALP':[0,200],
+    'a_Qiao_2021_ALP':[0,200],
 }
 
 class Osteogenesis:
@@ -98,8 +102,8 @@ class Osteogenesis:
                             'TNFa':Fuzzy_TNFa(self.params),
                             'Mg':Fuzzy_Mg(self.params)
                             }
-        
-        
+
+
 
     def interactions(self,fs):
         """
@@ -160,7 +164,7 @@ class Osteogenesis:
         #// k_early and k_late are the corrected maturation rate
         if 'early_diff' in f_values:
             f_early = f_values['early_diff'] # fuzzy output for early maturation
-            k_early = k0 * self.scale(x = f_early,factor = self.params['a_early_diff_u']) 
+            k_early = k0 * self.scale(x = f_early,factor = self.params['a_early_diff_u'])
         else:
             k_early = k0
         if 'late_diff' in f_values:
@@ -342,4 +346,4 @@ if __name__ == '__main__':
         obj.run()
         if i%500==0:
             print('Iteration ',i)
-            tr.print_diff() 
+            tr.print_diff()

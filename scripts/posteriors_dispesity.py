@@ -28,7 +28,6 @@ class settings:
 	studies = {
 		'A1':'inferred_params_1.json',
 		'A2':'inferred_params_2.json',
-		'A3':'inferred_params_3.json',
 
 	}
 	axis_font = {'fontname':'Times New Roman', 'size':'15'}

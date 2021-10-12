@@ -13,4 +13,4 @@ source /etc/profile.d/modules.sh
 module load maxwell gcc/8.2
 module load mpi/openmpi-x86_64
 export PYTHONPATH=/usr/lib64/python3.6/site-packages/openmpi
-python3 ../diff_calibration.py 10
+mpiexec -np 10 --mca pml ob1 python3 ../diff_calibration.py 10
