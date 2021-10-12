@@ -2,7 +2,14 @@ import pyswarms as ps
 from pyswarms.utils.functions import single_obj as fx
 import numpy as np
 import json
+import sys
 # import matplotlib.pyplot as plt
+import pathlib
+current_file = pathlib.Path(__file__).parent.absolute()
+dir_to_dirs = os.path.join(current_file,'..')
+sys.path.insert(0,dir_to_dirs)
+from dirs import dir_to_MSC_osteogenesis
+sys.path.insert(0,dir_to_MSC_osteogenesis)
 from MSC_osteogenesis import *
 
 
@@ -12,7 +19,7 @@ class SETTINGS:
 	options = {'c1': 0.5, 'c2': 2, 'w':2}
 	dimensions = len(free_params.keys())
 	bounds = ([item[0] for item in free_params.values()],[item[1] for item in free_params.values()])
-	n_particles = 100
+	n_particles = 1000
 	iters = 100
 
 

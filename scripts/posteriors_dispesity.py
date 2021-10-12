@@ -1,8 +1,7 @@
 """
 This script is designed to plot the inferred parameter values of a study in a normalized fashion compared to other studies
 """
-import pathlib
-current_file = pathlib.Path(__file__).parent.absolute()
+
 import os
 import sys
 import matplotlib.pyplot as plt
@@ -11,20 +10,25 @@ import copy
 import numpy as np
 from scipy.stats import levene
 import json
+import pathlib
+current_file = pathlib.Path(__file__).parent.absolute()
+dir_to_dirs = os.path.join(current_file,'..')
+sys.path.insert(0,dir_to_dirs)
+from dirs import dir_to_MSC_osteogenesis
+sys.path.insert(0,dir_to_MSC_osteogenesis)
 from MSC_osteogenesis import free_params
 plt.rcParams["font.family"] = "serif"
 plt.style.use('seaborn-deep')
 plt.rcParams["font.serif"] = ["Times New Roman"] + plt.rcParams["font.serif"]
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-results_file =os.path.join(dir_path,'results')
+results_file = os.path.join(dir_to_dirs,'results')
 
 class settings:
 	params_keys = free_params.keys()
 	studies = {
-		'chen_valles':'inferred_params_chen_valles.json',
-		'valles':'inferred_params_valles.json',
-		'chen':'inferred_params_chen.json'
+		'A1':'inferred_params_1.json',
+		'A2':'inferred_params_2.json',
+		'A3':'inferred_params_3.json',
 
 	}
 	axis_font = {'fontname':'Times New Roman', 'size':'15'}

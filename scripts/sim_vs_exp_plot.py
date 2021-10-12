@@ -1,5 +1,9 @@
 import sys
-dir_to_MSC_osteogenesis = '/Users/matin/Downloads/testProjs/MSC_M/models/'
+import pathlib
+current_file = pathlib.Path(__file__).parent.absolute()
+dir_to_dirs = os.path.join(current_file,'..')
+sys.path.insert(0,dir_to_dirs)
+from dirs import dir_to_MSC_osteogenesis
 sys.path.insert(0,dir_to_MSC_osteogenesis)
 from MSC_osteogenesis import *
 from plots import *
@@ -9,7 +13,7 @@ if __name__ == '__main__':
 
 	with open('inferred_params.json') as file:
 		inferred_params = json.load(file)
-	# inferred_params['a_early_diff_u'] = 3
+	# inferred_params['a_Valles_2020_ARS'] = 1
 	# inferred_params['ALP_M_n'] = 5
 	# inferred_params['a_Qiao_2021_IL1b_ALP'] = 60
 	# inferred_params['diff_time'] = 800

@@ -53,53 +53,38 @@ all_params = {
     'a_Ber_2016_maturity_t':1, # correction coeff of maturity threshold for the given study considering that cells are inherintly different
     'a_Ber_2016_ALP':.5, # correlation ALP to maturity
     'a_Ber_2016_OC':.5,
-
-    'a_Qiao_2021_Mg_maturity_t':1,
-    'a_Qiao_2021_Mg_ALP':10,
-    'a_Qiao_2021_Mg_OC':.2,
 }
 free_params = {
     'ALP_M_n':[0,10], # n in the equation ALP = a*(M^n + ALP_0)
     'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
-    'OC_M_n':[0,10], # n in the equation OC = a*(M^n + OC_0)
     'ALP_0':[0,1], # the default value of ALP when maturity is zero
     'ARS_0':[0,1], # the default value of ARS when maturity is zero
-    'OC_0':[0,1], # the default value of OC when maturity is zero
-    'Mg_S':[2,10], # stimulatory conc of Mg
-    'Mg_D':[20,40], # detrimental conc of Mg
-    'IL1b_H':[30,199], # high threshold IL1b
-    'IL1b_S':[1,29], # stimulatory threshold of IL1b
-    'IL8_M':[1,99], # medium threshold for IL8
-    'maturity_t':[0,1], # early maturity threshold
-    'early_diff_L':[0.1,0.4], # center of low membership function
-    'early_diff_H':[0.5,0.75], # center of high membership function
-    'early_diff_VH':[0.6,1], # center of high membership function
-    'late_diff_L':[0.1,0.4], # center of low membership function
-    'late_diff_H':[0.6,0.9], # center of high membership function
-    'a_early_diff_u':[0,5], # scale factor, upregulatory
-    'a_early_diff_d':[0,1], # scale factor, downregulatory
-    'a_late_diff_u':[0,5], # scale factor
-    'a_late_diff_d':[0,1], # scale factor
+
+    # 'Mg_S':[2,10], # stimulatory conc of Mg
+    # 'Mg_D':[20,40], # detrimental conc of Mg
+    # 'IL1b_H':[30,199], # high threshold IL1b
+    # 'IL1b_S':[1,29], # stimulatory threshold of IL1b
+    # 'IL8_M':[1,99], # medium threshold for IL8
+
+    # 'maturity_t':[0,1], # early maturity threshold
+    # 'early_diff_L':[0.1,0.4], # center of low membership function
+    # 'early_diff_H':[0.5,0.75], # center of high membership function
+    # 'early_diff_VH':[0.6,1], # center of high membership function
+    # 'late_diff_L':[0.1,0.4], # center of low membership function
+    # 'late_diff_H':[0.6,0.9], # center of high membership function
+    # 'a_early_diff_u':[0,5], # scale factor, upregulatory
+    # 'a_early_diff_d':[0,1], # scale factor, downregulatory
+    # 'a_late_diff_u':[0,5], # scale factor
+    # 'a_late_diff_d':[0,1], # scale factor
     'diff_time':[15*24,45*24], # days required for full differentiation
 
-    # 'a_Chen_2018_maturity_t':[0,1],
-    'a_Chen_2018_ALP':[0,10],
-    'a_Chen_2018_ARS':[0,10],
+    # 'a_Chen_2018_ALP':[0,10],
+    # 'a_Chen_2018_ARS':[0,10],
 
-    # # 'a_Valles_2020_maturity_t':[0,1],
     'a_Valles_2020_ALP':[0,1000],
     'a_Valles_2020_ARS':[0,1000],
 
-    # # 'a_Qiao_2021_maturity_t':[0,1],
-    'a_Qiao_2021_ALP':[0,200],
-
-    # # 'a_Ber_2016_maturity_t':[0,1], # correction coeff of maturity threshold for the given study considering that cells are inherintly different
-    'a_Ber_2016_ALP':[0,1], # correlation ALP to maturity
-    'a_Ber_2016_OC':[0,1],
-
-    # # 'a_Qiao_2021_Mg_maturity_t':[0,1],
-    'a_Qiao_2021_Mg_ALP':[0,50],
-    'a_Qiao_2021_Mg_OC':[0,1],
+    # 'a_Qiao_2021_ALP':[0,200],
 }
 
 class Osteogenesis:
@@ -125,18 +110,16 @@ class Osteogenesis:
             if value != None:
                 return value
 
-    def scale(self,x,factor_u, factor_d):
+    def scale(self,x,factor):
         """
         Scale the fuzzy controller's output cosidering that the origin is x=0.5
         The scalling is done differently for x > 0.5 than x < 0.5
         x: fuzzy output
         factor: scale factor
         """
-        if x >= 0.5:
-            f = 2*factor_u*(x-0.5)+1
-        else:
-            f = 2*factor_d*(x-0.5)+1
-
+        f = 2*factor*(x-0.5)+1
+        if f <=0:
+            f = 0
         return f
         # if x >= 0.5:
         #     return 2*factor_u*abs(x-0.5)+1
@@ -177,12 +160,12 @@ class Osteogenesis:
         #// k_early and k_late are the corrected maturation rate
         if 'early_diff' in f_values:
             f_early = f_values['early_diff'] # fuzzy output for early maturation
-            k_early = k0 * self.scale(x = f_early,factor_u = self.params['a_early_diff_u'], factor_d = self.params['a_early_diff_d']) # 2 is because the normal f value is 0.5
+            k_early = k0 * self.scale(x = f_early,factor = self.params['a_early_diff_u']) 
         else:
             k_early = k0
         if 'late_diff' in f_values:
             f_late = f_values['late_diff']
-            k_late = k0 * self.scale(x = f_late,factor_u = self.params['a_late_diff_u'], factor_d = self.params['a_late_diff_d'])
+            k_late = k0 * self.scale(x = f_late,factor = self.params['a_late_diff_d'])
         else:
             k_late = k0
         #// calculate maturity related parameters
