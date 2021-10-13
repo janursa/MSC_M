@@ -4,13 +4,9 @@ observations = {
 	# 'studies': ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b'],
 	# 'studies':['Ber_2016'],
 	# 'studies':['Chen_2018'],
-	# 'studies':['Valles_2020_IL10'],
+	'studies':['Valles_2020_IL10'],
 	# 'studies':['Valles_2020_TNFa'],
-	# 'studies':['Valles_2020_TNFa','Valles_2020_IL10'],
-	# 'studies':['Valles_2020_TNFa','Valles_2020_IL10','Chen_2018'],
-	'studies':['Valles_2020_TNFa','Valles_2020_IL10','Chen_2018','Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b'],
-	# 'studies':['Valles_2020_IL10','Chen_2018'],
-	# 'studies':['Saldana_2019','Valles_2020_IL10','Valles_2020_TNFa','Chen_2018','Qiao_2021_IL8','Qiao_2021_IL1b'],
+	# 'studies':['Valles_2020_TNFa','Valles_2020_IL10','Chen_2018','Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b'],
 
 
 	'Chen_2018':{# the effect of IL10 on ALP and ARS

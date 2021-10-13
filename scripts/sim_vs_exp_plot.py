@@ -14,17 +14,14 @@ if __name__ == '__main__':
 
 	with open('inferred_params.json') as file:
 		inferred_params = json.load(file)
-	# inferred_params['a_Valles_2020_ARS'] = 1
-	# inferred_params['ALP_M_n'] = 5
-	# inferred_params['a_Qiao_2021_IL1b_ALP'] = 60
-	# inferred_params['diff_time'] = 800
 
 
-	obj = MSC_model(free_params = inferred_params,debug=True)
+	obj = MSC_model(fixed_params=fixed_params,free_params = inferred_params,debug=True)
 	simulation_results = obj.simulate_studies()
-	print(simulation_results)
-	# study = 'Qiao_2021_Mg'
-	# study = 'Qiao_2021_Mg'
+	# print(simulation_results)
+	error = obj.run()
+	print('Error is ',error)
+
 
 	for study in observations['studies']:
 		if study == 'Qiao_2021_Mg' or study == 'Ber_2016':

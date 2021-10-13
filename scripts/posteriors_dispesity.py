@@ -23,13 +23,18 @@ plt.rcParams["font.serif"] = ["Times New Roman"] + plt.rcParams["font.serif"]
 
 results_file = os.path.join(dir_to_dirs,'results')
 
+def studies_func(n):
+	studies = {}
+	for i in range(n):
+		key = 'A%d'%i
+		value = 'inferred_params_%d.json'%i
+		studies[key] = value
+	return studies
+
 class settings:
 	params_keys = free_params.keys()
-	studies = {
-		'A1':'inferred_params_1.json',
-		'A2':'inferred_params_2.json',
+	studies =  studies_func(10)
 
-	}
 	axis_font = {'fontname':'Times New Roman', 'size':'15'}
 	legend_font = { 'family':'Times New Roman','size':'13'}
 	colors = ['indigo' , 'darkred', 'royalblue', 'olive']
@@ -54,8 +59,11 @@ study_n = len(data.keys())
 for (study,params),i in zip(data.items(),range(study_n)):
 	xs = params.values()
 	ys = range(len(params.keys()))
+	# ax.scatter(xs, ys,
+ #               marker = settings.symbols[i], s=150,color = settings.colors[i],
+ #               alpha = 0.8,label = study)
 	ax.scatter(xs, ys,
-               marker = settings.symbols[i], s=150,color = settings.colors[i],
+                s=150,
                alpha = 0.8,label = study)
 
 plt.yticks([(i) for i in range(len(free_params.keys()))], free_params.keys(),rotation=0)

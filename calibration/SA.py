@@ -14,10 +14,13 @@ settings = { # define settings
     "output_path": "",
     "model":MSC_model # this is your model
 }
-obj = tools.SA(free_params = free_params,settings = settings)
+def sensitivity_analysis(free_params):
+    obj = tools.SA(free_params = free_params,settings = settings)
+    obj.sample()
+    obj.run()
+    PTTS = obj.postprocessing()
+    return PTTS
 
-obj.sample()
-
-obj.run()
-
-obj.postprocessing()
+    
+if __name__ == '__main__':
+    sensitivity_analysis(free_params)
