@@ -35,7 +35,9 @@ class settings:
 	params_keys = free_params.keys()
 	# studies =  studies_func(2)
 	studies = {'A1':'inferred_params_mean_1.json',
-	'A2':'inferred_params_mean_2.json'}
+	'A2':'inferred_params_mean_2.json',
+	'A3':'inferred_params_mean_3.json',
+	'A4':'inferred_params_mean_4.json'}
 
 	axis_font = {'fontname':'Times New Roman', 'size':'15'}
 	legend_font = { 'family':'Times New Roman','size':'13'}

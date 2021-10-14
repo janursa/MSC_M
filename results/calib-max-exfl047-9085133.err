@@ -1,2 +1,0 @@
-slurmstepd: error: *** JOB 9085133 ON max-exfl047 CANCELLED AT 2021-10-14T10:24:10 DUE TO PREEMPTION ***
-mpiexec: Forwarding signal 18 to job

@@ -95,6 +95,6 @@ class Batch_calibrate:
 					file.write(json.dumps(inferred_params_accumulated, indent = 4))
 
 if __name__ == '__main__':
-	replica_n = [50,100]
+	replica_n = [150,200]
 	obj = Batch_calibrate(replica_n)
 	obj.run()
