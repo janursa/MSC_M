@@ -34,9 +34,9 @@ line_patterns = [[8,2,8,2],[2,1,2,1],[8,1,8,1],[2,2,2,2],[4,1,4,1]]
 format = ".svg"
 
 def plot_IL8():
-    fig,ax = plt.subplots(figsize=(3.5, 3))
+    fig,ax = plt.subplots(figsize=(4.5, 3))
     intervals_real = [0,10,100]
-    intervals = [0,3,7] #fake ones
+    intervals = [0,3.5,7] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'TNFa')
     # Generate fuzzy membership functions
     neg = fuzz.trimf(factor.universe, [intervals[0], intervals[0],intervals[1]])
@@ -61,13 +61,13 @@ def plot_IL8():
     intervals_real[1] = r'$c_{1}$'
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Concentration (mM)',**axis_font)
-    tags_x_locs = [intervals[0],intervals[1],intervals[2]-.5]
-    tags = ['Neg.','Low Stim.','High Stim.']
+    tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2]-.5]
+    tags = ['Negligible','Favorable','Stimulatory']
     return fig,ax,'IL8',tags_x_locs,tags
-
+      
 
 def plot_IL1b():
-    fig,ax = plt.subplots(figsize=(3.5, 3))
+    fig,ax = plt.subplots(figsize=(4.5, 3))
     intervals_real = [0,10,50,200]
     intervals = [0,5,10,12] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'IL1b')
@@ -96,19 +96,17 @@ def plot_IL1b():
     intervals_real[2] = r'$c_{3}$'
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Concentration (mM)',**axis_font)
-    tags_x_locs = [intervals[0],intervals[1],intervals[2]+1]
-    tags = ['Neg.','Stim.','High']
+    tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2]+1]
+    tags = ['Negligible','Stimulatory','Ineffective']
     return fig,ax,'IL1b',tags_x_locs,tags
 
-
-
 def plot_MG():
-    fig = pylab.figure(figsize=(6.5, 3))
+    fig = pylab.figure(figsize=(8.5, 3))
     ax = fig.add_subplot(111)
-    max_value = 50
-    factor = ctrl.Antecedent(np.arange(0, max_value, .005), 'Mg')
     intervals_real = [0,0.08,0.8,1.8,5,40,60]
-    intervals = [0,5,15,20,25,35,50] #fake ones
+    intervals = [0,1.5,6.5,9,11.5,16.5,21.5] #fake ones
+    factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'Mg')
+    
     # Generate fuzzy membership functions
     Des_e = fuzz.trapmf(factor.universe, [intervals[0], intervals[0],intervals[1],intervals[2]])
     Phy = fuzz.trimf(factor.universe, [intervals[1],intervals[2],intervals[4]])
@@ -139,12 +137,13 @@ def plot_MG():
     ax.set_xticklabels(intervals_real)
     # ax.set_ylabel('Membership',**axis_font)
     ax.set_xlabel('Concentration (mM)',**axis_font)
-    tags_x_locs = [intervals[0]+2,intervals[2],intervals[4],intervals[5],intervals[6],48]
-    tags = ['Inhib. ED','Phys.','Stim. ED','Neut.','Inhib.','Inhib. LD']
+    tags_x_locs = [intervals[0]+1,intervals[2],intervals[4],intervals[5],intervals[6],intervals[-1]]
+    tags = ['Inhibitory ED','Physiological','Stimulatory ED','Ineffective','Inhibitory','Inhibitory LD']
     return fig,ax,'Mg$^{2+}$ ions',tags_x_locs,tags
 
+
 def plot_IL10_above48():
-    fig,ax = plt.subplots(figsize=(5, 3))
+    fig,ax = plt.subplots(figsize=(6, 3))
     intervals_real = [0,0.1,1,10,100]
     intervals = [0,6,12,18,20] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'IL10')
@@ -172,14 +171,14 @@ def plot_IL10_above48():
     ax.set_xticklabels(intervals_real)
     # ax.set_ylabel('Membership',**axis_font)
     ax.set_xlabel('Concentration (ng/ml)',**axis_font)
-    tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3]+1]
-    tags = ['Neg.','High Stim.','Low Stim.','Inhib.']
-    return fig,ax,'IL10 above 48 h',tags_x_locs,tags
+    tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2],intervals[3]+1]
+    tags = ['Negligible','Stimulatory','Favorable','Inhibitory']
+    return fig,ax,'IL10 above 48 h',tags_x_locs,tags 
 
 def plot_IL10_below48():
-    fig,ax = plt.subplots(figsize=(5, 3))
+    fig,ax = plt.subplots(figsize=(6, 3))
     intervals_real = [0,1,10,100]
-    intervals = [0,6,12,20] #fake ones
+    intervals = [0,6,12,18] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'IL10')
     # Generate fuzzy membership functions
     Neg = fuzz.trimf(factor.universe, [intervals[0], intervals[0],intervals[1]])
@@ -205,13 +204,13 @@ def plot_IL10_below48():
     ax.set_xticklabels(intervals_real)
     # ax.set_ylabel('Membership',**axis_font)
     ax.set_xlabel('Concentration (ng/ml)',**axis_font)
-    tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3]]
-    tags = ['Neg.','Low Stim.','High Stim.','Inhib.']
+    tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2],intervals[3]]
+    tags = ['Negligible','Favorable','Stimulatory','Inhibitory']
     return fig,ax,'IL10 below 48 h',tags_x_locs,tags
 def plot_TNFa():
-    fig,ax = plt.subplots(figsize=(5, 3))
+    fig,ax = plt.subplots(figsize=(6, 3))
     intervals_real = [0,1,10,100]
-    intervals = [0,6,12,20] #fake ones
+    intervals = [0,6,12,18] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'TNFa')
     # Generate fuzzy membership functions
     neg = fuzz.trimf(factor.universe, [intervals[0], intervals[0],intervals[1]])
@@ -236,17 +235,17 @@ def plot_TNFa():
     ax.set_xticks(intervals) 
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Concentration (mM)',**axis_font)
-    tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3]]
-    tags = ['Neg.','Stim.','Neut.', 'Inhib.']
+    tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2],intervals[3]]
+    tags = ['Negligible','Stimulatory','Ineffective', 'Inhibitory']
     return fig,ax,'TNF-$\\alpha$',tags_x_locs,tags
 
 def plot_earlyDiff():
-    fig,ax = plt.subplots(figsize=(5.5, 3))
+    fig,ax = plt.subplots(figsize=(7, 3))
     max_value = 1.1
     factor = ctrl.Antecedent(np.arange(0, max_value, .005), 'earlyDiff')
     sigma = .05
     intervals_real = [0,.25,.5,.667,0.833, 1]
-    intervals = [0,.2,.4,.6,0.82, 1.1] #fake ones
+    intervals = [0,.175,.4,.625,0.82, 1.1] #fake ones
     # Generate fuzzy membership functions
     Z=fuzz.gaussmf(factor.universe, intervals[0], sigma)
     L=fuzz.gaussmf(factor.universe, intervals[1], sigma)
@@ -275,9 +274,10 @@ def plot_earlyDiff():
     intervals_real[4] = r'$c_{3}$'
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Intensity',**axis_font)
-    tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3],intervals[4],intervals[5]]
-    tags = ['Zero','Low','Phys.','High','Very high','Ext. high']
-    return fig,ax,'Early differentiation',tags_x_locs,tags
+    tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3],intervals[4],intervals[5]-.02]
+    tags = ['Zero','Slow','Physiological','Fast','Very fast','Extremely fast']
+    return fig,ax,'Early differentiation',tags_x_locs,tags  
+
 
 def plot_lateDiff():
     fig,ax = plt.subplots(figsize=(5.5, 3))
@@ -285,7 +285,7 @@ def plot_lateDiff():
     factor = ctrl.Antecedent(np.arange(0, max_value, .005), 'lateDiff')
     sigma = .05
     intervals_real = [0,.25,.5,.75, 1]
-    intervals = [0,.25,.5,.75, 1] #fake ones
+    intervals = [0,.2,.5,.8, 1] #fake ones
     # Generate fuzzy membership functions
     Z=fuzz.gaussmf(factor.universe, intervals[0], sigma)
     L=fuzz.gaussmf(factor.universe, intervals[1], sigma)
@@ -313,7 +313,7 @@ def plot_lateDiff():
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Intensity',**axis_font)
     tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3],intervals[4]]
-    tags = ['Zero','Low','Phys.','High','Very high']
+    tags = ['Zero','Slow','Physiological','Fast','Very fast']
     return fig,ax,'Late differentiation',tags_x_locs,tags
 
 def post(ax,name,tags_x_locs,tags):
@@ -342,10 +342,10 @@ def post(ax,name,tags_x_locs,tags):
         tags_x_loc = tags_x_locs[i]
         tag = tags[i]
         pos = 1.1
-        if tag == 'Inhib.' and name == 'Mg$^{2+}$ ions':
-            tags_x_loc = tags_x_loc-1.5
-            pos = 0.45
-            ax.text(tags_x_loc,pos,tag,size = 17, color = colors[i], rotation=50, fontname = 'Times New Roman',
+        if tag == 'Inhibitory' and name == 'Mg$^{2+}$ ions':
+            tags_x_loc = tags_x_loc-.5
+            pos = 0.35
+            ax.text(tags_x_loc,pos,tag,size = 17, color = colors[i], rotation=45, fontname = 'Times New Roman',
                horizontalalignment='center',
             verticalalignment='bottom')
         else:
