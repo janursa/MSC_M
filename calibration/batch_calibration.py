@@ -59,9 +59,12 @@ class Batch_calibrate:
 		def run_model(start,end):
 			inferred_params_list = []
 			for i in range(start,end):
+				output_file = os.path.join(self.dir_name,'inferred_params_{}.json'.format(i))
+				if os.path.isfile(output_file):
+					continue
 				calib_obj = Calibrate(free_params)
 				inferred_params = calib_obj.optimize(n_proc=1,disp=False)
-				with open(os.path.join(self.dir_name,'inferred_params_{}.json'.format(i)),'w') as file:
+				with open(output_file,'w') as file:
 					file.write(json.dumps(inferred_params, indent = 4))
 				inferred_params_list.append(inferred_params)
 				print('Iteration %d completed'%i)
