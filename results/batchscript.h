@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --partition=all
-#SBATCH --time=00:60:00                           # Maximum time requested
+#SBATCH --time=01:00:00                           # Maximum time requested
 #SBATCH --nodes=1                                 # Number of nodes
 #SBATCH --chdir   ./      # directory must already exist!
 #SBATCH --job-name  calib
@@ -13,4 +13,4 @@ source /etc/profile.d/modules.sh
 module load maxwell gcc/8.2
 module load mpi/openmpi-x86_64
 export PYTHONPATH=/usr/lib64/python3.6/site-packages/openmpi
-mpiexec -np 10 --mca pml ob1 python3 ../diff_calibration.py 10
+mpiexec -np 20 --mca pml ob1 python3 ../calibration/batch_calibration.py

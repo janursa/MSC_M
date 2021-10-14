@@ -3,7 +3,7 @@ from SA import sensitivity_analysis
 from diff_calibration import Calibrate
 
 import pathlib
-import os 
+import os
 import sys
 import numpy as np
 import json
@@ -15,30 +15,32 @@ from dirs import dir_to_MSC_osteogenesis
 sys.path.insert(0,dir_to_MSC_osteogenesis)
 from MSC_osteogenesis import free_params
 
-class Pipeline:
+class Batch_calibrate:
 	def __init__(self,replica_n):
 		from mpi4py import MPI
 		self.replica_n = replica_n
 		self.comm = MPI.COMM_WORLD
 		self.rank = self.comm.Get_rank()
 		print("Number of CPUs assigned: ",self.comm.Get_size())
+		self.dir_name = 'batch_calibration'
 		if self.rank == 0:
-			dir_name = 'pipeline'
 			try:
-				os.makedirs(dir_name)
+				os.makedirs(self.dir_name)
 			except OSError:
-				print("Creation of the directory %s failed" % dir_name)
+				print("Creation of the directory %s failed" % self.dir_name)
 			else:
-				print("Successfully created the directory %s " % dir_name)    
+				print("Successfully created the directory %s " % self.dir_name)
 
 	def run(self):
-		"""Runs the user given model for the parameter sets. 
+		"""Runs the user given model for the parameter sets.
 		"""
 		if self.rank == 0:
 			import numpy as np
 			CPU_n = self.comm.Get_size()
-			shares = np.ones(CPU_n,dtype=int)*int(self.replica_n/CPU_n)
-			plus = self.replica_n%CPU_n
+			run_n = self.replica_n[1]-self.replica_n[0]
+			shares = np.ones(CPU_n,dtype=int)*int(run_n/CPU_n)
+			print(shares)
+			plus = run_n%CPU_n
 			for i in range(plus):
 				shares[i]+=1
 
@@ -51,14 +53,14 @@ class Pipeline:
 		else:
 			portions = None
 
-		portion = self.comm.scatter(portions,root = 0)    
+		portion = self.comm.scatter(portions,root = 0)
 
 		def run_model(start,end):
 			inferred_params_list = []
 			for i in range(start,end):
 				calib_obj = Calibrate(free_params)
 				inferred_params = calib_obj.optimize(n_proc=1,disp=False)
-				with open('inferred_params_{}.json'.format(i),'w') as file:
+				with open(os.path.join(self.dir_name,'inferred_params_{}.json'.format(i)),'w') as file:
 					file.write(json.dumps(inferred_params, indent = 4))
 				inferred_params_list.append(inferred_params)
 				print('Iteration %d completed'%i)
@@ -83,14 +85,12 @@ class Pipeline:
 			for key,value in inferred_params_accumulated.items():
 				inferred_params_mean[key]=np.mean(value)
 
-			with open('inferred_params_mean.json','w') as file:
+			with open(os.path.join(self.dir_name,'inferred_params_mean.json'),'w') as file:
 					file.write(json.dumps(inferred_params_mean, indent = 4))
-			with open('inferred_params_accumulated.json','w') as file:
+			with open(os.path.join(self.dir_name,'inferred_params_accumulated.json'),'w') as file:
 					file.write(json.dumps(inferred_params_accumulated, indent = 4))
 
 if __name__ == '__main__':
-	replica_n = 10
-	obj = Pipeline(replica_n)
+	replica_n = [0,50]
+	obj = Batch_calibrate(replica_n)
 	obj.run()
-
-

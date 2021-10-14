@@ -12,7 +12,7 @@ from observations import observations
 if __name__ == '__main__':
 	##/ run test simultions and plot
 
-	with open('inferred_params.json') as file:
+	with open('inferred_params_1.json') as file:
 		inferred_params = json.load(file)
 
 

@@ -70,17 +70,17 @@ free_params = {
     # 'IL1b_S':[1,29], # stimulatory threshold of IL1b
     # 'IL8_M':[1,99], # medium threshold for IL8
 
-    # 'maturity_t':[0,1], # early maturity threshold
-    # 'early_diff_L':[0.1,0.4], # center of low membership function
-    # 'early_diff_H':[0.5,0.75], # center of high membership function
-    # 'early_diff_VH':[0.6,1], # center of high membership function
-    # 'late_diff_L':[0.1,0.4], # center of low membership function
-    # 'late_diff_H':[0.6,0.9], # center of high membership function
-    # 'a_early_diff_u':[0,5], # scale factor, upregulatory
-    # 'a_early_diff_d':[0,1], # scale factor, downregulatory
-    # 'a_late_diff_u':[0,5], # scale factor
-    # 'a_late_diff_d':[0,1], # scale factor
-    # 'diff_time':[15*24,45*24], # days required for full differentiation
+    'maturity_t':[0,1], # early maturity threshold
+    'early_diff_L':[0.1,0.4], # center of low membership function
+    'early_diff_H':[0.5,0.75], # center of high membership function
+    'early_diff_VH':[0.6,1], # center of high membership function
+    'late_diff_L':[0.1,0.4], # center of low membership function
+    'late_diff_H':[0.6,0.9], # center of high membership function
+    'a_early_diff_u':[0,5], # scale factor, upregulatory
+    'a_early_diff_d':[0,1], # scale factor, downregulatory
+    'a_late_diff_u':[0,5], # scale factor
+    'a_late_diff_d':[0,1], # scale factor
+    'diff_time':[15*24,45*24], # days required for full differentiation
 
     # 'a_Chen_2018_ALP':[0,10],
     # 'a_Chen_2018_ARS':[0,10],
