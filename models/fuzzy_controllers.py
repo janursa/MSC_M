@@ -21,7 +21,7 @@ class Fuzzy_controller:
 
         #// define membership functions
         sigma = .05
-        diff_intervals = [0,self.params['early_diff_L'],.5,self.params['early_diff_H'],self.params['early_diff_VH'], 1]
+        diff_intervals = [0,self.params['early_diff_slow'],.5,self.params['early_diff_fast'],self.params['early_diff_very_fast'], 1]
         early_diff['Z']=fuzz.gaussmf(range_value, diff_intervals[0], sigma)
         early_diff['L']=fuzz.gaussmf(range_value, diff_intervals[1], sigma)
         early_diff['M']=fuzz.gaussmf(range_value, diff_intervals[2], sigma)
@@ -30,7 +30,7 @@ class Fuzzy_controller:
         early_diff['EH']=fuzz.gaussmf(range_value, diff_intervals[5], sigma)
 
 
-        diff_intervals = [0,self.params['late_diff_L'],.5,self.params['late_diff_H'], 1]
+        diff_intervals = [0,self.params['late_diff_slow'],.5,self.params['late_diff_fast'], 1]
         late_diff['Z']=fuzz.gaussmf(range_value, diff_intervals[0], sigma)
         late_diff['L']=fuzz.gaussmf(range_value, diff_intervals[1], sigma)
         late_diff['M']=fuzz.gaussmf(range_value, diff_intervals[2], sigma)
@@ -66,19 +66,19 @@ class Fuzzy_IL8_IL1b(Fuzzy_controller):
         self.default_inputs = {'IL8':0,'IL1b':0}
     def define_antecedents(self):
         #// define Il8
-        intervals = [0,self.params['IL8_M'],100]
+        intervals = [0,self.params['IL8_favorable'],100]
         IL8 = ctrl.Antecedent(np.arange(intervals[0], intervals[-1], .005), 'IL8')
         IL8['Neg'] = fuzz.trimf(IL8.universe, [intervals[0], intervals[0],intervals[1]])
-        IL8['LowStim'] = fuzz.trimf(IL8.universe, [intervals[0], intervals[1], intervals[2]])
-        IL8['HighStim'] = fuzz.trimf(IL8.universe, [intervals[1], intervals[2], intervals[2]])
+        IL8['Favorable'] = fuzz.trimf(IL8.universe, [intervals[0], intervals[1], intervals[2]])
+        IL8['Stimulatory'] = fuzz.trimf(IL8.universe, [intervals[1], intervals[2], intervals[2]])
         IL8['NNeg'] = fuzz.trapmf(IL8.universe, [intervals[0], intervals[1],intervals[-1],intervals[-1]])
         self.antecedents['IL8']=IL8
         #// define IL1b
-        intervals = [0,self.params['IL1b_S'],self.params['IL1b_H'],200]
+        intervals = [0,self.params['IL1b_stim'],self.params['IL1b_ineffective'],200]
         IL1b = ctrl.Antecedent(np.arange(intervals[0], intervals[-1], .005), 'IL1b')
         IL1b['Neg'] = fuzz.trimf(IL1b.universe, [intervals[0], intervals[0],intervals[1]])
-        IL1b['Stim'] = fuzz.trimf(IL1b.universe, [intervals[0], intervals[1], intervals[2]])
-        IL1b['High'] = fuzz.trapmf(IL1b.universe, [intervals[1], intervals[2], intervals[3],intervals[3]])
+        IL1b['Stimulatory'] = fuzz.trimf(IL1b.universe, [intervals[0], intervals[1], intervals[2]])
+        IL1b['Ineffective'] = fuzz.trapmf(IL1b.universe, [intervals[1], intervals[2], intervals[3],intervals[3]])
         IL1b['NNeg'] = fuzz.trapmf(IL1b.universe, [intervals[0], intervals[1],intervals[-1],intervals[-1]])
         self.antecedents['IL1b']=IL1b
 
@@ -91,11 +91,11 @@ class Fuzzy_IL8_IL1b(Fuzzy_controller):
         early_diff_rules = [
             # only IL8
             ctrl.Rule(IL1b['Neg'] & IL8['Neg'] , early_diff['M']),
-            ctrl.Rule(IL1b['Neg'] & IL8['LowStim'] , early_diff['VH']),
-            ctrl.Rule(IL1b['Neg'] & IL8['HighStim'] , early_diff['EH']),
+            ctrl.Rule(IL1b['Neg'] & IL8['Favorable'] , early_diff['VH']),
+            ctrl.Rule(IL1b['Neg'] & IL8['Stimulatory'] , early_diff['EH']),
             # only IL1b
-            ctrl.Rule(IL1b['Stim'] & IL8['Neg'] , early_diff['VH']),
-            ctrl.Rule(IL1b['High'] & IL8['Neg'] , early_diff['M']),
+            ctrl.Rule(IL1b['Stimulatory'] & IL8['Neg'] , early_diff['VH']),
+            ctrl.Rule(IL1b['Ineffective'] & IL8['Neg'] , early_diff['M']),
             # combined
             ctrl.Rule(IL1b['NNeg'] & IL8['NNeg'] , early_diff['VH'])
 
@@ -119,15 +119,15 @@ class Fuzzy_IL10(Fuzzy_controller):
         if above_48h:
             intervals = [0,0.1,1,10,100]
             IL10['Neg'] = fuzz.trimf(IL10.universe, [intervals[0], intervals[0],intervals[1]])
-            IL10['LowStim'] = fuzz.trimf(IL10.universe, [intervals[0], intervals[1], intervals[2]])
-            IL10['HighStim'] = fuzz.trimf(IL10.universe, [intervals[1], intervals[2], intervals[3]])
+            IL10['Favorable'] = fuzz.trimf(IL10.universe, [intervals[0], intervals[1], intervals[2]])
+            IL10['Stimulatory'] = fuzz.trimf(IL10.universe, [intervals[1], intervals[2], intervals[3]])
             IL10['Inhib'] = fuzz.trapmf(IL10.universe, [intervals[2], intervals[3], intervals[-1], intervals[-1]])
             
         else:
             intervals = [0,1,10,100]
             IL10['Neg'] = fuzz.trimf(IL10.universe, [intervals[0], intervals[0],intervals[1]])
-            IL10['LowStim'] = fuzz.trimf(IL10.universe, [intervals[0], intervals[1], intervals[2]])
-            IL10['HighStim'] = fuzz.trimf(IL10.universe, [intervals[1], intervals[2], intervals[3]])
+            IL10['Favorable'] = fuzz.trimf(IL10.universe, [intervals[0], intervals[1], intervals[2]])
+            IL10['Stimulatory'] = fuzz.trimf(IL10.universe, [intervals[1], intervals[2], intervals[3]])
             IL10['Inhib'] = fuzz.trimf(IL10.universe, [intervals[2], intervals[-1],intervals[-1]])
             
         #// store
@@ -138,14 +138,14 @@ class Fuzzy_IL10(Fuzzy_controller):
         early_diff = self.consequents['early_diff']
         late_diff = self.consequents['late_diff']
         early_diff_rules = [
-            ctrl.Rule(IL10['HighStim'] , early_diff['VH']),
-            ctrl.Rule(IL10['LowStim'] , early_diff['H']),
+            ctrl.Rule(IL10['Stimulatory'] , early_diff['VH']),
+            ctrl.Rule(IL10['Favorable'] , early_diff['H']),
             ctrl.Rule(IL10['Neg'] , early_diff['M']),
             ctrl.Rule(IL10['Inhib'] , early_diff['L'])
         ]
         late_diff_rules = [
-            ctrl.Rule(IL10['HighStim'] , late_diff['VH']),
-            ctrl.Rule(IL10['LowStim'] , late_diff['H']),
+            ctrl.Rule(IL10['Stimulatory'] , late_diff['VH']),
+            ctrl.Rule(IL10['Favorable'] , late_diff['H']),
             ctrl.Rule(IL10['Neg'] , late_diff['M']),
             ctrl.Rule(IL10['Inhib'] , late_diff['L'])
         ]
@@ -201,8 +201,8 @@ class Fuzzy_Mg(Fuzzy_controller):
         self.default_inputs = {'Mg':0}
     def define_antecedents(self):
         #// define antecedents
-        neut = np.mean([self.params['Mg_S'],self.params['Mg_D']])
-        intervals = [0,0.08,0.8,1.8,self.params['Mg_S'],neut,self.params['Mg_D'],60]
+        neut = np.mean([self.params['Mg_stim'],self.params['Mg_dest']])
+        intervals = [0,0.08,0.8,1.8,self.params['Mg_stim'],neut,self.params['Mg_dest'],60]
         factor = ctrl.Antecedent(np.arange(0, 60, .005), 'Mg')
 
         factor['Des_e'] = fuzz.trapmf(factor.universe, [intervals[0], intervals[0],intervals[1],intervals[2]])

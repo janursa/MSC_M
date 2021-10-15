@@ -96,7 +96,7 @@ struct base_model{
     virtual void define_consequents(){
         // early Diff: 6 levels
         auto OUTPUT_EARLYDIFF = [&]() {
-            vector<float> intervals = {0,this->params["early_diff_L"],.5,this->params["early_diff_H"],this->params["early_diff_VH"], 1};
+            vector<float> intervals = {0,this->params["early_diff_slow"],.5,this->params["early_diff_fast"],this->params["early_diff_very_fast"], 1};
             vector<string> terms = {"Z", "L", "M", "H", "VH", "EH"};
             OutputVariable* out = new OutputVariable;
             out->setName("early_diff");
@@ -118,7 +118,7 @@ struct base_model{
 
         // late Diff: 5 levels
         auto OUTPUT_LATEDIFF = [&]() {
-            vector<float> intervals = {0,this->params["late_diff_L"],.5,this->params["late_diff_H"], 1};
+            vector<float> intervals = {0,this->params["late_diff_slow"],.5,this->params["late_diff_fast"], 1};
             vector<string> terms = {"Z", "L", "M", "H", "VH"};
             OutputVariable* out = new OutputVariable;
             out->setName("late_diff");
@@ -278,15 +278,15 @@ struct Fuzzy_IL10:public base_model {
         if (above_48h){
             vector<float> intervals = {0,0.1,1,10,100};
             input->addTerm(new Triangle("Neg", intervals[0], intervals[0],intervals[1]));
-            input->addTerm(new Triangle("LowStim", intervals[0], intervals[1], intervals[2]));
-            input->addTerm(new Triangle("HighStim", intervals[1], intervals[2], intervals[3]));
+            input->addTerm(new Triangle("Favorable", intervals[0], intervals[1], intervals[2]));
+            input->addTerm(new Triangle("Stimulatory", intervals[1], intervals[2], intervals[3]));
             input->addTerm(new Trapezoid("Inhib", intervals[2], intervals[3], intervals[4],intervals[4]));
 
         }else{
             vector<float> intervals = {0,1,10,100};
             input->addTerm(new Triangle("Neg", intervals[0], intervals[0],intervals[1]));
-            input->addTerm(new Triangle("LowStim", intervals[0], intervals[1], intervals[2]));
-            input->addTerm(new Triangle("HighStim", intervals[1], intervals[2], intervals[3]));
+            input->addTerm(new Triangle("Favorable", intervals[0], intervals[1], intervals[2]));
+            input->addTerm(new Triangle("Stimulatory", intervals[1], intervals[2], intervals[3]));
             input->addTerm(new Triangle("Inhib", intervals[2], intervals[3], intervals[3]));
         }
         this->engine->addInputVariable(input);
@@ -294,14 +294,14 @@ struct Fuzzy_IL10:public base_model {
     }
     void define_rules(){
         vector<string> early_diff_rules = {
-            "if IL10 is HighStim then early_diff is VH",
-            "if IL10 is LowStim then early_diff is H",
+            "if IL10 is Stimulatory then early_diff is VH",
+            "if IL10 is Favorable then early_diff is H",
             "if IL10 is Neg then early_diff is M",
             "if IL10 is Inhib then early_diff is L"
         };
         vector<string> late_diff_rules = {
-            "if IL10 is HighStim then late_diff is VH",
-            "if IL10 is LowStim then late_diff is H",
+            "if IL10 is Stimulatory then late_diff is VH",
+            "if IL10 is Favorable then late_diff is H",
             "if IL10 is Neg then late_diff is M",
             "if IL10 is Inhib then late_diff is L"
         };
@@ -331,7 +331,7 @@ struct Fuzzy_IL8_IL1b:public base_model {
     void define_antecedents(){
         #// define antecedents
         auto IL8 = [&](){
-            vector<float> intervals = {0,this->params["IL8_M"],100};
+            vector<float> intervals = {0,this->params["IL8_favorable"],100};
             InputVariable *input = new InputVariable;
             input->setName("IL8");
             input->setDescription("");
@@ -340,14 +340,14 @@ struct Fuzzy_IL8_IL1b:public base_model {
             input->setLockValueInRange(false);
 
             input->addTerm(new Triangle("Neg", intervals[0], intervals[0],intervals[1]));
-            input->addTerm(new Triangle("LowStim", intervals[0], intervals[1], intervals[2]));
-            input->addTerm(new Triangle("HighStim", intervals[1], intervals[2], intervals[2]));
+            input->addTerm(new Triangle("Favorable", intervals[0], intervals[1], intervals[2]));
+            input->addTerm(new Triangle("Stimulatory", intervals[1], intervals[2], intervals[2]));
             this->engine->addInputVariable(input);
             this->input_tags.push_back("IL8");
         };
         IL8();
         auto IL1b = [&](){
-            vector<float> intervals = {0,this->params["IL1b_S"],this->params["IL1b_H"],200};
+            vector<float> intervals = {0,this->params["IL1b_stim"],this->params["IL1b_ineffective"],200};
             InputVariable *input = new InputVariable;
             input->setName("IL1b");
             input->setDescription("");
@@ -356,8 +356,8 @@ struct Fuzzy_IL8_IL1b:public base_model {
             input->setLockValueInRange(false);
 
             input->addTerm(new Triangle("Neg", intervals[0], intervals[0],intervals[1]));
-            input->addTerm(new Triangle("Stim", intervals[0], intervals[1], intervals[2]));
-            input->addTerm(new Trapezoid("High", intervals[1], intervals[2], intervals[3],intervals[3]));
+            input->addTerm(new Triangle("Stimulatory", intervals[0], intervals[1], intervals[2]));
+            input->addTerm(new Trapezoid("Ineffective", intervals[1], intervals[2], intervals[3],intervals[3]));
             this->engine->addInputVariable(input);
             this->input_tags.push_back("IL1b");
         };
@@ -366,12 +366,12 @@ struct Fuzzy_IL8_IL1b:public base_model {
     void define_rules(){
         vector<string> early_diff_rules = {
             // only IL8
-            "if (IL1b is Neg) and (IL8 is HighStim) then early_diff is EH",
-            "if (IL1b is Neg) and (IL8 is LowStim) then early_diff is VH",
+            "if (IL1b is Neg) and (IL8 is Stimulatory) then early_diff is EH",
+            "if (IL1b is Neg) and (IL8 is Favorable) then early_diff is VH",
             "if (IL1b is Neg) and (IL8 is Neg) then early_diff is M",
             // only IL1b
-            "if (IL1b is Stim) and (IL8 is Neg) then early_diff is VH",
-            "if (IL1b is High) and (IL8 is Neg) then early_diff is M",
+            "if (IL1b is Stimulatory) and (IL8 is Neg) then early_diff is VH",
+            "if (IL1b is Ineffective) and (IL8 is Neg) then early_diff is M",
             // combind
             "if (IL1b is not Neg) and (IL8 is not Neg) then early_diff is VH"
         };
@@ -407,8 +407,8 @@ struct Fuzzy_Mg:public base_model {
 
     void define_antecedents(){
         #// define antecedents
-        float neut = (this->params["Mg_S"] + this->params["Mg_D"])/2;
-        vector<float> intervals = {0,0.08,0.8,1.8,this->params["Mg_S"],neut,this->params["Mg_D"],60};
+        float neut = (this->params["Mg_stim"] + this->params["Mg_dest"])/2;
+        vector<float> intervals = {0,0.08,0.8,1.8,this->params["Mg_stim"],neut,this->params["Mg_dest"],60};
         InputVariable *input = new InputVariable;
         input->setName("Mg");
         input->setDescription("");

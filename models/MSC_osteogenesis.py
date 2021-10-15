@@ -22,25 +22,25 @@ from fuzzy_cpp import *
 fixed_params = {
     'ALP_M_n':1, # n in the equation ALP = a*(M^n + ALP_0)
     'ARS_M_n':1,
-    'OC_M_n':1,
     'ALP_0':.2, # the default value of ALP when maturity is zero
-    'OC_0':.2, # the default value of OC when maturity is zero
     'ARS_0':.2, # the default value of ARS when maturity is zero
-    'Mg_S':5, # stimulatory conc of Mg
-    'Mg_D':30, # detrimental conc of Mg
-    'IL1b_H':120, # detrimental threshold IL1b
-    'IL1b_S':10,
-    'IL8_M':25, # medium threshold for IL8
+
+    'Mg_stim':5, # stimulatory conc of Mg
+    'Mg_dest':30, # detrimental conc of Mg
+    'IL1b_ineffective':120, # detrimental threshold IL1b
+    'IL1b_stim':10,
+    'IL8_favorable':25, # medium threshold for IL8
+    
     'maturity_t':.5, # early maturity threshold 
-    'early_diff_L':.25, # center of low membership function
-    'early_diff_H':.65, # center of high membership function
-    'early_diff_VH':.85, # center of high membership function
-    'late_diff_L':.25, # center of low membership function
-    'late_diff_H':.75, # center of high membership function
-    'a_early_diff_u':1, # scale factor, upregulatory
-    'a_early_diff_d':2, # scale factor, downregulatory
-    'a_late_diff_u':2, # scale factor
-    'a_late_diff_d':2, # scale factor
+    'early_diff_slow':.25, # center of low membership function
+    'early_diff_fast':.65, # center of high membership function
+    'early_diff_very_fast':.85, # center of high membership function
+    'late_diff_slow':.25, # center of low membership function
+    'late_diff_fast':.75, # center of high membership function
+    'a_early_diff_stim':1, # scale factor, stimulatory
+    'a_early_diff_inhib':2, # scale factor, inhibitory
+    'a_late_diff_stim':2, # scale factor
+    'a_late_diff_inhib':2, # scale factor
     'diff_time':30*24, # days required for full differentiation   
 
     'a_Chen_2018_maturity_t':1,
@@ -64,22 +64,22 @@ free_params = {
     'ALP_0':[0,1], # the default value of ALP when maturity is zero
     'ARS_0':[0,1], # the default value of ARS when maturity is zero
 
-    # 'Mg_S':[2,10], # stimulatory conc of Mg
-    # 'Mg_D':[20,40], # detrimental conc of Mg
-    # 'IL1b_H':[30,199], # high threshold IL1b
-    # 'IL1b_S':[1,29], # stimulatory threshold of IL1b
-    # 'IL8_M':[1,99], # medium threshold for IL8
+    # 'Mg_stim':[2,10], # stimulatory conc of Mg --
+    # 'Mg_dest':[20,40], # detrimental conc of Mg --
+    # 'IL1b_ineffective':[30,199], # high threshold IL1b --
+    # 'IL1b_stim':[1,29], # stimulatory threshold of IL1b --
+    # 'IL8_favorable':[1,99], # medium threshold for IL8 --
 
     'maturity_t':[0,1], # early maturity threshold.  ----
-    'early_diff_L':[0.1,0.4], # center of low membership function --
-    'early_diff_H':[0.5,0.75], # center of high membership function --
-    'early_diff_VH':[0.6,1], # center of high membership function --
-    'late_diff_L':[0.1,0.4], # center of low membership function --
-    'late_diff_H':[0.6,0.9], # center of high membership function --
-    'a_early_diff_u':[0,5], # scale factor, upregulatory --
-    'a_early_diff_d':[0,1], # scale factor, downregulatory --
-    'a_late_diff_u':[0,5], # scale factor --
-    'a_late_diff_d':[0,1], # scale factor --
+    'early_diff_slow':[0.1,0.4], # center of low membership function --
+    'early_diff_fast':[0.5,0.75], # center of high membership function --
+    'early_diff_very_fast':[0.6,1], # center of high membership function --
+    'late_diff_slow':[0.1,0.4], # center of low membership function --
+    'late_diff_fast':[0.6,0.9], # center of high membership function --
+    'a_early_diff_stim':[0,5], # scale factor, upregulatory --
+    'a_early_diff_inhib':[0,1], # scale factor, downregulatory --
+    'a_late_diff_stim':[0,5], # scale factor --
+    'a_late_diff_inhib':[0,1], # scale factor --
     'diff_time':[15*24,45*24], # days required for full differentiation ---
 
     # 'a_Chen_2018_ALP':[0,10],
@@ -114,14 +114,18 @@ class Osteogenesis:
             if value != None:
                 return value
 
-    def scale(self,x,factor):
+    def scale(self,x,factor_stim,factor_inhib):
         """
         Scale the fuzzy controller's output cosidering that the origin is x=0.5
         The scalling is done differently for x > 0.5 than x < 0.5
         x: fuzzy output
         factor: scale factor
         """
-        f = 2*factor*(x-0.5)+1
+        if x >=0:
+            f = 2*factor_stim*(x-0.5)+1
+        else:
+            f = 2*factor_inhib*(x-0.5)+1
+
         if f <=0:
             f = 0
         return f
@@ -164,12 +168,12 @@ class Osteogenesis:
         #// k_early and k_late are the corrected maturation rate
         if 'early_diff' in f_values:
             f_early = f_values['early_diff'] # fuzzy output for early maturation
-            k_early = k0 * self.scale(x = f_early,factor = self.params['a_early_diff_u'])
+            k_early = k0 * self.scale(x = f_early,factor_stim= self.params['a_early_diff_stim'],factor_inhib= self.params['a_early_diff_inhib'])
         else:
             k_early = k0
         if 'late_diff' in f_values:
             f_late = f_values['late_diff']
-            k_late = k0 * self.scale(x = f_late,factor = self.params['a_late_diff_d'])
+            k_late = k0 * self.scale(x = f_late,factor_stim = self.params['a_late_diff_stim'],factor_inhib = self.params['a_late_diff_inhib'])
         else:
             k_late = k0
         #// calculate maturity related parameters
