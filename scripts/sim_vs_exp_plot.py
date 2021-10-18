@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
 	with open('inferred_params.json') as file:
 		inferred_params = json.load(file)
-
+	# inferred_params['maturity_t'] = .2
 
 	obj = MSC_model(fixed_params=fixed_params,free_params = inferred_params,debug=True)
 	simulation_results = obj.simulate_studies()

@@ -418,7 +418,7 @@ struct Fuzzy_Mg:public base_model {
 
         input->addTerm(new Trapezoid("Des_e", intervals[0], intervals[0],intervals[1],intervals[2]));
         input->addTerm(new Triangle("Phy", intervals[1],intervals[2],intervals[4]));
-        input->addTerm(new Triangle("Stim", intervals[2],intervals[4],intervals[5]));
+        input->addTerm(new Triangle("Stim_e", intervals[2],intervals[4],intervals[5]));
         input->addTerm(new Triangle("Neut", intervals[4],intervals[5],intervals[6]));
         input->addTerm(new Trapezoid("Tox", intervals[5],intervals[6],intervals[7],intervals[7]));
         input->addTerm(new Trapezoid("Des_l", intervals[3],intervals[6],intervals[7],intervals[7]));
@@ -429,7 +429,7 @@ struct Fuzzy_Mg:public base_model {
     }
     void define_rules(){
         vector<string> early_diff_rules = {
-            "if Mg is Stim then early_diff is H",
+            "if Mg is Stim_e then early_diff is H",
             "if (Mg is Phy) or (Mg is Neut) then early_diff is M",
             "if (Mg is Des_e) or (Mg is Tox) then early_diff is L"
         };

@@ -30,7 +30,7 @@ fixed_params = {
     'IL1b_ineffective':120, # detrimental threshold IL1b
     'IL1b_stim':10,
     'IL8_favorable':25, # medium threshold for IL8
-    
+
     'maturity_t':.5, # early maturity threshold 
     'early_diff_slow':.25, # center of low membership function
     'early_diff_fast':.65, # center of high membership function
@@ -59,16 +59,16 @@ fixed_params = {
     'a_Ber_2016_OC':.5,
 }
 free_params = {
-    'ALP_M_n':[0,10], # n in the equation ALP = a*(M^n + ALP_0)
+    'ALP_M_n':[0,20], # n in the equation ALP = a*(M^n + ALP_0)
     'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
-    'ALP_0':[0,1], # the default value of ALP when maturity is zero
+    'ALP_0':[0,10], # the default value of ALP when maturity is zero
     'ARS_0':[0,1], # the default value of ARS when maturity is zero
 
-    # 'Mg_stim':[2,10], # stimulatory conc of Mg --
-    # 'Mg_dest':[20,40], # detrimental conc of Mg --
-    # 'IL1b_ineffective':[30,199], # high threshold IL1b --
-    # 'IL1b_stim':[1,29], # stimulatory threshold of IL1b --
-    # 'IL8_favorable':[1,99], # medium threshold for IL8 --
+    'Mg_stim':[2,10], # stimulatory conc of Mg --
+    'Mg_dest':[20,40], # detrimental conc of Mg --
+    'IL1b_ineffective':[30,199], # high threshold IL1b --
+    'IL1b_stim':[1,29], # stimulatory threshold of IL1b --
+    'IL8_favorable':[1,99], # medium threshold for IL8 --
 
     'maturity_t':[0,1], # early maturity threshold.  ----
     'early_diff_slow':[0.1,0.4], # center of low membership function --
@@ -153,7 +153,7 @@ class Osteogenesis:
 
         """
 
-        if (study == 'Qiao_2021_IL8_IL1b' or study == 'Qiao_2021_IL8' or study == 'Qiao_2021_IL1b'):
+        if (study == 'Qiao_2021_IL8_IL1b' or study == 'Qiao_2021_IL8' or study == 'Qiao_2021_IL1b'or study == 'Qiao_2021_Mg'):
             study = 'Qiao_2021'
 
         if (study == 'Valles_2020_TNFa' or study == 'Valles_2020_IL10' ):
@@ -194,8 +194,8 @@ class Osteogenesis:
         #// calculate ALP, OC, and ARS based on maturity
         maturity = calculate_maturity(checkpoint = checkpoint,maturity_t_h=maturity_t_scalled,
                 k_early=k_early,k_late=k_late)
-        if self.debug:
-            print('checkpoint {} fs {} maturity {}'.format(checkpoint,f_values, round(maturity,3)))
+        # if self.debug:
+        #     print('checkpoint {} fs {} maturity {}'.format(checkpoint,f_values, round(maturity,3)))
 
         if target == 'ALP':
             ALP_M_coeff = self.determine_correction_factor(study = study, params = self.params, f_type='ALP')
@@ -203,13 +203,16 @@ class Osteogenesis:
                 ALP = (maturity + self.params['ALP_0'])**self.params['ALP_M_n'] * ALP_M_coeff
             else:
                 ALP =(adjusted_maturity_t + self.params['ALP_0'])**self.params['ALP_M_n'] * ALP_M_coeff
-            # if self.debug:
-            #     print('checkpoint {}, fs {}, maturity {}, maturity_t {}, ALP {}'.format(checkpoint,f_values, round(maturity,4),round(adjusted_maturity_t,4),round(ALP,4)))
+            if self.debug:
+                print('checkpoint {}, fs {}, maturity {}, maturity_t {}, ALP {}'.format(checkpoint,f_values, round(maturity,4),round(adjusted_maturity_t,4),round(ALP,4)))
 
             return ALP
         elif target == 'ARS':
             ARS_M_coeff = self.determine_correction_factor(study = study, params = self.params, f_type='ARS')
             ARS = (maturity + self.params['ARS_0'])**self.params['ARS_M_n'] * ARS_M_coeff
+            if self.debug:
+                print('checkpoint {}, fs {}, maturity {}, maturity_t {}, ARS {}'.format(checkpoint,f_values, round(maturity,4),round(adjusted_maturity_t,4),round(ARS,4)))
+
             return ARS
         elif target == 'OC':
             OC_M_coeff = self.determine_correction_factor(study = study, params = self.params, f_type='OC')

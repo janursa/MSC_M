@@ -207,7 +207,7 @@ class Fuzzy_Mg(Fuzzy_controller):
 
         factor['Des_e'] = fuzz.trapmf(factor.universe, [intervals[0], intervals[0],intervals[1],intervals[2]])
         factor['Phy'] = fuzz.trimf(factor.universe, [intervals[1],intervals[2],intervals[4]])
-        factor['Stim'] = fuzz.trimf(factor.universe, [intervals[2],intervals[4],intervals[5]])
+        factor['Stim_e'] = fuzz.trimf(factor.universe, [intervals[2],intervals[4],intervals[5]])
         factor['Neut'] = fuzz.trimf(factor.universe, [intervals[4],intervals[5],intervals[6]])
         factor['Tox'] = fuzz.trapmf(factor.universe, [intervals[5],intervals[6],intervals[-1],intervals[-1]])
         factor['Des_l'] = fuzz.trapmf(factor.universe, [intervals[3],intervals[6],intervals[-1],intervals[-1]])
@@ -222,7 +222,7 @@ class Fuzzy_Mg(Fuzzy_controller):
         early_diff = self.consequents['early_diff']
         late_diff = self.consequents['late_diff']
         early_diff_rules = [
-            ctrl.Rule(factor['Stim'] , early_diff['H']),
+            ctrl.Rule(factor['Stim_e'] , early_diff['H']),
             ctrl.Rule(factor['Phy'] | factor['Neut'] , early_diff['M']),
             ctrl.Rule(factor['Des_e'] | factor['Tox'] , early_diff['L'])
         ]

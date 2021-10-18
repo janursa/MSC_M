@@ -58,12 +58,12 @@ def plot_IL8():
             line.set_dashes(line_patterns[i-1])
 
     ax.set_xticks(intervals) 
-    intervals_real[1] = r'$c_{1}$'
+    intervals_real[1] = r'$p_{8f}$'
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Concentration (mM)',**axis_font)
     tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2]-.5]
     tags = ['Negligible','Favorable','Stimulatory']
-    return fig,ax,'IL8',tags_x_locs,tags
+    return fig,ax,'IL-8',tags_x_locs,tags
       
 
 def plot_IL1b():
@@ -92,19 +92,19 @@ def plot_IL1b():
             line.set_dashes(line_patterns[i-1])
 
     ax.set_xticks(intervals) 
-    intervals_real[1] = r'$c_{2}$'
-    intervals_real[2] = r'$c_{3}$'
+    intervals_real[1] = r'$p_{1bs}$'
+    intervals_real[2] = r'$p_{1bie}$'
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Concentration (mM)',**axis_font)
     tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2]+1]
     tags = ['Negligible','Stimulatory','Ineffective']
-    return fig,ax,'IL1b',tags_x_locs,tags
+    return fig,ax,'IL-1$\\beta$',tags_x_locs,tags
 
 def plot_MG():
-    fig = pylab.figure(figsize=(8.5, 3))
+    fig = pylab.figure(figsize=(9.5, 3))
     ax = fig.add_subplot(111)
-    intervals_real = [0,0.08,0.8,1.8,5,40,60]
-    intervals = [0,1.5,6.5,9,11.5,16.5,21.5] #fake ones
+    intervals_real = [0,0.08,0.8,1.8,5,20,40,60]
+    intervals = [0,1.5,6.5,9,11.5,16.5,21.5,24] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'Mg')
     
     # Generate fuzzy membership functions
@@ -132,14 +132,15 @@ def plot_MG():
     
     #ax.set_title('BMP membership')
     ax.set_xticks(intervals) 
-    intervals_real[4] = r'$c_{1}$'
-    intervals_real[5] = r'$c_{2}$'
+    intervals_real[4] = r'$p_{ms}$'
+    intervals_real[5] = r'$(p_{ms}+p_{mie})/2$'
+    intervals_real[6] = r'$p_{mie}$'
     ax.set_xticklabels(intervals_real)
     # ax.set_ylabel('Membership',**axis_font)
     ax.set_xlabel('Concentration (mM)',**axis_font)
-    tags_x_locs = [intervals[0]+1,intervals[2],intervals[4],intervals[5],intervals[6],intervals[-1]]
+    tags_x_locs = [intervals[0]+1,intervals[2],intervals[4],intervals[5],intervals[6],intervals[-1]-2]
     tags = ['Inhibitory ED','Physiological','Stimulatory ED','Ineffective','Inhibitory','Inhibitory LD']
-    return fig,ax,'Mg$^{2+}$ ions',tags_x_locs,tags
+    return fig,ax,'Mg$^{2+}$ ions',tags_x_locs,tags 
 
 
 def plot_IL10_above48():
@@ -173,7 +174,7 @@ def plot_IL10_above48():
     ax.set_xlabel('Concentration (ng/ml)',**axis_font)
     tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2],intervals[3]+1]
     tags = ['Negligible','Stimulatory','Favorable','Inhibitory']
-    return fig,ax,'IL10 above 48 h',tags_x_locs,tags 
+    return fig,ax,'IL-10 above 48 h',tags_x_locs,tags 
 
 def plot_IL10_below48():
     fig,ax = plt.subplots(figsize=(6, 3))
@@ -206,7 +207,7 @@ def plot_IL10_below48():
     ax.set_xlabel('Concentration (ng/ml)',**axis_font)
     tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2],intervals[3]]
     tags = ['Negligible','Favorable','Stimulatory','Inhibitory']
-    return fig,ax,'IL10 below 48 h',tags_x_locs,tags
+    return fig,ax,'IL-10 below 48 h',tags_x_locs,tags
 def plot_TNFa():
     fig,ax = plt.subplots(figsize=(6, 3))
     intervals_real = [0,1,10,100]
@@ -267,11 +268,11 @@ def plot_earlyDiff():
             pass
         else:
             line.set_dashes(line_patterns[i-1])
-#     plt.rcParams['axes.titley'] = 1.0 
+
     ax.set_xticks(intervals) 
-    intervals_real[1] = r'$c_{1}$'
-    intervals_real[3] = r'$c_{2}$'
-    intervals_real[4] = r'$c_{3}$'
+    intervals_real[1] = r'$p_{es}$'
+    intervals_real[3] = r'$p_{ef}$'
+    intervals_real[4] = r'$p_{evf}$'
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Intensity',**axis_font)
     tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3],intervals[4],intervals[5]-.02]
@@ -308,8 +309,8 @@ def plot_lateDiff():
             line.set_dashes(line_patterns[i-1])
 #     plt.rcParams['axes.titley'] = 1.0 
     ax.set_xticks(intervals) 
-    intervals_real[1] = r'$c_{1}$'
-    intervals_real[3] = r'$c_{2}$'
+    intervals_real[1] = r'$p_{ls}$'
+    intervals_real[3] = r'$p_{lf}$'
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Intensity',**axis_font)
     tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3],intervals[4]]
@@ -343,9 +344,9 @@ def post(ax,name,tags_x_locs,tags):
         tag = tags[i]
         pos = 1.1
         if tag == 'Inhibitory' and name == 'Mg$^{2+}$ ions':
-            tags_x_loc = tags_x_loc-.5
-            pos = 0.35
-            ax.text(tags_x_loc,pos,tag,size = 17, color = colors[i], rotation=45, fontname = 'Times New Roman',
+            tags_x_loc = tags_x_loc+1
+            pos = 0.65
+            ax.text(tags_x_loc,pos,tag,size = 17, color = colors[i], rotation=0, fontname = 'Times New Roman',
                horizontalalignment='center',
             verticalalignment='bottom')
         else:
