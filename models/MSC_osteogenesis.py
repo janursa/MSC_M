@@ -276,13 +276,13 @@ class MSC_model:
         error = np.mean(errors_list) # we put the errors on all of the IDs here and finally just sum them up
         return error
 def single_run(free_params,fixed_params):
-    obj = MSC_model(fixed_params = fixed_params,free_params=fixed_params)
+    obj = MSC_model(fixed_params = fixed_params,free_params=free_params)
     error = obj.run()
     return error
 if __name__ == '__main__':
     # tr = tracker.SummaryTracker()
     # for i in range(100000):
-    single_run(free_params=free_params, fixed_params=fixed_params)
+    error = single_run(free_params=free_params, fixed_params=fixed_params)
         # if i%500==0:
         #     print('Iteration ',i)
         #     tr.print_diff()

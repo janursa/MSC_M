@@ -11,9 +11,9 @@ dir_to_dirs = os.path.join(current_file,'..')
 
 class PARAMS:
 	results_file = os.path.join(dir_to_dirs,'results','batch_calibration_selected')
-	n_start = 0
-	n_end = 9
-	inferred_params_mean = os.path.join(dir_to_dirs,'results','inferred_params.json')
+	n_start = 60
+	n_end = 110
+	inferred_params_mean = os.path.join(dir_to_dirs,'results','inferred_params_%d_%d.json'%(n_start,n_end))
 	inferred_params_accumulated = os.path.join(dir_to_dirs,'results','inferred_params_accumulated.json')
 
 print('Merging files {} to {} from folder {}'.format(PARAMS.n_start,PARAMS.n_end,PARAMS.results_file))
