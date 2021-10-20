@@ -1,17 +1,22 @@
+import numpy as np
+
 import os
 import sys
 import json
-import numpy as np
 import json
 import pathlib
-
 current_file = pathlib.Path(__file__).parent.absolute()
 dir_to_dirs = os.path.join(current_file,'..')
 
-sys.path.insert(0,dir_to_dirs)
 
+class PARAMS:
+	results_file = os.path.join(dir_to_dirs,'results','batch_calibration_selected')
+	n_start = 0
+	n_end = 9
+	inferred_params_mean = os.path.join(dir_to_dirs,'results','inferred_params.json')
+	inferred_params_accumulated = os.path.join(dir_to_dirs,'results','inferred_params_accumulated.json')
 
-results_file = os.path.join(dir_to_dirs,'results','batch_calibration')
+print('Merging files {} to {} from folder {}'.format(PARAMS.n_start,PARAMS.n_end,PARAMS.results_file))
 
 def file_func(n1,n2):
 	files = []
@@ -20,10 +25,10 @@ def file_func(n1,n2):
 		files.append(file)
 	return files
 
-files = file_func(n1 = 0, n2 = 100)
+files = file_func(n1 = PARAMS.n_start, n2 = PARAMS.n_end)
 inferred_params_lists = [] # stores data based on study tag
 for file in files:
-	with open(os.path.join(results_file,file)) as ff:
+	with open(os.path.join(PARAMS.results_file,file)) as ff:
 		params = json.load(ff)
 	inferred_params_lists.append(params)
 
@@ -37,7 +42,7 @@ inferred_params_mean = {}
 for key,value in inferred_params_accumulated.items():
 	inferred_params_mean[key]=np.mean(value)
 
-with open('inferred_params_mean_1.json','w') as file:
+with open(PARAMS.inferred_params_mean,'w') as file:
 	file.write(json.dumps(inferred_params_mean, indent = 4))
-with open('inferred_params_accumulated.json','w') as file:
+with open(PARAMS.inferred_params_accumulated,'w') as file:
 	file.write(json.dumps(inferred_params_accumulated, indent = 4))

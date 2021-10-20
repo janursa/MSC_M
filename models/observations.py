@@ -1,8 +1,8 @@
 
 observations = {
 	# 'studies':['Qiao_2021_Mg'],
-	'studies': ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b','Qiao_2021_Mg'],
-	# 'studies': ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b'],
+	# 'studies': ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b','Qiao_2021_Mg'],
+	'studies': ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b'],
 	# 'studies':['Ber_2016'],
 	# 'studies':['Chen_2018'],
 	# 'studies':['Valles_2020_IL10','Valles_2020_TNFa'],
@@ -547,7 +547,53 @@ observations = {
 
 		}
 	},
-	'Ber_2016':{ # the effect of Mg on ALP and OC
+	'Qiao_2021_Mg':{# the effect of Mg on ALP
+		'exposure_time':7*24,
+		'culture_volume':None, #ml
+		# 'experiment_period':7, # days
+		'measurement_scheme':{
+			'ALP': [3*24,7*24] #hour
+		},
+		'IDs': ['Mg_.08','Mg_.8','Mg_8'],
+		'Mg_.08':{
+			'inputs':{
+						"Mg": 0.08
+					},
+			"expectations": {
+				"ALP": {
+					'mean':[7,10],
+					'std': [2,3]
+				}
+			}
+
+		},
+		'Mg_.8':{
+			'inputs':{
+						"Mg": 0.8
+					},
+			"expectations": {
+				"ALP": {
+					'mean':[9,15],
+					'std': [2,3]
+				}
+			}
+
+		},
+		'Mg_8':{
+			'inputs':{
+						"Mg": 8
+					},
+			"expectations": {
+				"ALP": {
+					'mean':[13,20],
+					'std': [4,3]
+				}
+			}
+
+		},
+
+	},
+		'Ber_2016':{ # the effect of Mg on ALP and OC
 		'exposure_time':21*24,
 		'culture_volume':None, #ml
 		'cell_type':'HUCPV',
@@ -589,53 +635,6 @@ observations = {
 			}
 
 		},
-	},
-	'Qiao_2021_Mg':{# the effect of Mg on ALP
-		'exposure_time':7*24,
-		'culture_volume':None, #ml
-		# 'experiment_period':7, # days
-		'measurement_scheme':{
-			'ALP': [3*24,7*24] #hour
-		},
-		'IDs': ['Mg_.08','Mg_.8','Mg_8'],
-		# 'IDs': ['Mg_10'],
-		'Mg_.08':{
-			'inputs':{
-						"Mg": 0.08
-					},
-			"expectations": {
-				"ALP": {
-					'mean':[7,10],
-					'std': [2,3]
-				}
-			}
-
-		},
-		'Mg_.8':{
-			'inputs':{
-						"Mg": 0.8
-					},
-			"expectations": {
-				"ALP": {
-					'mean':[9,15],
-					'std': [2,3]
-				}
-			}
-
-		},
-		'Mg_8':{
-			'inputs':{
-						"Mg": 8
-					},
-			"expectations": {
-				"ALP": {
-					'mean':[13,20],
-					'std': [4,3]
-				}
-			}
-
-		},
-
 	},
 
 	"scale": 1,
