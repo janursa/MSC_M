@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
 	for study in observations['studies']:
 		if study == 'Qiao_2021_Mg' or study == 'Ber_2016':
-			plot_obj = Plot_line(study,observations)
+			plot_obj = Plot_bar_2(study,observations)
 		else:
 			plot_obj = Plot_bar(study,observations)
 		plot_obj.plot(simulation_results[study])
