@@ -16,7 +16,7 @@ dir_to_dirs = os.path.join(current_file,'..')
 sys.path.insert(0,dir_to_dirs)
 from dirs import dir_to_MSC_osteogenesis
 sys.path.insert(0,dir_to_MSC_osteogenesis)
-from MSC_osteogenesis import free_params
+from parameters import free_params_all
 plt.rcParams["font.family"] = "serif"
 plt.style.use('seaborn-deep')
 plt.rcParams["font.serif"] = ["Times New Roman"] + plt.rcParams["font.serif"]
@@ -32,10 +32,9 @@ def studies_func(n):
 	return studies
 
 class settings:
-	params_keys = free_params.keys()
 	# studies =  studies_func(2)
-	studies = {'A1':'inferred_params_0_60.json',
-	'A2':'inferred_params_60_110.json',}
+	studies = {'IL':'inferred_params_IL.json',
+	'Mg':'inferred_params_Mg.json',}
 
 	axis_font = {'fontname':'Times New Roman', 'size':'15'}
 	legend_font = { 'family':'Times New Roman','size':'13'}
@@ -49,26 +48,42 @@ for study,file in settings.studies.items():
 	with open(os.path.join(results_file,file)) as ff:
 		params = json.load(ff)
 	normalized_params = {}
-	for key,value in params.items():
-		denominator = np.mean([max(free_params[key]),min(free_params[key])])
-		normalized_params[key] = value/denominator
+	for key,value in free_params_all.items():
+		norm_value = None
+		if key not in params:
+			pass
+		else:
+			denominator = np.mean([max(free_params_all[key]),min(free_params_all[key])])
+			norm_value = params[key]/denominator
+		normalized_params[key] = norm_value
 	data[study] = normalized_params
 
 fig = plt.figure(figsize=(3,12))
 ax = fig.add_subplot(1, 1, 1)
 
 study_n = len(data.keys())
+study_i = 0
 for (study,params),i in zip(data.items(),range(study_n)):
-	xs = params.values()
-	ys = range(len(params.keys()))
+	xs = list(params.values())
+	ys = [i for i in range(len(params.keys()))]
 	# ax.scatter(xs, ys,
  #               marker = settings.symbols[i], s=150,color = settings.colors[i],
  #               alpha = 0.8,label = study)
-	ax.scatter(xs, ys,
-                s=150,
-               alpha = 0.8,label = study)
+	for jj in range(len(xs)):
+		if xs[jj] == None:
+			continue
+		else:
+			if jj == 0:
+				ax.scatter(xs[jj], ys[jj],
+			                s=150,
+			               alpha = 0.8,label = study,color = settings.colors[study_i],marker =settings.symbols[study_i] )
+			else:
+				ax.scatter(xs[jj], ys[jj],
+			                s=150,
+			               alpha = 0.8,color = settings.colors[study_i],marker =settings.symbols[study_i] )
+	study_i+=1
 
-plt.yticks([(i) for i in range(len(free_params.keys()))], free_params.keys(),rotation=0)
+plt.yticks([(i) for i in range(len(free_params_all.keys()))], free_params_all.keys(),rotation=0)
 # ax.set_xlim([0,2])
 for label in (ax.get_xticklabels() + ax.get_yticklabels()):
 	label.set_fontname(settings.axis_font['fontname'])
