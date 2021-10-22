@@ -129,15 +129,15 @@ class Plot_bar:
 		self.observations = observations
 		self.colors = ['lime' , 'violet', 'yellowgreen', 'peru', 'skyblue']
 
-		if study == 'Valles_2020_IL10':
-			self.graph_size = [10,10]
+		if study == 'Valles_2020_IL10' or study == 'Valles_2020_TNFa':
+			self.graph_size = [4.5,8]
 			self.bar_width = .2
-			self.error_bar_width = .2
+			self.error_bar_width = 5
 			self.colors = ['lime' , 'violet', 'yellowgreen', 'peru', 'skyblue']
-			self.legend_font_size = 30
-			self.tick_font_size = 30
-			self.title_font_size = 30 
-			self.delta = .1
+			self.legend_font_size = 21
+			self.tick_font_size = 21
+			self.title_font_size = 21 
+			self.delta = .12
 		elif study == 'Qiao_2021_IL1b' or study == 'Qiao_2021_IL8':
 			self.graph_size = [4,4]
 			self.bar_width = .25
@@ -162,14 +162,7 @@ class Plot_bar:
 			self.tick_font_size = 21
 			self.title_font_size = 21 
 			self.delta = .17
-		elif study == 'Valles_2020_TNFa':
-			self.graph_size = [10,10]
-			self.bar_width = .2
-			self.error_bar_width = .2
-			self.legend_font_size = 30
-			self.tick_font_size = 30
-			self.title_font_size = 30 
-			self.delta = .1
+
 		else:
 			raise ValueError('input not defined')
 	@staticmethod
@@ -187,13 +180,13 @@ class Plot_bar:
 		elif study == 'Chen_2018' and target=='ARS':
 			yrange_value = [0,5.5]
 		elif study == 'Valles_2020_TNFa' and target=='ALP':
-			yrange_value = [0,7]
+			yrange_value = [0,500]
 		elif study == 'Valles_2020_TNFa' and target=='ARS':
-			yrange_value = [0,5.5]
+			yrange_value = [0,1100]
 		elif study == 'Valles_2020_IL10' and target=='ALP':
-			yrange_value = [0,7]
+			yrange_value = [0,700]
 		elif study == 'Valles_2020_IL10' and target=='ARS':
-			yrange_value = [0,5.5]
+			yrange_value = [0,1300]
 
 		return yrange_value
 	@staticmethod
@@ -225,17 +218,17 @@ class Plot_bar:
 			Xs = [xx[2]+.15,xx[3]+.15, xx[4]+.15, xx[5]+.15,xx[6]+.15]
 			Ys = [2.1,4.6,3.5,.7,.7]
 		elif study == 'Valles_2020_TNFa' and target == 'ALP':
-			Xs = []
-			Ys = []
+			Xs = [[xx[0],xx[2]]]
+			Ys = [370]
 		elif study == 'Valles_2020_TNFa' and target == 'ARS':
-			Xs = []
-			Ys = []
+			Xs = [[xx[0],xx[2]]]
+			Ys = [850]
 		elif study == 'Valles_2020_IL10' and target == 'ALP':
-			Xs = []
-			Ys = []
+			Xs = [[xx[0],xx[2]],[xx[0],xx[3]]]
+			Ys = [450,550]
 		elif study == 'Valles_2020_IL10' and target == 'ARS':
-			Xs = []
-			Ys = []
+			Xs = [[xx[0],xx[2]],[xx[0],xx[3]]]
+			Ys = [900,1050]
 		return Xs,Ys
 	@staticmethod
 	def draw_p_values(ax,study,target,Xs,Ys):
@@ -268,6 +261,16 @@ class Plot_bar:
 			for i in range(len(significance_list)):
 				barplot_annotate_stars(significance=significance_list[i],
 					center=Xs[i],height=Ys[i])
+		elif study == 'Valles_2020_IL10' :
+			significance_list = [0.01,0.01]
+			for i in range(len(significance_list)):
+				barplot_annotate_brackets(significance=significance_list[i],
+					center=Xs[i],height=Ys[i])
+		elif  study == 'Valles_2020_TNFa':
+			significance_list = [0.01]
+			for i in range(len(significance_list)):
+				barplot_annotate_brackets(significance=significance_list[i],
+					center=Xs[i],height=Ys[i])
 		
 	@staticmethod
 	def determine_ylabel(study,target):
@@ -277,7 +280,26 @@ class Plot_bar:
 			unit_value = '\n (nmol/min/mg.protein)'
 		elif study == 'Chen_2018':
 			unit_value = '\n (Relative fold)'
+		elif (study == 'Valles_2020_IL10' or study == 'Valles_2020_TNFa') and target == 'ALP':
+			unit_value = '\n (nmol/min.mg)'
+		elif (study == 'Valles_2020_IL10' or study == 'Valles_2020_TNFa') and target == 'ARS':
+			unit_value = ' (%)'
 		label = target+unit_value
+		return label
+	@staticmethod
+	def determine_title(study,target):
+		label = ''
+		if study == 'Valles_2020_IL10' or study == 'Valles_2020_TNFa':
+			if target == 'ALP':
+				label = '14 days'
+			elif target == 'ARS':
+				label = '21 days'
+		elif study == 'Chen_2018':
+			if target == 'ALP':
+				label = '3 days'
+			elif target == 'ARS':
+				label = '9 days'
+
 		return label
 	@staticmethod
 	def determine_xlabel(study,target):
@@ -294,6 +316,14 @@ class Plot_bar:
 			label = 'IL-10 (ng/ml)'
 		elif study == 'Chen_2018' and target == 'ALP':
 			pass
+		elif study == 'Valles_2020_IL10'  and target == 'ALP':
+			pass
+		elif study == 'Valles_2020_IL10' and target == 'ARS':
+			label = 'IL-10 (ng/ml)'
+		elif study == 'Valles_2020_TNFa' and target == 'ALP':
+			pass
+		elif study == 'Valles_2020_TNFa' and target == 'ARS':
+			label = 'TNF-$\\alpha$ (ng/ml)'
 		return label
 	
 
@@ -309,6 +339,7 @@ class Plot_bar:
 		fig = plt.figure(figsize=(self.graph_size[0],self.graph_size[1]))
 		fig.canvas.draw()
 		fig.tight_layout()
+		fig.subplots_adjust(hspace=.4)
 
 		for target,ii in zip(self.measurement_scheme.keys(),range(target_n)):
 			ax = fig.add_subplot(target_n,1,ii+1)
@@ -327,12 +358,10 @@ class Plot_bar:
 					 error_kw = dict(capsize= self.error_bar_width))
 			
 			# ax.legend(bbox_to_anchor=(2, 1),loc = 'upper right', borderaxespad=2,prop={ 'family':'Times New Roman','size':self.legend_font_size},ncol=1)
-			# ax.set_xlim([-.3,1.3])
-			# x_labels = [item.get_text() for item in ax.get_xticklabels()]
+
 			x_ticks = [(i+j)/2 for i,j in zip(x_sim,x_exp)]
 			x_ticks_adj,x_labels_adj = self.add_adjustements(ax=ax,study=self.study,target=target,base_x=base_x,x_ticks=x_ticks,x_labels=x_labels)
-		#     ax.get_yaxis().set_major_formatter(
-		#         matplotlib.ticker.FuncFormatter(lambda x, p: format(int(x)/1000, ',')))
+
 			self.finalize_and_save(ax=ax,target=target,exp_xx=x_ticks_adj,x_ticks=x_ticks_adj,x_labels=x_labels_adj)
 	def add_adjustements(self,ax,study,target,base_x,x_ticks,x_labels):
 		x_ticks_adj = copy.deepcopy(x_ticks)
@@ -366,7 +395,7 @@ class Plot_bar:
 		ax.set_ylabel(Plot_bar.determine_ylabel(study=self.study,target = target),fontdict ={'family':'Times New Roman','size':self.title_font_size})
 		ax.set_xlabel(Plot_bar.determine_xlabel(study=self.study,target = target),fontdict ={'family':'Times New Roman','size':self.title_font_size})
 
-		# ax.set_title(target,fontdict ={'family':'Times New Roman','size':self.title_font_size, 'fontweight':'bold'})
+		ax.set_title(Plot_bar.determine_title(study=self.study,target = target),fontdict ={'family':'Times New Roman','size':self.title_font_size})
 		Xs,Ys = Plot_bar.p_values_positions(study=self.study,target=target,xx = exp_xx)	
 		Plot_bar.draw_p_values(ax,study=self.study,target=target,Xs=Xs,Ys=Ys)
 		if self.study == 'Qiao_2021_Mg':
