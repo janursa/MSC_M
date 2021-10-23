@@ -1,0 +1,12 @@
+****************************************************************************
+* hwloc 1.11.8 has encountered an incorrect PCI locality information.
+* PCI bus 0000:80 is supposedly close to 2nd NUMA node of 1st package,
+* however hwloc believes this is impossible on this architecture.
+* Therefore the PCI bus will be moved to 1st NUMA node of 2nd package.
+*
+* If you feel this fixup is wrong, disable it by setting in your environment
+* HWLOC_PCI_0000_80_LOCALCPUS= (empty value), and report the problem
+* to the hwloc's user mailing list together with the XML output of lstopo.
+*
+* You may silence this message by setting HWLOC_HIDE_ERRORS=1 in your environment.
+****************************************************************************
