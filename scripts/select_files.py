@@ -13,11 +13,12 @@ sys.path.insert(0,dir_to_MSC_osteogenesis)
 from MSC_osteogenesis import single_run,fixed_params,MSC_model
 
 class PARAMS:
-	results_file = os.path.join(dir_to_dirs,'results','batch_calibration')
-	dest_folder = os.path.join(dir_to_dirs,'results','batch_calibration_selected')
-	error_cut_off_value = 0.02
+	results_folder = os.path.join(dir_to_dirs,'results','Chen')
+	results_file = os.path.join(results_folder,'batch_calibration')
+	dest_folder = os.path.join(results_folder,'batch_calibration_selected')
+	error_cut_off_value = 0.1
 	n_start = 0
-	n_end = 150
+	n_end = 200
 
 try:
     os.makedirs(PARAMS.dest_folder)

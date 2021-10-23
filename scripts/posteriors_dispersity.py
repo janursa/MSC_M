@@ -21,12 +21,14 @@ plt.rcParams["font.family"] = "serif"
 plt.style.use('seaborn-deep')
 plt.rcParams["font.serif"] = ["Times New Roman"] + plt.rcParams["font.serif"]
 
-results_file = os.path.join(dir_to_dirs,'results')
+
 
 
 class settings:
-	files = {'IL':'inferred_params_IL.json',
-	'Mg':'inferred_params_Mg.json',}
+	results_folder = os.path.join(dir_to_dirs,'results')
+	files = {'Chen':'Chen.json',
+	'Qiao_IL':'Qiao_IL.json',
+	'Qiao_Mg':'Qiao_Mg.json',}
 
 	axis_font = {'fontname':'Times New Roman', 'size':'15'}
 	legend_font = { 'family':'Times New Roman','size':'13'}
@@ -99,9 +101,7 @@ def edit_params(free_params_all): # get rid of this parameters
 	del free_params_all['a_Valles_2020_ARS']
 	del free_params_all['a_Qiao_2021_ALP']
 	return free_params_all
-free_params_all = edit_params(free_params_all)
-fig = plt.figure(figsize=(3,7))
-ax = fig.add_subplot(1, 1, 1)
+
 def plot(data):
 	study_n = len(data.keys())
 	study_i = 0
@@ -124,32 +124,37 @@ def plot(data):
 ##/ read the inferred params from the files and normalized them based on the range of the free params
 
 
-data = {} # stores data based on study tag
-for study,file in settings.files.items():
-	with open(os.path.join(results_file,file)) as ff:
-		params = json.load(ff)
-	normalized_params = {}
-	for key,value in free_params_all.items():
-		norm_value = None
-		if key not in params:
-			pass
-		else:
-			denominator = np.mean([max(free_params_all[key]),min(free_params_all[key])])
-			norm_value = params[key]/denominator
-		normalized_params[key] = norm_value
-	data[study] = normalized_params
-plot(data = data)
 
 
+if __name__ == '__main__':
+	free_params_all = edit_params(free_params_all)
+	fig = plt.figure(figsize=(3,7))
+	ax = fig.add_subplot(1, 1, 1)
+
+	data = {} # stores data based on study tag
+	for study,file in settings.files.items():
+		with open(os.path.join(settings.results_folder,file)) as ff:
+			params = json.load(ff)
+		normalized_params = {}
+		for key,value in free_params_all.items():
+			norm_value = None
+			if key not in params:
+				pass
+			else:
+				denominator = np.mean([max(free_params_all[key]),min(free_params_all[key])])
+				norm_value = params[key]/denominator
+			normalized_params[key] = norm_value
+		data[study] = normalized_params
+	plot(data = data)
+
+	plt.yticks([(i) for i in range(len(free_params_all.keys()))], relabel(free_params_all.keys()),rotation=0)
+	ax.set_xlim([-.25,2.25])
+	for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+		label.set_fontname(settings.axis_font['fontname'])
+		label.set_fontsize(float(settings.axis_font['size']))
+
+	plt.legend(bbox_to_anchor=(0.05, 1.07), loc='upper left', borderaxespad=0.,prop=settings.legend_font,ncol=4)
+	plt.xlabel('Scaled values',fontsize = 17, family = settings.axis_font['fontname'])
+	plt.savefig("posteriors_dispesity.svg",bbox_inches="tight")
 
 
-
-plt.yticks([(i) for i in range(len(free_params_all.keys()))], relabel(free_params_all.keys()),rotation=0)
-ax.set_xlim([-.25,2.25])
-for label in (ax.get_xticklabels() + ax.get_yticklabels()):
-	label.set_fontname(settings.axis_font['fontname'])
-	label.set_fontsize(float(settings.axis_font['size']))
-
-plt.legend(bbox_to_anchor=(0.05, 1.07), loc='upper left', borderaxespad=0.,prop=settings.legend_font,ncol=4)
-plt.xlabel('Scaled values',fontsize = 17, family = settings.axis_font['fontname'])
-plt.savefig("posteriors_dispesity.svg",bbox_inches="tight")
