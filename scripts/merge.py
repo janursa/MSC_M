@@ -10,7 +10,7 @@ dir_to_dirs = os.path.join(current_file,'..')
 
 
 class PARAMS:
-	results_folder = os.path.join(dir_to_dirs,'results','Chen')
+	results_folder = os.path.join(dir_to_dirs,'results','Valles')
 	results_file = os.path.join(results_folder,'batch_calibration_selected')
 	n_start = 0
 	n_end = 200

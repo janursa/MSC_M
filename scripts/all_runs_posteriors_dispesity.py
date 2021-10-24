@@ -24,14 +24,16 @@ plt.style.use('seaborn-deep')
 plt.rcParams["font.serif"] = ["Times New Roman"] + plt.rcParams["font.serif"]
 
 class settings:
-	studies = ['Qiao_IL8_IL1b','Qiao_Mg','Chen']
-	runs = [400,400,200]
-	axis_font = {'fontname':'Times New Roman', 'size':'15'}
-	legend_font = { 'family':'Times New Roman','size':'15'}
-	title_font = { 'family':'Times New Roman','size':'14'}
+	studies = ['Qiao_IL8_IL1b','Qiao_Mg','Chen','Valles']
+	runs = [400,400,200,200]
+	axis_font = {'fontname':'Times New Roman', 'size':'14'}
+	legend_font = { 'family':'Times New Roman','size':'14'}
+	title_font = { 'family':'Times New Roman','size':'13'}
 	colors = ['indigo' , 'darkred', 'olive','royalblue']
-	symbols = ["3" , 'x', "o",'+']
-	graph_size = (6,7)
+	symbols = [">" , '<', "o",'+']
+	symbol_size_major = 70
+	symbol_size_minor = 30
+	graph_size = (9,7)
 def determine_title(study):
 	title = ''
 	if study == 'Qiao_IL8_IL1b':
@@ -40,6 +42,8 @@ def determine_title(study):
 		title = 'Qiao_Mg'
 	elif study == 'Chen':
 		title = 'Chen'
+	elif study == 'Valles':
+		title = 'Valles'
 	return title
 
 
@@ -63,18 +67,18 @@ def plot(ax,data,label_flag = False):
 			else:
 				if jj == 0 and label_flag:
 					ax.scatter(xs[jj], ys[jj],
-			                s=150,alpha = 0.8,label = study,color = settings.colors[study_i],marker =settings.symbols[study_i] )
+			                s=settings.symbol_size_major,alpha = 0.8,label = study,color = settings.colors[study_i],marker =settings.symbols[study_i] )
 				elif label_flag:
 					ax.scatter(xs[jj], ys[jj],
-				                s=150, alpha = 0.8,color = settings.colors[study_i],marker =settings.symbols[study_i])
+				                s=settings.symbol_size_major, alpha = 0.8,color = settings.colors[study_i],marker =settings.symbols[study_i])
 				
 				elif study_i == 0 and jj == 0:
 					ax.scatter(xs[jj], ys[jj],
-				                s=50,
+				                s=settings.symbol_size_minor,
 				               alpha = 0.8,label='Indivitual run',color = settings.colors[-1],marker =settings.symbols[-1])
 				else:
 					ax.scatter(xs[jj], ys[jj],
-				                s=50,
+				                s=settings.symbol_size_minor,
 				               alpha = 0.8,color = settings.colors[-1],marker =settings.symbols[-1])
 				
 		study_i+=1
@@ -94,9 +98,9 @@ if __name__ == '__main__':
 
 		# individual_files =  files_func(0,run_count)
 		individual_files =  files_func(0,20)
-		mean_files = {'1st':'inferred_params_0_%d.json'%int(run_count/2),
-			'2nd':'inferred_params_%d_%d.json'%(run_count/2,run_count),
-			'All':'inferred_params_0_%d.json'%run_count}
+		mean_files = {'1st set':'inferred_params_0_%d.json'%int(run_count/2),
+			'2nd set ':'inferred_params_%d_%d.json'%(run_count/2,run_count),
+			'Combined':'inferred_params_0_%d.json'%run_count}
 
 		individual_data = {} # stores data based on study tag
 		for file_ID,file in individual_files.items():
@@ -139,10 +143,11 @@ if __name__ == '__main__':
 			label.set_fontsize(float(settings.axis_font['size']))
 		if study_ii == 0:
 			plt.yticks([(i) for i in range(len(free_params_all.keys()))], relabel(free_params_all.keys()),rotation=0)
-			plt.legend(bbox_to_anchor=(0.05, 1.15), loc='upper left', borderaxespad=0.,prop=settings.legend_font,ncol=4)
+			plt.legend(bbox_to_anchor=(0.1, 1.13), loc='upper left', borderaxespad=0.,prop=settings.legend_font,ncol=4)
 		else:
 			plt.yticks([], [],rotation=0)
-		plt.xlabel('Scaled values',fontsize = 17, family = settings.axis_font['fontname'])
+		# plt.xlabel('Scaled values',fontsize = 17, family = settings.axis_font['fontname'])
+
 		ax.set_title(determine_title(study),fontdict =settings.title_font,fontweight='bold')
 		study_ii+=1
 	plt.savefig("posteriors_dispesity_all_runs.svg",bbox_inches="tight")
