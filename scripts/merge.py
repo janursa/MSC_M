@@ -10,11 +10,12 @@ dir_to_dirs = os.path.join(current_file,'..')
 
 
 class PARAMS:
-	results_file = os.path.join(dir_to_dirs,'results','batch_calibration_selected')
-	n_start = 60
-	n_end = 110
-	inferred_params_mean = os.path.join(dir_to_dirs,'results','inferred_params_%d_%d.json'%(n_start,n_end))
-	inferred_params_accumulated = os.path.join(dir_to_dirs,'results','inferred_params_accumulated.json')
+	results_folder = os.path.join(dir_to_dirs,'results','Chen')
+	results_file = os.path.join(results_folder,'batch_calibration_selected')
+	n_start = 0
+	n_end = 200
+	inferred_params_mean_file = os.path.join(results_folder,'inferred_params_%d_%d.json'%(n_start,n_end))
+	inferred_params_accumulated_file = os.path.join(results_folder,'inferred_params_accumulated.json')
 
 print('Merging files {} to {} from folder {}'.format(PARAMS.n_start,PARAMS.n_end,PARAMS.results_file))
 
@@ -42,7 +43,7 @@ inferred_params_mean = {}
 for key,value in inferred_params_accumulated.items():
 	inferred_params_mean[key]=np.mean(value)
 
-with open(PARAMS.inferred_params_mean,'w') as file:
+with open(PARAMS.inferred_params_mean_file,'w') as file:
 	file.write(json.dumps(inferred_params_mean, indent = 4))
-with open(PARAMS.inferred_params_accumulated,'w') as file:
+with open(PARAMS.inferred_params_accumulated_file,'w') as file:
 	file.write(json.dumps(inferred_params_accumulated, indent = 4))

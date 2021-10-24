@@ -9,10 +9,12 @@ sys.path.insert(0,dir_to_MSC_osteogenesis)
 from MSC_osteogenesis import *
 from plots import *
 from observations import observations
+
+
 if __name__ == '__main__':
 	##/ run test simultions and plot
-
-	with open('inferred_params.json') as file:
+	results_folder = os.path.join(dir_to_dirs,'results')
+	with open(os.path.join(results_folder,'inferred_params.json')) as file:
 		inferred_params = json.load(file)
 	# inferred_params['maturity_t'] = .7
 
