@@ -49,10 +49,12 @@ class Osteogenesis:
         x: fuzzy output
         factor: scale factor
         """
-        if x >=0:
+        if x >=0.5:
             f = 2*factor_stim*(x-0.5)+1
         else:
             f = 2*factor_inhib*(x-0.5)+1
+            # print(x,factor_inhib,f)
+
 
         if f <=0:
             f = 0
@@ -102,6 +104,7 @@ class Osteogenesis:
         if 'late_diff' in f_values:
             f_late = f_values['late_diff']
             k_late = k0 * self.scale(x = f_late,factor_stim = self.params['a_late_diff_stim'],factor_inhib = self.params['a_late_diff_inhib'])
+            # print('k_late ',k_late)
         else:
             k_late = k0
         #// calculate maturity related parameters
@@ -115,7 +118,7 @@ class Osteogenesis:
                 maturity = checkpoint*k_early
             else:
                 maturity = maturity_t_h*k_early + (checkpoint-maturity_t_h)*k_late
-
+            # print('maturity ',maturity)
             if maturity > 1: # should be between 0 and 1
                 maturity = 1
             return maturity
@@ -146,6 +149,8 @@ class Osteogenesis:
         elif target == 'OC':
             OC_M_coeff = self.determine_correction_factor(study = study, params = self.params, f_type='OC')
             OC = (maturity + self.params['OC_0'])**self.params['OC_M_n'] * OC_M_coeff
+            if self.debug:
+                print('checkpoint {}, fs {}, maturity {}, maturity_t {}, OC {}'.format(checkpoint,f_values, round(maturity,4),round(adjusted_maturity_t,4),round(OC,4)))
             return OC
         else:
             raise('invlid input')

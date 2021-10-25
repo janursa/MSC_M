@@ -79,27 +79,26 @@ def relabel(lables):
 		elif label == 'diff_time':
 			adj_label = '$T_{d}$'
 		elif label == 'a_Chen_2018_ALP':
-			adj_label = 'a_Chen_2018_ALP'
+			adj_label = '$k_{ALP,2}$'
 		elif label == 'a_Chen_2018_ARS':
-			adj_label = 'a_Chen_2018_ARS'
+			adj_label = '$k_{ARS,2}$'
 		elif label == 'a_Valles_2020_ALP':
-			adj_label = 'a_Valles_2020_ALP'
+			adj_label = '$k_{ALP,3}$'
 		elif label == 'a_Valles_2020_ARS':
-			adj_label = 'a_Valles_2020_ARS'
+			adj_label = '$k_{ARS,3}$'
 		elif label == 'a_Qiao_2021_ALP':
-			adj_label = 'a_Qiao_2021_ALP'
-
+			adj_label = '$k_{ALP,1}$'
 		else:
 			adj_label = label
 		lables_adjusted.append(adj_label)
 	return lables_adjusted
 
 def edit_params(free_params_all): # get rid of this parameters
-	del free_params_all['a_Chen_2018_ALP']
-	del free_params_all['a_Chen_2018_ARS']
-	del free_params_all['a_Valles_2020_ALP']
-	del free_params_all['a_Valles_2020_ARS']
-	del free_params_all['a_Qiao_2021_ALP']
+	# del free_params_all['a_Chen_2018_ALP']
+	# del free_params_all['a_Chen_2018_ARS']
+	# del free_params_all['a_Valles_2020_ALP']
+	# del free_params_all['a_Valles_2020_ARS']
+	# del free_params_all['a_Qiao_2021_ALP']
 	return free_params_all
 
 def plot(data):

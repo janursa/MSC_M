@@ -16,7 +16,7 @@ if __name__ == '__main__':
 	results_folder = os.path.join(dir_to_dirs,'results')
 	with open(os.path.join(results_folder,'inferred_params.json')) as file:
 		inferred_params = json.load(file)
-	# inferred_params['maturity_t'] = .7
+	# inferred_params['a_late_diff_inhib'] = 10
 
 	obj = MSC_model(fixed_params=fixed_params,free_params = inferred_params,debug=True)
 	simulation_results = obj.simulate_studies()

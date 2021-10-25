@@ -25,7 +25,9 @@ plt.rcParams["font.serif"] = ["Times New Roman"] + plt.rcParams["font.serif"]
 
 class settings:
 	studies = ['Qiao_IL8_IL1b','Qiao_Mg','Chen','Valles']
+	# studies = ['Qiao_IL8_IL1b']
 	runs = [400,400,200,200]
+	# runs = [400]
 	axis_font = {'fontname':'Times New Roman', 'size':'14'}
 	legend_font = { 'family':'Times New Roman','size':'14'}
 	title_font = { 'family':'Times New Roman','size':'13'}
@@ -61,13 +63,15 @@ def plot(ax,data,label_flag = False):
 	for (study,params),i in zip(data.items(),range(study_n)):
 		xs = list(params.values())
 		ys = [i for i in range(len(params.keys()))]
+		first_label_flat = True
 		for jj in range(len(xs)):
 			if xs[jj] == None:
-				continue
+				ax.scatter(0, 0,s=0.01)
 			else:
-				if jj == 0 and label_flag:
+				if first_label_flat == True and label_flag:
 					ax.scatter(xs[jj], ys[jj],
 			                s=settings.symbol_size_major,alpha = 0.8,label = study,color = settings.colors[study_i],marker =settings.symbols[study_i] )
+					first_label_flat = False
 				elif label_flag:
 					ax.scatter(xs[jj], ys[jj],
 				                s=settings.symbol_size_major, alpha = 0.8,color = settings.colors[study_i],marker =settings.symbols[study_i])

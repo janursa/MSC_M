@@ -4,9 +4,9 @@ observations = {
 	# 'studies': ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b','Qiao_2021_Mg'],
 	# 'studies': ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b'],
 	# 'studies': ['Qiao_2021_IL1b'],
-	# 'studies':['Ber_2016'],
+	'studies':['Ber_2016'],
 	# 'studies':['Chen_2018'],
-	'studies':['Valles_2020_IL10','Valles_2020_TNFa'],
+	# 'studies':['Valles_2020_IL10','Valles_2020_TNFa'],
 	# 'studies':['Valles_2020_TNFa'],
 	# 'studies':['Valles_2020_TNFa','Valles_2020_IL10','Chen_2018','Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b'],
 
@@ -610,7 +610,7 @@ observations = {
 					},
 			"expectations": {
 				"ALP": {
-					'mean':[0.30,0.53,0.57],
+					'mean':[0.30,0.53,0.66],
 					'std': [0,0,0]
 				},
 				'OC':{
@@ -626,11 +626,11 @@ observations = {
 					},
 			"expectations": {
 				"ALP": {
-					'mean':[0.34,0.39, 0.61],
+					'mean':[0.4,0.65, 0.67],
 					'std': [0,0,0]
 				},
 				'OC':{
-					'mean':[0.28,0.22,0.27],
+					'mean':[0.46,0.42,0.40],
 					'std': [0,0,0]
 				}
 			}

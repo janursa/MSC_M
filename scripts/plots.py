@@ -381,7 +381,10 @@ class Plot_bar:
 					 error_kw = dict(capsize= self.error_bar_width))
 		return x_ticks_adj,x_labels_adj
 	def finalize_and_save(self,ax,target,x_ticks,x_labels,exp_xx):
-		ax.set_ylim(self.determine_yrange(target = target, study = self.study))
+		try:
+			ax.set_ylim(self.determine_yrange(target = target, study = self.study))
+		except:
+			pass
 		try:
 			ax.set_xlim(self.determine_xrange(target = target, study = self.study))
 		except:
@@ -396,8 +399,11 @@ class Plot_bar:
 		ax.set_xlabel(Plot_bar.determine_xlabel(study=self.study,target = target),fontdict ={'family':'Times New Roman','size':self.title_font_size})
 
 		ax.set_title(Plot_bar.determine_title(study=self.study,target = target),fontdict ={'family':'Times New Roman','size':self.title_font_size})
-		Xs,Ys = Plot_bar.p_values_positions(study=self.study,target=target,xx = exp_xx)	
-		Plot_bar.draw_p_values(ax,study=self.study,target=target,Xs=Xs,Ys=Ys)
+		try:
+			Xs,Ys = Plot_bar.p_values_positions(study=self.study,target=target,xx = exp_xx)	
+			Plot_bar.draw_p_values(ax,study=self.study,target=target,Xs=Xs,Ys=Ys)
+		except:
+			pass
 		if self.study == 'Qiao_2021_Mg':
 			ax.get_xaxis().set_major_formatter(
 				matplotlib.ticker.FuncFormatter(lambda x, p: format(int(int(x)/24), ',')))
