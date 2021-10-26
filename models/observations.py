@@ -1,14 +1,11 @@
 
 observations = {
 	# 'studies':['Qiao_2021_Mg'],
-	# 'studies': ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b','Qiao_2021_Mg'],
 	# 'studies': ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b'],
-	# 'studies': ['Qiao_2021_IL1b'],
 	'studies':['Ber_2016'],
 	# 'studies':['Chen_2018'],
 	# 'studies':['Valles_2020_IL10','Valles_2020_TNFa'],
-	# 'studies':['Valles_2020_TNFa'],
-	# 'studies':['Valles_2020_TNFa','Valles_2020_IL10','Chen_2018','Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b'],
+	# 'studies':['Valles_2020_TNFa','Valles_2020_IL10','Chen_2018','Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b','Ber_2016'],
 
 
 	'Chen_2018':{# the effect of IL10 on ALP and ARS
@@ -600,8 +597,10 @@ observations = {
 		'cell_type':'HUCPV',
 		# 'experiment_period':7, # days
 		'measurement_scheme':{
-			'ALP': [7*24,14*24,21*24], #hour
-			'OC':[7*24,14*24,21*24]
+			# 'ALP': [7*24,14*24,21*24], #hour
+			# 'OC':[7*24,14*24,21*24]
+			'ALP': [7*24], #hour
+			'OC':[21*24]
 		},
 		'IDs': ['Mg_.8','Mg_5'],
 		'Mg_.8':{
@@ -610,12 +609,14 @@ observations = {
 					},
 			"expectations": {
 				"ALP": {
-					'mean':[0.30,0.53,0.66],
-					'std': [0,0,0]
+					# 'mean':[0.30,0.53,0.5],
+					'mean':[0.30],
+					'std': [0.05]
 				},
 				'OC':{
-					'mean':[0.53,0.71,0.8],
-					'std': [0,0,0]
+					# 'mean':[0.53,0.71,0.8],
+					'mean':[0.8],
+					'std': [0.05]
 				}
 			}
 
@@ -624,18 +625,62 @@ observations = {
 			'inputs':{
 						"Mg": 5
 					},
-			"expectations": {
+			"expectations": {	
 				"ALP": {
-					'mean':[0.4,0.65, 0.67],
-					'std': [0,0,0]
+					'mean':[0.34],
+					# 'mean':[0.4,0.5, 0.54],
+					'std': [0.04]
 				},
 				'OC':{
-					'mean':[0.46,0.42,0.40],
-					'std': [0,0,0]
+					# 'mean':[0.46,0.3,0.35],
+					'mean':[0.28],
+					'std': [0.02]
 				}
 			}
 
 		},
+		# 'Ber_2016':{ # the effect of Mg on ALP and OC
+		# 'exposure_time':21*24,
+		# 'culture_volume':None, #ml
+		# 'cell_type':'HUCPV',
+		# # 'experiment_period':7, # days
+		# 'measurement_scheme':{
+		# 	'ALP': [7*24,14*24,21*24], #hour
+		# 	'OC':[7*24,14*24,21*24]
+		# },
+		# 'IDs': ['Mg_.8','Mg_5'],
+		# 'Mg_.8':{
+		# 	'inputs':{
+		# 				"Mg": 0.8
+		# 			},
+		# 	"expectations": {
+		# 		"ALP": {
+		# 			'mean':[0.30,0.53,0.57],
+		# 			'std': [0,0,0]
+		# 		},
+		# 		'OC':{
+		# 			'mean':[0.53,0.71,0.8],
+		# 			'std': [0,0,0]
+		# 		}
+		# 	}
+
+		# },
+		# 'Mg_5':{
+		# 	'inputs':{
+		# 				"Mg": 5
+		# 			},
+		# 	"expectations": {
+		# 		"ALP": {
+		# 			'mean':[0.34,0.45, 0.61],
+		# 			'std': [0,0,0]
+		# 		},
+		# 		'OC':{
+		# 			'mean':[0.45,0.22,0.27],
+		# 			'std': [0,0,0]
+		# 		}
+		# 	}
+
+		# },
 	},
 
 	"scale": 1,

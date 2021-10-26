@@ -134,10 +134,11 @@ class Plot_bar:
 			self.bar_width = .2
 			self.error_bar_width = 5
 			self.colors = ['lime' , 'violet', 'yellowgreen', 'peru', 'skyblue']
-			self.legend_font_size = 21
+			self.legend_font_size = 20
 			self.tick_font_size = 21
 			self.title_font_size = 21 
 			self.delta = .12
+			self.legend_location=(1.15,1.65)
 		elif study == 'Qiao_2021_IL1b' or study == 'Qiao_2021_IL8':
 			self.graph_size = [4,4]
 			self.bar_width = .25
@@ -146,6 +147,7 @@ class Plot_bar:
 			self.tick_font_size = 20
 			self.title_font_size = 20 
 			self.delta = .14
+			self.legend_location=(1.2,1.4)
 		elif study == 'Qiao_2021_IL8_IL1b':
 			self.graph_size = [3,4]
 			self.bar_width = .15
@@ -154,14 +156,16 @@ class Plot_bar:
 			self.tick_font_size = 20
 			self.title_font_size = 20 
 			self.delta = .09
+			self.legend_location=(1.45,1.4)
 		elif study == 'Chen_2018':
 			self.graph_size = [6,8]
 			self.bar_width = .3
 			self.error_bar_width = 4
-			self.legend_font_size = 21
+			self.legend_font_size = 19
 			self.tick_font_size = 21
 			self.title_font_size = 21 
 			self.delta = .17
+			self.legend_location=(.95,1.6)
 
 		else:
 			raise ValueError('input not defined')
@@ -187,15 +191,21 @@ class Plot_bar:
 			yrange_value = [0,700]
 		elif study == 'Valles_2020_IL10' and target=='ARS':
 			yrange_value = [0,1300]
+		elif study == 'Ber_2016' and target=='OC':
+			yrange_value = [0,1.15]
+		elif study == 'Ber_2016' and target=='ALP':
+			yrange_value = [0,.7]
 
 		return yrange_value
 	@staticmethod
 	def determine_xrange(study,target):
 		if study == 'Qiao_2021_IL8_IL1b' and target == 'ALP':
-			yrange_value = [-.3,1.3]
+			xrange_value = [-.3,1.3]
+		elif study == 'Ber_2016':
+			xrange_value = [138,200]
 		elif study == 'Qiao_2021_IL8' or study == 'Qiao_2021_IL1b':
 			raise ValueError('not needed')
-		return yrange_value
+		return xrange_value
 
 	@staticmethod
 	def p_values_positions(study,target,xx):
@@ -229,6 +239,9 @@ class Plot_bar:
 		elif study == 'Valles_2020_IL10' and target == 'ARS':
 			Xs = [[xx[0],xx[2]],[xx[0],xx[3]]]
 			Ys = [900,1050]
+		elif study == 'Ber_2016' and target == 'OC':
+			Xs = [xx[0][0],xx[1][0]]
+			Ys = .9
 		return Xs,Ys
 	@staticmethod
 	def draw_p_values(ax,study,target,Xs,Ys):
@@ -271,6 +284,11 @@ class Plot_bar:
 			for i in range(len(significance_list)):
 				barplot_annotate_brackets(significance=significance_list[i],
 					center=Xs[i],height=Ys[i])
+		elif study == 'Ber_2016' and target == 'OC':
+			X,Y = Xs,Ys
+			significance = 0.01 
+			barplot_annotate_brackets(significance=significance,
+				center=X,height=Y)
 		
 	@staticmethod
 	def determine_ylabel(study,target):
@@ -284,6 +302,10 @@ class Plot_bar:
 			unit_value = '\n (nmol/min.mg)'
 		elif (study == 'Valles_2020_IL10' or study == 'Valles_2020_TNFa') and target == 'ARS':
 			unit_value = ' (%)'
+		elif study == 'Ber_2016' and target == 'ALP':
+			unit_value = '\n (U/ngDNA)'
+		elif study == 'Ber_2016' and target == 'OC':
+			unit_value = '\n (ng/ngDNA)'
 		label = target+unit_value
 		return label
 	@staticmethod
@@ -299,6 +321,11 @@ class Plot_bar:
 				label = '3 days'
 			elif target == 'ARS':
 				label = '9 days'
+		elif study == 'Ber_2016':
+			if target == 'ALP':
+				label = '7 days'
+			elif target == 'OC':
+				label = '21 days'
 
 		return label
 	@staticmethod
@@ -339,7 +366,10 @@ class Plot_bar:
 		fig = plt.figure(figsize=(self.graph_size[0],self.graph_size[1]))
 		fig.canvas.draw()
 		fig.tight_layout()
-		fig.subplots_adjust(hspace=.4)
+		if self.study == 'Ber_2016':
+			fig.subplots_adjust(hspace=.4)
+		else:
+			fig.subplots_adjust(hspace=.4)
 
 		for target,ii in zip(self.measurement_scheme.keys(),range(target_n)):
 			ax = fig.add_subplot(target_n,1,ii+1)
@@ -356,8 +386,8 @@ class Plot_bar:
 					facecolor = self.colors[1],hatch=r'\\\\',
 					 edgecolor="black", yerr =  exp_std,
 					 error_kw = dict(capsize= self.error_bar_width))
-			
-			# ax.legend(bbox_to_anchor=(2, 1),loc = 'upper right', borderaxespad=2,prop={ 'family':'Times New Roman','size':self.legend_font_size},ncol=1)
+			if ii == 0: # legend only for the first target
+				ax.legend(bbox_to_anchor=self.legend_location,loc = 'upper right', borderaxespad=2,prop={ 'family':'Times New Roman','size':self.legend_font_size},ncol=2)
 
 			x_ticks = [(i+j)/2 for i,j in zip(x_sim,x_exp)]
 			x_ticks_adj,x_labels_adj = self.add_adjustements(ax=ax,study=self.study,target=target,base_x=base_x,x_ticks=x_ticks,x_labels=x_labels)
@@ -389,8 +419,14 @@ class Plot_bar:
 			ax.set_xlim(self.determine_xrange(target = target, study = self.study))
 		except:
 			pass
-		ax.set_xticks(ticks = x_ticks)
-		ax.set_xticklabels(x_labels)
+		
+		if self.study == 'Ber_2016':
+			ax.set_xticks(ticks = [])
+			ax.set_xticklabels([])
+		else:
+			ax.set_xticks(ticks = x_ticks)
+			ax.set_xticklabels(x_labels)
+
 		for label in (ax.get_xticklabels() + ax.get_yticklabels()):
 			label.set_fontname('Times New Roman')
 			label.set_fontsize(self.tick_font_size)
@@ -402,7 +438,7 @@ class Plot_bar:
 		try:
 			Xs,Ys = Plot_bar.p_values_positions(study=self.study,target=target,xx = exp_xx)	
 			Plot_bar.draw_p_values(ax,study=self.study,target=target,Xs=Xs,Ys=Ys)
-		except:
+		except UnboundLocalError:
 			pass
 		if self.study == 'Qiao_2021_Mg':
 			ax.get_xaxis().set_major_formatter(
@@ -488,26 +524,26 @@ class Plot_bar_2(Plot_bar):
 			self.graph_size = [5,4]
 			self.bar_width = 8
 			self.error_bar_width = 3
-			self.legend_font_size = 20
+			self.legend_font_size = 17
 			self.tick_font_size = 20
 			self.title_font_size = 20
-			self.legend_location = [3,1]
+			self.legend_location = [1.7,1.15]
 			self.yaxis_title = ''
 			self.xaxis_title = ''
 			self.D = 85 # the length in which all Mg dosages are plotted in a certain time point
 			self.delta = 5 # gap between exp and sim
 		elif study == 'Ber_2016':
-			self.graph_size = [5,5]
-			self.bar_width = 10
+			self.graph_size = [3,8]
+			self.bar_width = 5.5
 			self.error_bar_width = 5
 			self.legend_font_size = 20
 			self.tick_font_size = 20
 			self.title_font_size = 20
-			self.legend_location = [2.5,1]
+			self.legend_location = [2.2,1.2]
 			self.yaxis_title = ''
 			self.xaxis_title = ''
 			self.D = 100 # the length in which all Mg dosages are plotted in a certain time point
-			self.delta = 5 # gap between exp and sim
+			self.delta = 3.2 # gap between exp and sim
 		else:
 			raise ValueError('not defined')
 
@@ -554,18 +590,19 @@ class Plot_bar_2(Plot_bar):
 			for jj in range(len(self.observations[self.study]['IDs'])):
 				ID = self.observations[self.study]['IDs'][jj]
 				ID_lebel = self.ID_label(ID)
-				ax.bar(x=xs[jj][0],height=sim_target_results[target][jj],width = self.bar_width, label = "Sim_"+ID_lebel, 
+				ax.bar(x=xs[jj][0],height=sim_target_results[target][jj],width = self.bar_width, label = "S-"+ID_lebel, 
 						facecolor = self.colors[jj],
 						 edgecolor="black", yerr =  0,
 						 error_kw = dict(capsize= self.error_bar_width))
 
-				ax.bar(x=xs[jj][1],height=mean_exp_sorted[jj],width = self.bar_width, label = 'Exp_'+ID_lebel, 
+				ax.bar(x=xs[jj][1],height=mean_exp_sorted[jj],width = self.bar_width, label = 'E-'+ID_lebel, 
 						facecolor = self.colors[jj],hatch=r'\\\\',
 						 edgecolor="black", yerr =  std_exp_sorted[jj],
 						 error_kw = dict(capsize= self.error_bar_width))
 
 			exp_xx = [xs[jj][1] for jj in range(len(self.observations[self.study]['IDs']))]
-			# ax.legend(bbox_to_anchor=(2, 1),loc = 'upper right', borderaxespad=0.,prop={ 'family':'Times New Roman','size':self.legend_font_size},ncol=1)
+			if ii == 0:
+				ax.legend(bbox_to_anchor=self.legend_location,loc = 'upper right', borderaxespad=2,prop={ 'family':'Times New Roman','size':self.legend_font_size},ncol=1)
 
 			self.finalize_and_save(ax=ax, target=target,x_ticks=checkpoints,x_labels=checkpoints,exp_xx=exp_xx)
 

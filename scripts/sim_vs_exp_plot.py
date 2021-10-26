@@ -18,6 +18,7 @@ if __name__ == '__main__':
 		inferred_params = json.load(file)
 	# inferred_params['a_late_diff_inhib'] = 10
 
+
 	obj = MSC_model(fixed_params=fixed_params,free_params = inferred_params,debug=True)
 	simulation_results = obj.simulate_studies()
 	# print(simulation_results)

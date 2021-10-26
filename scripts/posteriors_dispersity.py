@@ -28,12 +28,15 @@ class settings:
 	results_folder = os.path.join(dir_to_dirs,'results')
 	files = {'Chen':'Chen.json',
 	'Qiao_IL':'Qiao_IL.json',
-	'Qiao_Mg':'Qiao_Mg.json',}
+	'Qiao_Mg':'Qiao_Mg.json',
+	'Valles':'Valles.json',
+	'Ber':'Ber.json'}
 
 	axis_font = {'fontname':'Times New Roman', 'size':'15'}
 	legend_font = { 'family':'Times New Roman','size':'13'}
-	colors = ['indigo' , 'darkred', 'olive','royalblue']
-	symbols = [ '3', '+',"o"]
+	colors = ['indigo' , 'darkred', 'olive','royalblue','red']
+	symbols = [ '1', '2',"3",'4','+']
+	fig_size = (3,9)
 
 def relabel(lables):
 	lables_adjusted = []
@@ -42,10 +45,14 @@ def relabel(lables):
 			adj_label = '$n_{ALP}$'
 		elif label == 'ARS_M_n':
 			adj_label = '$n_{ARS}$'
+		elif label == 'OC_M_n':
+			adj_label = '$n_{OC}$'
 		elif label == 'ALP_0':
 			adj_label = '$\\beta_{ALP}$'
 		elif label == 'ARS_0':
 			adj_label = '$\\beta_{ARS}$'
+		elif label == 'OC_0':
+			adj_label = '$\\beta_{OC}$'
 		elif label == 'Mg_stim':
 			adj_label = '$p_{ms}$'
 		elif label == 'Mg_dest':
@@ -88,6 +95,10 @@ def relabel(lables):
 			adj_label = '$k_{ARS,3}$'
 		elif label == 'a_Qiao_2021_ALP':
 			adj_label = '$k_{ALP,1}$'
+		elif label == 'a_Ber_2016_ALP':
+			adj_label = '$k_{ALP,4}$'
+		elif label == 'a_Ber_2016_OC':
+			adj_label = '$k_{OC,4}$'
 		else:
 			adj_label = label
 		lables_adjusted.append(adj_label)
@@ -107,13 +118,15 @@ def plot(data):
 	for (study,params),i in zip(data.items(),range(study_n)):
 		xs = list(params.values())
 		ys = [i for i in range(len(params.keys()))]
+		label_flag = True
 		for jj in range(len(xs)):
 			if xs[jj] == None:
 				continue
 			else:
-				if jj == 0:
+				if label_flag == True:
 					ax.scatter(xs[jj], ys[jj],
 			                s=150,alpha = 0.8,label = study,color = settings.colors[study_i],marker =settings.symbols[study_i] )
+					label_flag = False
 				else:
 					ax.scatter(xs[jj], ys[jj],
 				                s=150,
@@ -127,7 +140,7 @@ def plot(data):
 
 if __name__ == '__main__':
 	free_params_all = edit_params(free_params_all)
-	fig = plt.figure(figsize=(3,7))
+	fig = plt.figure(figsize=(settings.fig_size))
 	ax = fig.add_subplot(1, 1, 1)
 
 	data = {} # stores data based on study tag
@@ -152,7 +165,7 @@ if __name__ == '__main__':
 		label.set_fontname(settings.axis_font['fontname'])
 		label.set_fontsize(float(settings.axis_font['size']))
 
-	plt.legend(bbox_to_anchor=(0.05, 1.07), loc='upper left', borderaxespad=0.,prop=settings.legend_font,ncol=4)
+	plt.legend(bbox_to_anchor=(0.05, 1.07), loc='upper left', borderaxespad=0.,prop=settings.legend_font,ncol=5)
 	plt.xlabel('Scaled values',fontsize = 17, family = settings.axis_font['fontname'])
 	plt.savefig("posteriors_dispesity.svg",bbox_inches="tight")
 

@@ -20,12 +20,12 @@ fixed_params = {
     'a_late_diff_stim':2, # scale factor
     'a_late_diff_inhib':2, # scale factor
 
-    'ALP_M_n':[0,20], # n in the equation ALP = a*(M^n + ALP_0)
-    'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
-    'OC_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
-    'ALP_0':[0,10], # the default value of ALP when maturity is zero
-    'ARS_0':[0,1], # the default value of ARS when maturity is zero 
-    'OC_0':[0,1], # the default value of ARS when maturity is zero 
+    'ALP_M_n':5, # n in the equation ALP = a*(M^n + ALP_0)
+    'ARS_M_n':5, # n in the equation ARS = a*(M^n + ARS_0)
+    'OC_M_n':5, # n in the equation ARS = a*(M^n + ARS_0)
+    'ALP_0':5, # the default value of ALP when maturity is zero
+    'ARS_0':5, # the default value of ARS when maturity is zero 
+    'OC_0':5, # the default value of ARS when maturity is zero 
 
 
     'a_Chen_2018_maturity_t':1,
@@ -44,187 +44,21 @@ fixed_params = {
     'a_Ber_2016_OC':.5,
 }
 free_params_all = {
-
-
-    'a_Valles_2020_ALP':[0,1000],
-    'a_Valles_2020_ARS':[0,1000],
-
-    'a_Chen_2018_ALP':[0,10],
-    'a_Chen_2018_ARS':[0,10],
-
-    'a_Qiao_2021_ALP':[0,200],
-
-    'a_early_diff_stim':[0,5], # scale factor, upregulatory --
-    'a_early_diff_inhib':[0,1], # scale factor, downregulatory --
-    'a_late_diff_stim':[0,5], # scale factor --
-    'a_late_diff_inhib':[0,1], # scale factor --
-
-
-    'early_diff_slow':[0.1,0.4], # center of low membership function --
-    'early_diff_fast':[0.5,0.75], # center of high membership function --
-    'early_diff_very_fast':[0.6,1], # center of high membership function --
-    'late_diff_slow':[0.1,0.4], # center of low membership function --
-    'late_diff_fast':[0.6,0.9], # center of high membership function --
-
-    'Mg_stim':[2,10], # stimulatory conc of Mg --
-    'Mg_dest':[20,40], # detrimental conc of Mg --
-    'IL1b_ineffective':[30,199], # high threshold IL1b --
-    'IL1b_stim':[1,29], # stimulatory threshold of IL1b --
-    'IL8_favorable':[1,99], # medium threshold for IL8 --
-
-    'ALP_M_n':[0,20], # n in the equation ALP = a*(M^n + ALP_0)
-    'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
-    'ALP_0':[0,10], # the default value of ALP when maturity is zero
-    'ARS_0':[0,1], # the default value of ARS when maturity is zero 
-
-    'diff_time':[15*24,45*24], # days required for full differentiation ---
-    'maturity_t':[0,1] # early maturity threshold.  ---
-
-}
-free_params_Qiao_Mg = {
-    'ALP_M_n':[0,20], # n in the equation ALP = a*(M^n + ALP_0)
-    # 'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
-    'ALP_0':[0,10], # the default value of ALP when maturity is zero
-    # 'ARS_0':[0,1], # the default value of ARS when maturity is zero
-
-    'Mg_stim':[2,10], # stimulatory conc of Mg --
-    'Mg_dest':[20,40], # detrimental conc of Mg --
-    # 'IL1b_ineffective':[30,199], # high threshold IL1b --
-    # 'IL1b_stim':[1,29], # stimulatory threshold of IL1b --
-    # 'IL8_favorable':[1,99], # medium threshold for IL8 --
-
-    'maturity_t':[0,1], # early maturity threshold.  ----
-    # 'early_diff_slow':[0.1,0.4], # center of low membership function --
-    'early_diff_fast':[0.5,0.75], # center of high membership function --
-    # 'early_diff_very_fast':[0.6,1], # center of high membership function --
-    # 'late_diff_slow':[0.1,0.4], # center of low membership function --
-    # 'late_diff_fast':[0.6,0.9], # center of high membership function --
-    'a_early_diff_stim':[0,5], # scale factor, upregulatory --
-    # 'a_early_diff_inhib':[0,1], # scale factor, downregulatory --
-    # 'a_late_diff_stim':[0,5], # scale factor --
-    # 'a_late_diff_inhib':[0,1], # scale factor --
-    'diff_time':[15*24,45*24], # days required for full differentiation ---
-
-    # 'a_Chen_2018_ALP':[0,10],
-    # 'a_Chen_2018_ARS':[0,10],
-
-    'a_Valles_2020_ALP':[0,1000],
-    # 'a_Valles_2020_ARS':[0,1000],
-
-    # 'a_Qiao_2021_ALP':[0,200],
-}
-free_params_Qiao_IL8_IL1b = {
-    'ALP_M_n':[0,20], # n in the equation ALP = a*(M^n + ALP_0)
-    # 'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
-    'ALP_0':[0,10], # the default value of ALP when maturity is zero
-    # 'ARS_0':[0,1], # the default value of ARS when maturity is zero
-
-    # 'Mg_stim':[2,10], # stimulatory conc of Mg --
-    # 'Mg_dest':[20,40], # detrimental conc of Mg --
-    'IL1b_ineffective':[30,199], # high threshold IL1b --
-    'IL1b_stim':[1,29], # stimulatory threshold of IL1b --
-    'IL8_favorable':[1,99], # medium threshold for IL8 --
-
-    'maturity_t':[0,1], # early maturity threshold.  ----
-    # 'early_diff_slow':[0.1,0.4], # center of low membership function --
-    # 'early_diff_fast':[0.5,0.75], # center of high membership function --
-    'early_diff_very_fast':[0.6,1], # center of high membership function --
-    # 'late_diff_slow':[0.1,0.4], # center of low membership function --
-    # 'late_diff_fast':[0.6,0.9], # center of high membership function --
-    'a_early_diff_stim':[0,5], # scale factor, upregulatory --
-    # 'a_early_diff_inhib':[0,1], # scale factor, downregulatory --
-    # 'a_late_diff_stim':[0,5], # scale factor --
-    # 'a_late_diff_inhib':[0,1], # scale factor --
-    'diff_time':[15*24,45*24], # days required for full differentiation ---
-
-    # 'a_Chen_2018_ALP':[0,10],
-    # 'a_Chen_2018_ARS':[0,10],
-
-    # 'a_Valles_2020_ALP':[0,1000],
-    # 'a_Valles_2020_ARS':[0,1000],
-
-    'a_Qiao_2021_ALP':[0,200],
-}
-free_params_Chen = {
-    'ALP_M_n':[0,20], # n in the equation ALP = a*(M^n + ALP_0)
-    'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
-    'ALP_0':[0,10], # the default value of ALP when maturity is zero
-    'ARS_0':[0,1], # the default value of ARS when maturity is zero
-
-    # 'Mg_stim':[2,10], # stimulatory conc of Mg --
-    # 'Mg_dest':[20,40], # detrimental conc of Mg --
-    # 'IL1b_ineffective':[30,199], # high threshold IL1b --
-    # 'IL1b_stim':[1,29], # stimulatory threshold of IL1b --
-    # 'IL8_favorable':[1,99], # medium threshold for IL8 --
-
-    'maturity_t':[0,1], # early maturity threshold.  ----
-    'early_diff_slow':[0.1,0.4], # center of low membership function --
-    'early_diff_fast':[0.5,0.75], # center of high membership function --
-    'early_diff_very_fast':[0.6,1], # center of high membership function --
-    'late_diff_slow':[0.1,0.4], # center of low membership function --
-    'late_diff_fast':[0.6,0.9], # center of high membership function --
-    'a_early_diff_stim':[0,5], # scale factor, upregulatory --
-    'a_early_diff_inhib':[0,1], # scale factor, downregulatory --
-    'a_late_diff_stim':[0,5], # scale factor --
-    'a_late_diff_inhib':[0,1], # scale factor --
-    'diff_time':[15*24,45*24], # days required for full differentiation ---
-
-    'a_Chen_2018_ALP':[0,10],
-    'a_Chen_2018_ARS':[0,10],
-
-    # 'a_Valles_2020_ALP':[0,1000],
-    # 'a_Valles_2020_ARS':[0,1000],
-
-    # 'a_Qiao_2021_ALP':[0,200],
-}
-free_params_Valles = {
-    'ALP_M_n':[0,20], # n in the equation ALP = a*(M^n + ALP_0)
-    'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
-    'ALP_0':[0,10], # the default value of ALP when maturity is zero
-    'ARS_0':[0,1], # the default value of ARS when maturity is zero
-
-    # 'Mg_stim':[2,10], # stimulatory conc of Mg --
-    # 'Mg_dest':[20,40], # detrimental conc of Mg --
-    # 'IL1b_ineffective':[30,199], # high threshold IL1b --
-    # 'IL1b_stim':[1,29], # stimulatory threshold of IL1b --
-    # 'IL8_favorable':[1,99], # medium threshold for IL8 --
-
-    'maturity_t':[0,1], # early maturity threshold.  ----
-    'early_diff_slow':[0.1,0.4], # center of low membership function --
-    'early_diff_fast':[0.5,0.75], # center of high membership function --
-    'early_diff_very_fast':[0.6,1], # center of high membership function --
-    'late_diff_slow':[0.1,0.4], # center of low membership function --
-    'late_diff_fast':[0.6,0.9], # center of high membership function --
-    'a_early_diff_stim':[0,5], # scale factor, upregulatory --
-    'a_early_diff_inhib':[0,1], # scale factor, downregulatory --
-    'a_late_diff_stim':[0,5], # scale factor --
-    'a_late_diff_inhib':[0,1], # scale factor --
-    'diff_time':[15*24,45*24], # days required for full differentiation ---
-
-    # 'a_Chen_2018_ALP':[0,10],
-    # 'a_Chen_2018_ARS':[0,10],
-
-    'a_Valles_2020_ALP':[0,1000],
-    'a_Valles_2020_ARS':[0,1000],
-
-    # 'a_Qiao_2021_ALP':[0,200],
-}
-free_params_Ber = {
-    'a_Ber_2016_ALP':[0,1],
+    'a_Ber_2016_ALP': [0,1],
     'a_Ber_2016_OC':[0,1],
 
-    # 'a_Valles_2020_ALP':[0,1000],
-    # 'a_Valles_2020_ARS':[0,1000],
-    
-    # 'a_Chen_2018_ALP':[0,10],
-    # 'a_Chen_2018_ARS':[0,10],
+    'a_Valles_2020_ALP':[0,1000],
+    'a_Valles_2020_ARS':[0,1000],
 
-    # 'a_Qiao_2021_ALP':[0,200],
+    'a_Chen_2018_ALP':[0,10],
+    'a_Chen_2018_ARS':[0,10],
 
-    'a_early_diff_stim':[0,5], # scale factor, upregulatory --
-    'a_early_diff_inhib':[0,1], # scale factor, downregulatory --
-    'a_late_diff_stim':[0,5], # scale factor --
-    'a_late_diff_inhib':[0,10], # scale factor --
+    'a_Qiao_2021_ALP':[0,200],
+
+    'a_early_diff_stim':[0,20], # scale factor, upregulatory --
+    'a_early_diff_inhib':[0,20], # scale factor, downregulatory --
+    'a_late_diff_stim':[0,20], # scale factor --
+    'a_late_diff_inhib':[0,20], # scale factor --
 
 
     'early_diff_slow':[0.1,0.4], # center of low membership function --
@@ -240,19 +74,111 @@ free_params_Ber = {
     'IL8_favorable':[1,99], # medium threshold for IL8 --
 
     'ALP_M_n':[0,20], # n in the equation ALP = a*(M^n + ALP_0)
-    'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
-    'OC_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
+    'ARS_M_n':[0,20], # n in the equation ARS = a*(M^n + ARS_0)
+    'OC_M_n':[0,20], # n in the equation ARS = a*(M^n + ARS_0)
     'ALP_0':[0,10], # the default value of ALP when maturity is zero
-    'ARS_0':[0,1], # the default value of ARS when maturity is zero 
-    'OC_0':[0,1], # the default value of ARS when maturity is zero 
+    'ARS_0':[0,10], # the default value of ARS when maturity is zero 
+    'OC_0':[0,10], # the default value of ARS when maturity is zero 
 
     'diff_time':[15*24,45*24], # days required for full differentiation ---
     'maturity_t':[0,1] # early maturity threshold.  ---
 
 }
+free_params_Qiao_Mg = ['ALP_M_n',
+'ALP_0',
+'Mg_stim', 
+'Mg_dest',
+'maturity_t',
+'early_diff_fast',
+'a_early_diff_stim',
+'diff_time', 
+'a_Valles_2020_ALP']
 
-# free_params = free_params_Qiao_IL8_IL1b
-# free_params = free_params_Qiao_Mg
-# free_params = free_params_Chen
-# free_params = free_params_Valles
-free_params = free_params_Ber
+free_params_Qiao_IL8_IL1b = {
+    'ALP_M_n':[0,20], # n in the equation ALP = a*(M^n + ALP_0)
+    'ALP_0':[0,10], # the default value of ALP when maturity is zero
+    'IL1b_ineffective':[30,199], # high threshold IL1b --
+    'IL1b_stim':[1,29], # stimulatory threshold of IL1b --
+    'IL8_favorable':[1,99], # medium threshold for IL8 --
+
+    'maturity_t':[0,1], # early maturity threshold.  ----
+    'early_diff_very_fast':[0.6,1], # center of high membership function --
+    'a_early_diff_stim':[0,5], # scale factor, upregulatory --
+    'diff_time':[15*24,45*24], # days required for full differentiation ---
+    'a_Qiao_2021_ALP':[0,200],
+}
+free_params_Chen = [
+    'ALP_M_n',
+    'ARS_M_n',
+    'ALP_0',
+    'ARS_0',
+    'maturity_t',
+    'early_diff_slow',
+    'early_diff_fast',
+    'early_diff_very_fast',
+    'late_diff_slow',
+    'late_diff_fast',
+    'a_early_diff_stim',
+    'a_early_diff_inhib',
+    'a_late_diff_stim',
+    'a_late_diff_inhib',
+    'diff_time',
+
+    'a_Chen_2018_ALP',
+    'a_Chen_2018_ARS',
+]
+free_params_Valles = [
+    'ALP_M_n',
+    'ARS_M_n',
+    'ALP_0',
+    'ARS_0',
+
+    'maturity_t', 
+    'early_diff_slow', 
+    'early_diff_fast', 
+    'early_diff_very_fast',
+    'late_diff_slow',
+    'late_diff_fast',
+    'a_early_diff_stim',
+    'a_early_diff_inhib',
+    'a_late_diff_stim',
+    'a_late_diff_inhib',
+    'diff_time',
+
+    'a_Valles_2020_ALP',
+    'a_Valles_2020_ARS'
+
+]
+free_params_Ber = {
+
+    'a_Ber_2016_ALP': [0,1],
+    'a_Ber_2016_OC':[0,1],
+
+    'a_early_diff_stim':[0,10], # scale factor, upregulatory --
+    'a_late_diff_inhib':[0,20], # scale factor --
+
+
+    'early_diff_very_fast':[0.6,1], # center of high membership function --
+    'late_diff_slow':[0.1,0.4], # center of low membership function --
+
+    'Mg_stim':[2,10], # stimulatory conc of Mg --
+    'Mg_dest':[20,40], # detrimental conc of Mg --
+ 
+    'ALP_M_n':[0,10], # n in the equation ALP = a*(M^n + ALP_0)
+    'OC_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
+    'ALP_0':[0,10], # the default value of ALP when maturity is zero
+    'OC_0':[0,10], # the default value of ARS when maturity is zero 
+
+    'diff_time':[15*24,45*24], # days required for full differentiation ---
+    'maturity_t':[0,1] # early maturity threshold.  ---
+
+}
+# candidate = list(free_params_Qiao_IL8_IL1b.keys())
+# candidate = free_params_Qiao_Mg
+# candidate = free_params_Chen
+# candidate = free_params_Valles
+candidate = list(free_params_Ber.keys())
+free_params  = {}
+for key in candidate:
+    free_params[key] = free_params_all[key]
+
