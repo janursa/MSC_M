@@ -152,19 +152,19 @@ def relabel_description(lables):
 		elif label == 'diff_time':
 			adj_label = '$T_{d}$' + ': differentiation time'
 		elif label == 'a_Chen_2018_ALP':
-			adj_label = '$k_{ALP,2}$'
+			adj_label = '$k_{ALP,2}$'+': scale factor of ALP in study 2'
 		elif label == 'a_Chen_2018_ARS':
-			adj_label = '$k_{ARS,2}$'
+			adj_label = '$k_{ARS,2}$'+': scale factor of ARS in study 2'
 		elif label == 'a_Valles_2020_ALP':
-			adj_label = '$k_{ALP,3}$'
+			adj_label = '$k_{ALP,3}$'+': scale factor of ALP in study 3'
 		elif label == 'a_Valles_2020_ARS':
-			adj_label = '$k_{ARS,3}$'
+			adj_label = '$k_{ARS,3}$'+': scale factor of ARS in study 3'
 		elif label == 'a_Qiao_2021_ALP':
-			adj_label = '$k_{ALP,1}$'
+			adj_label = '$k_{ALP,1}$'+': scale factor of ALP in study 1'
 		elif label == 'a_Ber_2016_ALP':
-			adj_label = '$k_{ALP,4}$'
+			adj_label = '$k_{ALP,4}$'+': scale factor of ALP in study 4'
 		elif label == 'a_Ber_2016_OC':
-			adj_label = '$k_{OC,4}$'
+			adj_label = '$k_{OC,4}$'+': scale factor of OC in study 4'
 		else:
 			adj_label = label
 		lables_adjusted.append(adj_label)
