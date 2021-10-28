@@ -177,7 +177,8 @@ free_params_Ber = {
 # candidate = free_params_Qiao_Mg
 # candidate = free_params_Chen
 # candidate = free_params_Valles
-candidate = list(free_params_Ber.keys())
+# candidate = list(free_params_Ber.keys())
+candidate = list(free_params_all.keys())
 free_params  = {}
 for key in candidate:
     free_params[key] = free_params_all[key]

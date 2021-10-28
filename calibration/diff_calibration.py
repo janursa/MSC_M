@@ -14,7 +14,7 @@ from MSC_osteogenesis import *
 ##// optimize //##
 class Calibrate:
 	def __init__(self,fixed_params,free_params):
-		self.max_iters = 1000
+		self.max_iters = 200
 		self.free_params = free_params
 		self.fixed_params = fixed_params
 	def cost_function(self,calib_params_values):

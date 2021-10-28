@@ -39,13 +39,17 @@ class settings:
 def determine_title(study):
 	title = ''
 	if study == 'Qiao_IL8_IL1b':
-		title = 'Qiao_IL8_IL1b' 
+		title = 'C2' 
 	elif study == 'Qiao_Mg':
-		title = 'Qiao_Mg'
+		title = 'C1'
 	elif study == 'Chen':
-		title = 'Chen'
+		title = 'C3'
 	elif study == 'Valles':
-		title = 'Valles'
+		title = 'C4'
+	elif study == 'Ber':
+		title = 'C5'
+	elif study == 'All':
+		title = 'C1-5'
 	return title
 
 

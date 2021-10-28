@@ -42,7 +42,7 @@ def relabel(lables):
 	lables_adjusted = []
 	for label in lables:
 		if label == 'ALP_M_n':
-			adj_label = '$n_{ALP}$'
+			adj_label = r'$n_{ALP}$'
 		elif label == 'ARS_M_n':
 			adj_label = '$n_{ARS}$'
 		elif label == 'OC_M_n':
@@ -72,9 +72,9 @@ def relabel(lables):
 		elif label == 'early_diff_very_fast':
 			adj_label = '$p_{evf}$'
 		elif label == 'late_diff_slow':
-			adj_label = '$p_{ds}$'
+			adj_label = '$p_{ls}$'
 		elif label == 'late_diff_fast':
-			adj_label = '$p_{df}$'
+			adj_label = '$p_{lf}$'
 		elif label == 'a_early_diff_stim':
 			adj_label = '$\\alpha_{es}$'
 		elif label == 'a_early_diff_inhib':
@@ -85,6 +85,72 @@ def relabel(lables):
 			adj_label = '$\\alpha_{li}$'
 		elif label == 'diff_time':
 			adj_label = '$T_{d}$'
+		elif label == 'a_Chen_2018_ALP':
+			adj_label = '$k_{ALP,2}$'
+		elif label == 'a_Chen_2018_ARS':
+			adj_label = '$k_{ARS,2}$'
+		elif label == 'a_Valles_2020_ALP':
+			adj_label = '$k_{ALP,3}$'
+		elif label == 'a_Valles_2020_ARS':
+			adj_label = '$k_{ARS,3}$'
+		elif label == 'a_Qiao_2021_ALP':
+			adj_label = '$k_{ALP,1}$'
+		elif label == 'a_Ber_2016_ALP':
+			adj_label = '$k_{ALP,4}$'
+		elif label == 'a_Ber_2016_OC':
+			adj_label = '$k_{OC,4}$'
+		else:
+			adj_label = label
+		lables_adjusted.append(adj_label)
+	return lables_adjusted
+
+def relabel_description(lables):
+	lables_adjusted = []
+	for label in lables:
+		if label == 'ALP_M_n':
+			adj_label = r'$n_{ALP}$'+r': degree of nonlinearity ALP-maturity '
+		elif label == 'ARS_M_n':
+			adj_label = '$n_{ARS}$'+': degree of nonlinearity ARS-maturity '
+		elif label == 'OC_M_n':
+			adj_label = '$n_{OC}$'+': degree of nonlinearity OC-maturity '
+		elif label == 'ALP_0':
+			adj_label = '$\\beta_{ALP}$'+': baseline of ALP'
+		elif label == 'ARS_0':
+			adj_label = '$\\beta_{ARS}$'+': baseline of ARS'
+		elif label == 'OC_0':
+			adj_label = '$\\beta_{OC}$'+': baseline of OC'
+		elif label == 'Mg_stim':
+			adj_label = '$p_{ms}$'+': fuzzy Stimulatory Mg2+ ions'
+		elif label == 'Mg_dest':
+			adj_label = '$p_{md}$'+': fuzzy Destructive Mg2+ ions'
+		elif label == 'IL1b_ineffective':
+			adj_label = '$p_{1bie}$'+': fuzzy Ineffective IL-1$\\beta$'
+		elif label == 'IL1b_stim':
+			adj_label = '$p_{1bs}$'+': fuzzy Stimulatory IL-1$\\beta$'
+		elif label == 'IL8_favorable':
+			adj_label = '$p_{8f}$'+': fuzzy Favorable IL-8'
+		elif label == 'maturity_t':
+			adj_label = '$M_{t}$'+': early maturity threshold'
+		elif label == 'early_diff_slow':
+			adj_label = '$p_{es}$'+': fuzzy Slow early differentiation'
+		elif label == 'early_diff_fast': 
+			adj_label = '$p_{ef}$'+': fuzzy Fast early differentiation'
+		elif label == 'early_diff_very_fast':
+			adj_label = '$p_{evf}$'+': fuzzy Very fast early differentiation'
+		elif label == 'late_diff_slow':
+			adj_label = '$p_{ls}$'+': fuzzy Slow late differentiation'
+		elif label == 'late_diff_fast':
+			adj_label = '$p_{lf}$'+': fuzzy Fast late differentiation'
+		elif label == 'a_early_diff_stim':
+			adj_label = '$\\alpha_{es}$'+': scale early differentiation, stimulatory'
+		elif label == 'a_early_diff_inhib':
+			adj_label = '$\\alpha_{ei}$'+': scale early differentiation, inhibitory'
+		elif label == 'a_late_diff_stim':
+			adj_label = '$\\alpha_{ls}$'+': scale late differentiation, stimulatory'
+		elif label == 'a_late_diff_inhib':
+			adj_label = '$\\alpha_{li}$'+': scale late differentiation, inhibitory'
+		elif label == 'diff_time':
+			adj_label = '$T_{d}$' + ': differentiation time'
 		elif label == 'a_Chen_2018_ALP':
 			adj_label = '$k_{ALP,2}$'
 		elif label == 'a_Chen_2018_ARS':
@@ -165,7 +231,7 @@ if __name__ == '__main__':
 		label.set_fontname(settings.axis_font['fontname'])
 		label.set_fontsize(float(settings.axis_font['size']))
 
-	plt.legend(bbox_to_anchor=(0.05, 1.07), loc='upper left', borderaxespad=0.,prop=settings.legend_font,ncol=5)
+	plt.legend(bbox_to_anchor=(-.08, 1.14), loc='upper left', borderaxespad=0.,prop=settings.legend_font,ncol=2)
 	plt.xlabel('Scaled values',fontsize = 17, family = settings.axis_font['fontname'])
 	plt.savefig("posteriors_dispesity.svg",bbox_inches="tight")
 
