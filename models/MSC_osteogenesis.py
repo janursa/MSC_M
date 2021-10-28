@@ -17,7 +17,7 @@ from observations import observations
 dir_to_binds = os.path.join(current_file,'fuzzy_cpp/build/binds')
 sys.path.insert(0,dir_to_binds)
 from fuzzy_cpp import *
-from parameters import free_params, fixed_params
+import parameters 
 
 class Osteogenesis:
     def __init__(self,params,debug=False):
@@ -209,11 +209,12 @@ class Osteogenesis:
         return results
 
 class MSC_model:
-    def __init__(self,free_params,fixed_params,debug=False):
+    def __init__(self,free_params,fixed_params,observations, debug=False):
         self.debug=debug
         for key,value in free_params.items():
             fixed_params[key] = value
         self.params = fixed_params
+        self.observations = observations
         self.osteogenesis = Osteogenesis(self.params,debug=self.debug)
         # TODO: another model should be created for inflammatory reponse
     def simulate_studies(self):
@@ -221,7 +222,7 @@ class MSC_model:
         Simulate all studies
         """
         studies_results = {}
-        for study in observations['studies']:
+        for study in self.observations['studies']:
             results = self.simulate_osteogenesis_study(study)
 
             studies_results[study]= results
@@ -233,12 +234,12 @@ class MSC_model:
         """
         if self.debug:
             print('\n **** ', study,'*** \n')
-        measurement_scheme = observations[study]['measurement_scheme']
-        exposure_time = observations[study]['exposure_time']
-        IDs = observations[study]['IDs']
+        measurement_scheme = self.observations[study]['measurement_scheme']
+        exposure_time = self.observations[study]['exposure_time']
+        IDs = self.observations[study]['IDs']
         results = {}
         for ID in IDs:
-            inputs = observations[study][ID]['inputs']
+            inputs = self.observations[study][ID]['inputs']
             if self.debug:
                 print('\n',ID)
                 # print('inputs:',inputs)
@@ -250,10 +251,10 @@ class MSC_model:
         """
         calculates cost values for each ID of the given study
         """
-        measurement_scheme = observations[study]['measurement_scheme']
+        measurement_scheme = self.observations[study]['measurement_scheme']
         errors = {}
         for ID, ID_results in study_results.items():
-            ID_observations = observations[study][ID]['expectations']
+            ID_observations = self.observations[study][ID]['expectations']
             tag_errors = []
             for target in measurement_scheme.keys():
                 abs_diff =abs(np.array(ID_results[target])-np.array(ID_observations[target]['mean']))
@@ -280,14 +281,15 @@ class MSC_model:
         #// to sum up the errors
         error = np.mean(errors_list) # we put the errors on all of the IDs here and finally just sum them up
         return error
-def single_run(free_params,fixed_params):
-    obj = MSC_model(fixed_params = fixed_params,free_params=free_params)
+def single_run(free_params,fixed_params,observations):
+    obj = MSC_model(fixed_params = fixed_params,free_params=free_params,observations=observations)
     error = obj.run()
     return error
 if __name__ == '__main__':
     # tr = tracker.SummaryTracker()
     # for i in range(100000):
-    error = single_run(free_params=free_params, fixed_params=fixed_params)
+    obs,free_params = parameters.specification('all')
+    error = single_run(free_params=free_params, fixed_params=parameters.fixed_params,observations=obs)
         # if i%500==0:
         #     print('Iteration ',i)
         #     tr.print_diff()

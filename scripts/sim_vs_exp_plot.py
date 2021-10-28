@@ -8,18 +8,17 @@ from dirs import dir_to_MSC_osteogenesis
 sys.path.insert(0,dir_to_MSC_osteogenesis)
 from MSC_osteogenesis import *
 from plots import *
-from observations import observations
-
+import parameters
 
 if __name__ == '__main__':
 	##/ run test simultions and plot
-	results_folder = os.path.join(dir_to_dirs,'results')
-	with open(os.path.join(results_folder,'inferred_params.json')) as file:
+	results_folder = os.path.join(dir_to_dirs,'results','Qiao_IL8_IL1b')
+	with open(os.path.join(results_folder,'inferred_params_0_400.json')) as file:
 		inferred_params = json.load(file)
 	# inferred_params['a_late_diff_inhib'] = 10
+	obs,_ = parameters.specifications('Qiao_IL8_IL1b')
 
-
-	obj = MSC_model(fixed_params=fixed_params,free_params = inferred_params,debug=True)
+	obj = MSC_model(fixed_params=parameters.fixed_params,free_params = inferred_params,observations=obs, debug=True)
 	simulation_results = obj.simulate_studies()
 	# print(simulation_results)
 	error = obj.run()
@@ -27,9 +26,9 @@ if __name__ == '__main__':
 
 
 
-	for study in observations['studies']:
+	for study in obs['studies']:
 		if study == 'Qiao_2021_Mg' or study == 'Ber_2016':
-			plot_obj = Plot_bar_2(study,observations)
+			plot_obj = Plot_bar_2(study,obs)
 		else:
-			plot_obj = Plot_bar(study,observations)
+			plot_obj = Plot_bar(study,obs)
 		plot_obj.plot(simulation_results[study])

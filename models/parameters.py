@@ -1,4 +1,12 @@
-
+import sys
+import pathlib
+import os
+current_file = pathlib.Path(__file__).parent.absolute()
+dir_to_dirs = os.path.join(current_file,'..')
+sys.path.insert(0,dir_to_dirs)
+from dirs import dir_to_MSC_osteogenesis
+sys.path.insert(0,dir_to_MSC_osteogenesis)
+from observations import observations
 fixed_params = {
     'diff_time':30*24, # days required for full differentiation   
     'maturity_t':.5, # early maturity threshold 
@@ -178,8 +186,40 @@ free_params_Ber = {
 # candidate = free_params_Chen
 # candidate = free_params_Valles
 # candidate = list(free_params_Ber.keys())
-candidate = list(free_params_all.keys())
-free_params  = {}
-for key in candidate:
-    free_params[key] = free_params_all[key]
+# candidate = list(free_params_all.keys())
+# free_params  = {}
+# for key in candidate:
+#     free_params[key] = free_params_all[key]
+def specifications(study):
+    
+    if study == 'Qiao_IL8_IL1b':
+        studies = ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b']
+        candidate = list(free_params_Qiao_IL8_IL1b.keys())
+    elif study == 'Qiao_Mg':
+        studies = ['Qiao_2021_Mg']
+        candidate = free_params_Qiao_Mg
+    elif study == 'Ber_2016':
+        studies = ['Ber_2016']
+        candidate = list(free_params_Ber.keys())
+    elif study == 'Valles_2020':
+        studies = ['Valles_2020_IL10','Valles_2020_TNFa']
+        candidate = free_params_Valles
+    elif study == 'Chen_2018':
+        studies = ['Chen_2018']
+        candidate = free_params_Chen
+    elif study == 'All':
+        studies = ['Valles_2020_TNFa','Valles_2020_IL10','Chen_2018','Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b','Ber_2016']
+        candidate = list(free_params_all.keys())
+    free_params  = {}
+    for key in candidate:
+        free_params[key] = free_params_all[key]
+    obs = {'studies':studies}
+    for study in studies:
+        obs[study] = observations[study]
+
+    return obs,free_params
+
+
+
+
 

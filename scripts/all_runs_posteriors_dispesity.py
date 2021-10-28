@@ -24,9 +24,9 @@ plt.style.use('seaborn-deep')
 plt.rcParams["font.serif"] = ["Times New Roman"] + plt.rcParams["font.serif"]
 
 class settings:
-	studies = ['Qiao_IL8_IL1b','Qiao_Mg','Chen','Valles']
+	studies = ['Qiao_IL8_IL1b','Chen_2018','Valles_2020']
 	# studies = ['Qiao_IL8_IL1b']
-	runs = [400,400,200,200]
+	runs = [400,200,200]
 	# runs = [400]
 	axis_font = {'fontname':'Times New Roman', 'size':'14'}
 	legend_font = { 'family':'Times New Roman','size':'14'}
@@ -42,11 +42,11 @@ def determine_title(study):
 		title = 'C2' 
 	elif study == 'Qiao_Mg':
 		title = 'C1'
-	elif study == 'Chen':
+	elif study == 'Chen_2018':
 		title = 'C3'
-	elif study == 'Valles':
+	elif study == 'Valles_2020':
 		title = 'C4'
-	elif study == 'Ber':
+	elif study == 'Ber_2016':
 		title = 'C5'
 	elif study == 'All':
 		title = 'C1-5'

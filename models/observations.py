@@ -5,7 +5,7 @@ observations = {
 	# 'studies':['Ber_2016'],
 	# 'studies':['Chen_2018'],
 	# 'studies':['Valles_2020_IL10','Valles_2020_TNFa'],
-	'studies':['Valles_2020_TNFa','Valles_2020_IL10','Chen_2018','Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b','Ber_2016'],
+	# 'studies':['Valles_2020_TNFa','Valles_2020_IL10','Chen_2018','Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b','Ber_2016'],
 
 
 	'Chen_2018':{# the effect of IL10 on ALP and ARS
