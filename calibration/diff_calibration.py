@@ -9,20 +9,22 @@ dir_to_dirs = os.path.join(current_file,'..')
 sys.path.insert(0,dir_to_dirs)
 from dirs import dir_to_MSC_osteogenesis
 sys.path.insert(0,dir_to_MSC_osteogenesis)
-from MSC_osteogenesis import *
+from MSC_osteogenesis import MSC_model
+from parameters import specifications, fixed_params	
 
 ##// optimize //##
 class Calibrate:
-	def __init__(self,fixed_params,free_params):
-		self.max_iters = 200
+	def __init__(self,fixed_params,free_params,observations):
+		self.max_iters = 100
 		self.free_params = free_params
 		self.fixed_params = fixed_params
+		self.obs = observations
 	def cost_function(self,calib_params_values):
 		# calculate the error for each target by comparing the results to the original model
 		calib_params = {}
 		for key,value in zip(self.free_params.keys(),calib_params_values):
 			calib_params[key] = value
-		obj = MSC_model(fixed_params = self.fixed_params,free_params=calib_params)
+		obj = MSC_model(fixed_params = self.fixed_params,free_params=calib_params,observations = self.obs)
 		error = obj.run()
 		return error
 
@@ -38,10 +40,10 @@ class Calibrate:
 			file.write(json.dumps(inferred_params, indent = 4))
 		return inferred_params,results.fun
 
-def calibrate(fixed_params=fixed_params,free_params=free_params,n_proc=1,disp=True):
+def calibrate(fixed_params,free_params,observations, n_proc=1,disp=True):
 	# print('fixed_params',fixed_params)
 	# print('free_params',free_params)
-	calib_obj = Calibrate(fixed_params,free_params)
+	calib_obj = Calibrate(fixed_params,free_params,observations)
 	inferred_params,error = calib_obj.optimize(n_proc,disp=disp)
 	return inferred_params
 
@@ -50,5 +52,6 @@ if __name__ == '__main__':
 	##/ calibrate
 	n_proc = sys.argv[1]
 	print('number of assigned processers:',n_proc)
-	calibrate(fixed_params,free_params,n_proc)
+	obs,free_params = specifications(study = 'Qiao_Mg')
+	calibrate(fixed_params = fixed_params,free_params=free_params,observations=obs,n_proc=n_proc)
 

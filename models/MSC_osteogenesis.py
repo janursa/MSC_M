@@ -255,14 +255,14 @@ class MSC_model:
         errors = {}
         for ID, ID_results in study_results.items():
             ID_observations = self.observations[study][ID]['expectations']
-            tag_errors = []
+            target_errors = {}
             for target in measurement_scheme.keys():
                 abs_diff =abs(np.array(ID_results[target])-np.array(ID_observations[target]['mean']))
                 means = [ID_observations[target]['mean'],ID_results[target]]
                 mean = np.mean(means)
-                tag_error = abs_diff/mean
-                tag_errors.append(tag_error)
-            errors[ID] = np.mean(tag_errors)
+                target_error = abs_diff/mean
+                target_errors[target] = target_error
+            errors[ID] = target_errors
         return errors
     def cost_studies(self,studies_results):
         """
@@ -277,7 +277,11 @@ class MSC_model:
         errors = self.cost_studies(results)
         errors_list = []
         for study,study_errors in errors.items():
-            errors_list+=list(study_errors.values())
+            ID_errors = []
+            for ID,ID_error in study_errors.items():
+                ID_errors.append(np.mean(list(ID_error.values())))
+
+            errors_list.append(np.mean(ID_errors))
         #// to sum up the errors
         error = np.mean(errors_list) # we put the errors on all of the IDs here and finally just sum them up
         return error

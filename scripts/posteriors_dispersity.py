@@ -108,21 +108,21 @@ def relabel_description(lables):
 	lables_adjusted = []
 	for label in lables:
 		if label == 'ALP_M_n':
-			adj_label = r'$n_{ALP}$'+r': degree of nonlinearity ALP-maturity '
+			adj_label = r'$n_{ALP}$'+r': nonlinearity of ALP-maturity '
 		elif label == 'ARS_M_n':
-			adj_label = '$n_{ARS}$'+': degree of nonlinearity ARS-maturity '
+			adj_label = '$n_{ARS}$'+': nonlinearity of ARS-maturity '
 		elif label == 'OC_M_n':
-			adj_label = '$n_{OC}$'+': degree of nonlinearity OC-maturity '
+			adj_label = '$n_{OC}$'+': nonlinearity of OC-maturity '
 		elif label == 'ALP_0':
-			adj_label = '$\\beta_{ALP}$'+': baseline of ALP'
+			adj_label = '$\\beta_{ALP}$'+': ALP baseline'
 		elif label == 'ARS_0':
-			adj_label = '$\\beta_{ARS}$'+': baseline of ARS'
+			adj_label = '$\\beta_{ARS}$'+': ARS baseline'
 		elif label == 'OC_0':
-			adj_label = '$\\beta_{OC}$'+': baseline of OC'
+			adj_label = '$\\beta_{OC}$'+': OC baseline'
 		elif label == 'Mg_stim':
-			adj_label = '$p_{ms}$'+': fuzzy Stimulatory Mg2+ ions'
+			adj_label = '$p_{ms}$'+': fuzzy Stimulatory Mg$^{2+}$ ions'
 		elif label == 'Mg_dest':
-			adj_label = '$p_{md}$'+': fuzzy Destructive Mg2+ ions'
+			adj_label = '$p_{md}$'+': fuzzy Destructive Mg$^{2+}$ ions'
 		elif label == 'IL1b_ineffective':
 			adj_label = '$p_{1bie}$'+': fuzzy Ineffective IL-1$\\beta$'
 		elif label == 'IL1b_stim':
@@ -132,23 +132,23 @@ def relabel_description(lables):
 		elif label == 'maturity_t':
 			adj_label = '$M_{t}$'+': early maturity threshold'
 		elif label == 'early_diff_slow':
-			adj_label = '$p_{es}$'+': fuzzy Slow early differentiation'
+			adj_label = '$p_{es}$'+': fuzzy Slow early diff.'
 		elif label == 'early_diff_fast': 
-			adj_label = '$p_{ef}$'+': fuzzy Fast early differentiation'
+			adj_label = '$p_{ef}$'+': fuzzy Fast early diff.'
 		elif label == 'early_diff_very_fast':
-			adj_label = '$p_{evf}$'+': fuzzy Very fast early differentiation'
+			adj_label = '$p_{evf}$'+': fuzzy Very fast early diff.'
 		elif label == 'late_diff_slow':
-			adj_label = '$p_{ls}$'+': fuzzy Slow late differentiation'
+			adj_label = '$p_{ls}$'+': fuzzy Slow late diff.'
 		elif label == 'late_diff_fast':
-			adj_label = '$p_{lf}$'+': fuzzy Fast late differentiation'
+			adj_label = '$p_{lf}$'+': fuzzy Fast late diff.'
 		elif label == 'a_early_diff_stim':
-			adj_label = '$\\alpha_{es}$'+': scale early differentiation, stimulatory'
+			adj_label = '$\\alpha_{es}$'+': scale early diff., stimulatory'
 		elif label == 'a_early_diff_inhib':
-			adj_label = '$\\alpha_{ei}$'+': scale early differentiation, inhibitory'
+			adj_label = '$\\alpha_{ei}$'+': scale early diff., inhibitory'
 		elif label == 'a_late_diff_stim':
-			adj_label = '$\\alpha_{ls}$'+': scale late differentiation, stimulatory'
+			adj_label = '$\\alpha_{ls}$'+': scale late diff., stimulatory'
 		elif label == 'a_late_diff_inhib':
-			adj_label = '$\\alpha_{li}$'+': scale late differentiation, inhibitory'
+			adj_label = '$\\alpha_{li}$'+': scale late diff., inhibitory'
 		elif label == 'diff_time':
 			adj_label = '$T_{d}$' + ': differentiation time'
 		elif label == 'a_Chen_2018_ALP':
@@ -171,11 +171,13 @@ def relabel_description(lables):
 	return lables_adjusted
 
 def edit_params(free_params_all): # get rid of this parameters
-	# del free_params_all['a_Chen_2018_ALP']
-	# del free_params_all['a_Chen_2018_ARS']
-	# del free_params_all['a_Valles_2020_ALP']
-	# del free_params_all['a_Valles_2020_ARS']
-	# del free_params_all['a_Qiao_2021_ALP']
+	del free_params_all['a_Chen_2018_ALP']
+	del free_params_all['a_Chen_2018_ARS']
+	del free_params_all['a_Valles_2020_ALP']
+	del free_params_all['a_Valles_2020_ARS']
+	del free_params_all['a_Ber_2016_ALP']
+	del free_params_all['a_Ber_2016_OC']
+	del free_params_all['a_Qiao_2021_ALP']
 	return free_params_all
 
 def plot(data):

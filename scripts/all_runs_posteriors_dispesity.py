@@ -20,7 +20,6 @@ sys.path.insert(0,dir_to_MSC_osteogenesis)
 from parameters import free_params_all
 from posteriors_dispersity import relabel,edit_params,relabel_description
 plt.rcParams["font.family"] = "serif"
-plt.style.use('seaborn-deep')
 plt.rcParams["font.serif"] = ["Times New Roman"] + plt.rcParams["font.serif"]
 
 class settings:
@@ -33,15 +32,16 @@ class settings:
 	axis_font = {'fontname':'Times New Roman', 'size':'14'}
 	legend_font = { 'family':'Times New Roman','size':'14'}
 	title_font = { 'family':'Times New Roman','size':'13'}
-	colors = ['indigo' , 'darkred', 'olive','royalblue']
+	colors = ['indigo' , 'olive', 'red','royalblue']
 	symbols = [">" , '<', "o",'+']
 	symbol_size_major = 70
 	symbol_size_minor = 30
+	alpha = .5
 	fig_size = (9,7)
 def determine_title(study):
 	title = ''
 	if study == 'Qiao_IL8_IL1b':
-		title = 'C2' 
+		title = 'C5' 
 	elif study == 'Qiao_Mg':
 		title = 'C1'
 	elif study == 'Chen_2018':
@@ -49,7 +49,7 @@ def determine_title(study):
 	elif study == 'Valles_2020':
 		title = 'C4'
 	elif study == 'Ber_2016':
-		title = 'C5'
+		title = 'C2'
 	elif study == 'All':
 		title = 'C1-5'
 	return title
@@ -77,21 +77,21 @@ def plot(ax,data,label_flag = False):
 			else:
 				if first_label_flag == True and label_flag:
 					ax.scatter(xs[jj], ys[jj],
-							s=settings.symbol_size_major,alpha = 0.8,label = study,color = settings.colors[study_i],marker =settings.symbols[study_i] )
+							s=settings.symbol_size_major,alpha = settings.alpha,label = study,color = settings.colors[study_i],marker =settings.symbols[study_i] )
 					first_label_flag = False
 				elif label_flag:
 					ax.scatter(xs[jj], ys[jj],
-								s=settings.symbol_size_major, alpha = 0.8,color = settings.colors[study_i],marker =settings.symbols[study_i])
+								s=settings.symbol_size_major, alpha = settings.alpha,color = settings.colors[study_i],marker =settings.symbols[study_i])
 				
 				elif indivitual_label_flag == True and study_i ==0:
 					indivitual_label_flag = False
 					ax.scatter(xs[jj], ys[jj],
 								s=settings.symbol_size_minor,
-							   alpha = 0.8,label='Indivitual run',color = settings.colors[-1],marker =settings.symbols[-1])
+							   alpha = settings.alpha,label='Indivitual run',color = settings.colors[-1],marker =settings.symbols[-1])
 				else:
 					ax.scatter(xs[jj], ys[jj],
 								s=settings.symbol_size_minor,
-							   alpha = 0.8,color = settings.colors[-1],marker =settings.symbols[-1])
+							   alpha = settings.alpha,color = settings.colors[-1],marker =settings.symbols[-1])
 				
 		study_i+=1
 
@@ -99,7 +99,7 @@ if __name__ == '__main__':
 
 	free_params_all = edit_params(free_params_all)
 	fig = plt.figure()
-	f, axes = plt.subplots(settings.graph_dims[0],settings.graph_dims[1],figsize=settings.fig_size, gridspec_kw={'width_ratios': settings.width_ration,'wspace':0.025})
+	f, axes = plt.subplots(settings.graph_dims[0],settings.graph_dims[1],figsize=settings.fig_size, gridspec_kw={'width_ratios': settings.width_ration,'wspace':0.01})
 
 	fig.subplots_adjust(wspace=.02)
 
@@ -110,9 +110,9 @@ if __name__ == '__main__':
 
 		# individual_files =  files_func(0,run_count)
 		individual_files =  files_func(0,20)
-		mean_files = {'1st set':'inferred_params_0_%d.json'%int(run_count/2),
-			'2nd set ':'inferred_params_%d_%d.json'%(run_count/2,run_count),
-			'Combined':'inferred_params_0_%d.json'%run_count}
+		mean_files = {'1st half of samples':'inferred_params_0_%d.json'%int(run_count/2),
+			'2nd half of samples':'inferred_params_%d_%d.json'%(run_count/2,run_count),
+			'All samples':'inferred_params_0_%d.json'%run_count}
 
 		individual_data = {} # stores data based on study tag
 		for file_ID,file in individual_files.items():
@@ -160,16 +160,18 @@ if __name__ == '__main__':
 			ax.yaxis.tick_right()
 			ax.set_yticks([(i) for i in range(len(free_params_all.keys()))])
 			ax.set_yticklabels(relabel_description(free_params_all.keys()))
+			left_edge = ax.spines["left"]
+			left_edge.set_visible(False)
 
 
 		else:
-			# left_edge = ax.spines["left"]
-			# left_edge.set_visible(False)
+			left_edge = ax.spines["left"]
+			left_edge.set_visible(False)
 			ax.set_yticks([], [])
 
 		ax.set_xticks([], [])
 		# plt.xlabel('Scaled values',fontsize = 17, family = settings.axis_font['fontname'])
-		ax.set_title(determine_title(study),fontdict =settings.title_font)
+		ax.set_title(determine_title(study),fontdict =settings.title_font,fontweight = 'normal')
 		study_ii+=1
 	# plt.yticks([(i) for i in range(len(free_params_all.keys()))], relabel_description(free_params_all.keys()),rotation=0,fontweight='normal')
 	for ax in axes:

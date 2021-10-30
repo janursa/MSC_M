@@ -192,7 +192,7 @@ free_params_Ber = {
 #     free_params[key] = free_params_all[key]
 def specifications(study):
     
-    if study == 'Qiao_IL8_IL1b':
+    if study == 'Qiao_2021_IL':
         studies = ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b']
         candidate = list(free_params_Qiao_IL8_IL1b.keys())
     elif study == 'Qiao_Mg':
@@ -210,6 +210,8 @@ def specifications(study):
     elif study == 'All':
         studies = ['Valles_2020_TNFa','Valles_2020_IL10','Chen_2018','Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b','Ber_2016']
         candidate = list(free_params_all.keys())
+    else:
+        raise ValueError('specifications of {} not defined.'.format(study))
     free_params  = {}
     for key in candidate:
         free_params[key] = free_params_all[key]
