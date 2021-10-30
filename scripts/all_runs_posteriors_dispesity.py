@@ -23,6 +23,7 @@ plt.rcParams["font.family"] = "serif"
 plt.rcParams["font.serif"] = ["Times New Roman"] + plt.rcParams["font.serif"]
 
 class settings:
+	results_folder = os.path.join(dir_to_dirs,'raw_results')
 	studies = ['Qiao_IL8_IL1b','Chen_2018','Valles_2020','Qiao_IL8_IL1b','Chen_2018','Valles_2020']
 	# studies = ['Qiao_IL8_IL1b']
 	runs = [400,200,200,400,200,200]
@@ -105,7 +106,7 @@ if __name__ == '__main__':
 
 	study_ii=0
 	for study,run_count in zip(settings.studies,settings.runs):
-		mean_results_file = os.path.join(dir_to_dirs,'results',study)
+		mean_results_file = os.path.join(settings.results_folder,study)
 		individual_results_file = os.path.join(mean_results_file,'batch_calibration')
 
 		# individual_files =  files_func(0,run_count)

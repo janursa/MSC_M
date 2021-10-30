@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib
 import copy
+import os
 plt.rcParams["font.family"] = "serif"
 plt.style.use('seaborn-deep')
 # plt.style.use('Agg')
@@ -123,12 +124,13 @@ class Plot_bar:
 	"""
 	Plots the results of a study by allocting a figure for each target and a bar for each ID
 	"""
-	def __init__(self,study,observations,errors):
+	def __init__(self,study,observations,errors,destination=''):
 		self.measurement_scheme = observations[study]['measurement_scheme']
 		self.study = study
 		self.observations = observations
 		self.colors = ['lime' , 'violet', 'yellowgreen', 'peru', 'skyblue']
 		self.errors = errors
+		self.destination = destination
 
 		if study == 'Valles_2020_IL10' or study == 'Valles_2020_TNFa':
 			self.graph_size = [4.5,8]
@@ -216,16 +218,17 @@ class Plot_bar:
 	@staticmethod
 	def p_values_positions(study,target,xx):
 		if study == 'Qiao_2021_IL8_IL1b':
-			Xs = xx
+			# print(study,xx)
+			Xs = xx[1]
 			Ys = 50
 		elif study == 'Qiao_2021_IL8':
-			Xs = [[xx[0],xx[2]],[xx[0],xx[3]]]
+			Xs = [xx[2],xx[3]]
 			Ys = [70,140]
 		elif study == 'Qiao_2021_IL1b':
-			Xs = [xx[0],xx[2]]
+			Xs = xx[2]
 			Ys = 50
 		elif study == 'Qiao_2021_Mg':
-			Xs = [[[xx[0][0],xx[1][0]],[xx[0][0],xx[2][0]]],[[xx[0][1],xx[1][1]],[xx[0][1],xx[2][1]]]]
+			Xs = [[xx[1][0],xx[2][0]],[xx[1][1],xx[2][1]]]
 			Ys = [[11,17],[18,23]]
 		elif study == 'Chen_2018' and target == 'ALP':
 			Xs = [xx[2]+.15,xx[3]+.15, xx[4]+.15, xx[5]+.15,xx[6]+.15]
@@ -234,19 +237,19 @@ class Plot_bar:
 			Xs = [xx[2]+.15,xx[3]+.15, xx[4]+.15, xx[5]+.15,xx[6]+.15]
 			Ys = [2.1,4.6,3.5,.7,.7]
 		elif study == 'Valles_2020_TNFa' and target == 'ALP':
-			Xs = [[xx[0],xx[2]]]
+			Xs = [xx[2]+.1]
 			Ys = [370]
 		elif study == 'Valles_2020_TNFa' and target == 'ARS':
-			Xs = [[xx[0],xx[2]]]
+			Xs = [xx[2]+.1]
 			Ys = [850]
 		elif study == 'Valles_2020_IL10' and target == 'ALP':
-			Xs = [[xx[0],xx[2]],[xx[0],xx[3]]]
+			Xs = [xx[2]+.1,xx[3]+.1]
 			Ys = [450,550]
 		elif study == 'Valles_2020_IL10' and target == 'ARS':
-			Xs = [[xx[0],xx[2]],[xx[0],xx[3]]]
+			Xs = [xx[2]+.1,xx[3]+.1]
 			Ys = [900,1050]
 		elif study == 'Ber_2016' and target == 'OC':
-			Xs = [xx[0][0],xx[1][0]]
+			Xs = xx[1][0]
 			Ys = .9
 		elif study == 'Ber_2016' and target == 'ALP':
 			Xs = None
@@ -294,24 +297,24 @@ class Plot_bar:
 	@staticmethod
 	def draw_p_values(ax,study,target,Xs,Ys):
 		if study == 'Qiao_2021_IL8_IL1b':
-			X,Y = Xs,Ys
-			barplot_annotate_brackets(significance=0.001,center=Xs,height=Ys)
+			barplot_annotate_stars(significance=0.001,
+					center=Xs,height=Ys)
 		elif study == 'Qiao_2021_IL8':
 			significance_list = [0.001,0.001]
 			for i in range(len(significance_list)):
-				barplot_annotate_brackets(significance=significance_list[i],
+				barplot_annotate_stars(significance=significance_list[i],
 					center=Xs[i],height=Ys[i])
 		elif study == 'Qiao_2021_IL1b':
 			X,Y = Xs,Ys
 			significance = 0.01 
-			barplot_annotate_brackets(significance=significance,
+			barplot_annotate_stars(significance=significance,
 				center=X,height=Y)
 		elif study == 'Qiao_2021_Mg':
 			significance_list = [[0.01,0.01],[0.01,0.001]]
 			for group_i in range(2):
 				for i in range(len(significance_list[group_i])):
-					barplot_annotate_brackets(significance=significance_list[group_i][i],
-						center=Xs[group_i][i],height=Ys[group_i][i])
+					barplot_annotate_stars(significance=significance_list[group_i][i],
+					center=Xs[group_i][i],height=Ys[group_i][i])
 		elif study == 'Chen_2018' and target == 'ALP':
 			significance_list = [0.01,0.01,0.01,0.01,0.01]
 			for i in range(len(significance_list)):
@@ -319,23 +322,29 @@ class Plot_bar:
 					center=Xs[i],height=Ys[i])
 		elif study == 'Chen_2018' and target == 'ARS':
 			significance_list = [0.01,0.01,0.01,0.01,0.01]
+			# print(study, Xs)
 			for i in range(len(significance_list)):
 				barplot_annotate_stars(significance=significance_list[i],
 					center=Xs[i],height=Ys[i])
 		elif study == 'Valles_2020_IL10' :
 			significance_list = [0.01,0.01]
 			for i in range(len(significance_list)):
-				barplot_annotate_brackets(significance=significance_list[i],
+				# barplot_annotate_brackets(significance=significance_list[i],
+				# 	center=Xs[i],height=Ys[i])
+				barplot_annotate_stars(significance=significance_list[0],
 					center=Xs[i],height=Ys[i])
 		elif  study == 'Valles_2020_TNFa':
 			significance_list = [0.01]
+			# print(study, Xs)
 			for i in range(len(significance_list)):
-				barplot_annotate_brackets(significance=significance_list[i],
+				# barplot_annotate_brackets(significance=significance_list[i],
+				# 	center=Xs[i],height=Ys[i])
+				barplot_annotate_stars(significance=significance_list[0],
 					center=Xs[i],height=Ys[i])
 		elif study == 'Ber_2016' and target == 'OC':
 			X,Y = Xs,Ys
 			significance = 0.01 
-			barplot_annotate_brackets(significance=significance,
+			barplot_annotate_stars(significance=significance,
 				center=X,height=Y)
 		
 	@staticmethod
@@ -433,7 +442,7 @@ class Plot_bar:
 			exp_std = [exp_target_results[target][i]['std'] for i in range(len(exp_target_results[target]))]
 			exp_values = [item[0] for item in exp_values]
 			exp_std = [item[0] for item in exp_std]
-			print(x_exp)
+			# print(x_exp)
 			ax.bar(x=x_exp,height=exp_values,width = self.bar_width, label = 'E', 
 					facecolor = self.colors[1],hatch=r'\\\\',
 					 edgecolor="black", yerr =  exp_std,
@@ -504,7 +513,7 @@ class Plot_bar:
 		if self.study == 'Qiao_2021_Mg':
 			ax.get_xaxis().set_major_formatter(
 				matplotlib.ticker.FuncFormatter(lambda x, p: format(int(int(x)/24), ',')))
-		plt.savefig(self.study+'.svg',bbox_inches='tight')
+		plt.savefig(os.path.join(self.destination, self.study+'.svg'),bbox_inches='tight')
 
 	def sort(self,sim_results):
 		exp_target_results = {}
@@ -653,7 +662,7 @@ class Plot_bar_2(Plot_bar):
 			for jj in range(len(self.observations[self.study]['IDs'])):
 				ID = self.observations[self.study]['IDs'][jj]
 				ID_lebel = self.ID_label(ID)
-				print(xs)
+				# print(xs)
 
 				ax.bar(x=xs[jj][0],height=sim_target_results[target][jj],width = self.bar_width, label = "S-"+ID_lebel, 
 						facecolor = self.colors[jj],

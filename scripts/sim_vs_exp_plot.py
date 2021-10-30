@@ -16,6 +16,21 @@ import numpy as np
 importlib.reload(plots)
 importlib.reload(parameters)
 importlib.reload(MSC_osteogenesis)
+def results_file(study):
+	file = None
+	if study == 'Qiao_2021_Mg':
+		file = 'inferred_params_0_200.json'
+	elif study == 'All':
+		file = 'inferred_params_0_200.json'
+	return file
+
+class settings:
+	# study = 'Qiao_2021_Mg'
+	study = 'All'
+	results_folder = os.path.join(dir_to_dirs,'raw_results',study)
+	results_file = os.path.join(results_folder,results_file(study))
+	output_folder = results_folder
+		
 
 def rearrange_errors(errors,targets):
 #     print(errors)
@@ -29,19 +44,18 @@ def rearrange_errors(errors,targets):
     return target_errors
     
 ##/ run test simultions and plot
-results_folder = os.path.join(dir_to_dirs,'results')
-with open(os.path.join(results_folder,'Valles.json')) as file:
+
+with open(os.path.join(settings.results_file)) as file:
     inferred_params = json.load(file)
 # inferred_params['a_late_diff_inhib'] = 10
 all_studies_flag = False
-obs,_ = parameters.specifications('Valles_2020')
+obs,_ = parameters.specifications(settings.study)
 
 obj = MSC_osteogenesis.MSC_model(fixed_params=parameters.fixed_params,free_params = inferred_params,observations=obs, debug=False)
 simulation_results = obj.simulate_studies()
 study_errors = obj.cost_studies(simulation_results)
 
 error = obj.run()
-# print(studies_errors)
 
 print('Overall error is ',error)
 
@@ -49,7 +63,7 @@ for study in obs['studies']:
     targets = list(obs[study]['measurement_scheme'].keys())
     study_error = rearrange_errors(study_errors[study],targets)
     if study == 'Qiao_2021_Mg' or study == 'Ber_2016':
-        plot_obj = plots.Plot_bar_2(study=study,observations=obs,errors=study_error)
+        plot_obj = plots.Plot_bar_2(study=study,observations=obs,errors=study_error,destination = settings.output_folder)
     else:
-        plot_obj = plots.Plot_bar(study,obs,errors=study_error)
+        plot_obj = plots.Plot_bar(study=study,observations=obs,errors=study_error,destination = settings.output_folder)
     plot_obj.plot(simulation_results[study])

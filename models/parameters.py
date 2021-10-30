@@ -195,7 +195,7 @@ def specifications(study):
     if study == 'Qiao_2021_IL':
         studies = ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b']
         candidate = list(free_params_Qiao_IL8_IL1b.keys())
-    elif study == 'Qiao_Mg':
+    elif study == 'Qiao_2021_Mg':
         studies = ['Qiao_2021_Mg']
         candidate = free_params_Qiao_Mg
     elif study == 'Ber_2016':
@@ -208,7 +208,7 @@ def specifications(study):
         studies = ['Chen_2018']
         candidate = free_params_Chen
     elif study == 'All':
-        studies = ['Valles_2020_TNFa','Valles_2020_IL10','Chen_2018','Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b','Ber_2016']
+        studies = ['Valles_2020_TNFa','Valles_2020_IL10','Chen_2018','Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b','Qiao_2021_Mg','Ber_2016']
         candidate = list(free_params_all.keys())
     else:
         raise ValueError('specifications of {} not defined.'.format(study))
