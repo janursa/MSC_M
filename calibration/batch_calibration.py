@@ -14,6 +14,7 @@ sys.path.insert(0,dir_to_dirs)
 from dirs import dir_to_MSC_osteogenesis
 sys.path.insert(0,dir_to_MSC_osteogenesis)
 from MSC_osteogenesis import *
+from parameters import specifications, fixed_params
 
 class Batch_calibrate:
 	def __init__(self,replica_n):
@@ -31,7 +32,7 @@ class Batch_calibrate:
 			else:
 				print("Successfully created the directory %s " % self.dir_name)
 
-	def run(self):
+	def run(self,obs,free_params):
 		"""Runs the user given model for the parameter sets.
 		"""
 		if self.rank == 0:
@@ -66,7 +67,7 @@ class Batch_calibrate:
 						inferred_params = json.load(file)
 						print('\n loaded params ',inferred_params)
 				else:
-					inferred_params = calibrate(fixed_params = fixed_params, free_params = free_params,n_proc=1,disp=False)
+					inferred_params = calibrate(fixed_params = fixed_params, free_params = free_params,observations=obs, n_proc=1,disp=False)
 					with open(output_file,'w') as file:
 						file.write(json.dumps(inferred_params, indent = 4))
 
@@ -107,6 +108,8 @@ class Batch_calibrate:
 					file.write(json.dumps(error_list_accumulated, indent = 4))
 
 if __name__ == '__main__':
-	replica_n = [0,50]
+	replica_n = [0,2]
+	study = 'All'
+	obs,free_params = specifications(study)
 	obj = Batch_calibrate(replica_n)
-	obj.run()
+	obj.run(obs = obs,free_params = free_params)
