@@ -17,18 +17,27 @@ def determine_cut_off_error(study):
 	value = None
 	if study == 'Qiao_2021_Mg':
 		value = 0.08
+	elif study == 'Ber_2016':
+		value = 0.01
+	elif study == 'Chen_2018':
+		value = 0.065
+	elif study == 'Valles_2020':
+		value = 0.06
 	elif study == 'All':
-		value = 0.15
+		value = 0.2
 	return value
 
 class PARAMS:
-	study = 'All'
+	# study = 'Ber_2016'
+	study = 'Chen_2018'
+	# study = 'Valles_2020'
+	# study = 'All'
 	main_output_folder = os.path.join(dir_to_dirs,'raw_results',study)
 	results_folder = os.path.join(main_output_folder,'batch_calibration')
 	dest_folder = os.path.join(main_output_folder,'batch_calibration_selected')
 	error_cut_off_value = determine_cut_off_error(study)
 	n_start = 0
-	n_end = 274
+	n_end = 300
 
 try:
     os.makedirs(PARAMS.dest_folder)

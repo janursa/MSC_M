@@ -18,42 +18,28 @@ sys.path.insert(0,dir_to_dirs)
 from dirs import dir_to_MSC_osteogenesis
 sys.path.insert(0,dir_to_MSC_osteogenesis)
 from parameters import free_params_all
-from posteriors_dispersity import relabel,edit_params,relabel_description
+from posteriors_dispersity import relabel,edit_params,relabel_description,determine_title
 plt.rcParams["font.family"] = "serif"
 plt.rcParams["font.serif"] = ["Times New Roman"] + plt.rcParams["font.serif"]
 
 class settings:
-	results_folder = os.path.join(dir_to_dirs,'raw_results')
-	studies = ['Qiao_IL8_IL1b','Chen_2018','Valles_2020','Qiao_IL8_IL1b','Chen_2018','Valles_2020']
-	# studies = ['Qiao_IL8_IL1b']
-	runs = [400,200,200,400,200,200]
+	results_folder = os.path.join(dir_to_dirs,'results')
+	studies = ['Qiao_2021_Mg','Ber_2016','Chen_2018','Valles_2020','Qiao_2021_ILs','All']
+
+	runs = [200,120,200,200,400,200]
 	# runs = [400]
 	width_ration = [1,1,1,1,1,1]
 	graph_dims = (1,6)
-	axis_font = {'fontname':'Times New Roman', 'size':'14'}
-	legend_font = { 'family':'Times New Roman','size':'14'}
-	title_font = { 'family':'Times New Roman','size':'13'}
+	axis_font = {'fontname':'Times New Roman', 'size':'17'}
+	legend_font = { 'family':'Times New Roman','size':'17'}
+	title_font = { 'family':'Times New Roman','size':'16'}
 	colors = ['indigo' , 'olive', 'red','royalblue']
 	symbols = [">" , '<', "o",'+']
 	symbol_size_major = 70
 	symbol_size_minor = 30
 	alpha = .5
-	fig_size = (9,7)
-def determine_title(study):
-	title = ''
-	if study == 'Qiao_IL8_IL1b':
-		title = 'C5' 
-	elif study == 'Qiao_Mg':
-		title = 'C1'
-	elif study == 'Chen_2018':
-		title = 'C3'
-	elif study == 'Valles_2020':
-		title = 'C4'
-	elif study == 'Ber_2016':
-		title = 'C2'
-	elif study == 'All':
-		title = 'C1-5'
-	return title
+	fig_size = (12,7)
+
 
 
 
@@ -88,7 +74,7 @@ def plot(ax,data,label_flag = False):
 					indivitual_label_flag = False
 					ax.scatter(xs[jj], ys[jj],
 								s=settings.symbol_size_minor,
-							   alpha = settings.alpha,label='Indivitual run',color = settings.colors[-1],marker =settings.symbols[-1])
+							   alpha = settings.alpha,label='Single run',color = settings.colors[-1],marker =settings.symbols[-1])
 				else:
 					ax.scatter(xs[jj], ys[jj],
 								s=settings.symbol_size_minor,
@@ -110,9 +96,9 @@ if __name__ == '__main__':
 		individual_results_file = os.path.join(mean_results_file,'batch_calibration')
 
 		# individual_files =  files_func(0,run_count)
-		individual_files =  files_func(0,20)
-		mean_files = {'1st half of samples':'inferred_params_0_%d.json'%int(run_count/2),
-			'2nd half of samples':'inferred_params_%d_%d.json'%(run_count/2,run_count),
+		individual_files =  files_func(0,settings.runs[study_ii])
+		mean_files = {'1$^{st}$ batch':'inferred_params_0_%d.json'%int(run_count/2),
+			'2$^{nd}$ batch':'inferred_params_%d_%d.json'%(run_count/2,run_count),
 			'All samples':'inferred_params_0_%d.json'%run_count}
 
 		individual_data = {} # stores data based on study tag
@@ -154,7 +140,7 @@ if __name__ == '__main__':
 		if study_ii == 0:
 			ax.set_yticks([(i) for i in range(len(free_params_all.keys()))])
 			ax.set_yticklabels(relabel(free_params_all.keys()))
-			ax.legend(bbox_to_anchor=(0.1, 1.13), loc='upper left', borderaxespad=0.,prop=settings.legend_font,ncol=4)
+			ax.legend(bbox_to_anchor=(0.1, 1.15), loc='upper left', borderaxespad=0.,prop=settings.legend_font,ncol=4)
 
 		elif study_ii == len(settings.width_ration)-1:
 			ax.yaxis.set_label_position("right")

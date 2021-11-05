@@ -34,7 +34,7 @@ line_patterns = [[8,2,8,2],[2,1,2,1],[8,1,8,1],[2,2,2,2],[4,1,4,1]]
 format = ".svg"
 
 def plot_IL8():
-    fig,ax = plt.subplots(figsize=(4.5, 3))
+    fig,ax = plt.subplots(figsize=(3.6, 3))
     intervals_real = [0,10,100]
     intervals = [0,3.5,7] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'TNFa')
@@ -61,15 +61,15 @@ def plot_IL8():
     intervals_real[1] = r'$p_{8f}$'
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Concentration (mM)',**axis_font)
-    tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2]-.5]
+    tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2]-.6]
     tags = ['Negligible','Favorable','Stimulatory']
     return fig,ax,'IL-8',tags_x_locs,tags
       
 
 def plot_IL1b():
-    fig,ax = plt.subplots(figsize=(4.5, 3))
+    fig,ax = plt.subplots(figsize=(3.8, 3))
     intervals_real = [0,10,50,200]
-    intervals = [0,5,10,12] #fake ones
+    intervals = [0,5.3,10,12] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'IL1b')
 
     # Generate fuzzy membership functions
@@ -101,10 +101,10 @@ def plot_IL1b():
     return fig,ax,'IL-1$\\beta$',tags_x_locs,tags
 
 def plot_MG():
-    fig = pylab.figure(figsize=(9.5, 3))
+    fig = pylab.figure(figsize=(8.5, 3))
     ax = fig.add_subplot(111)
     intervals_real = [0,0.08,0.8,1.8,5,20,40,60]
-    intervals = [0,1.5,6.5,9,11.5,16.5,21.5,24] #fake ones
+    intervals = [0,1.5,6,9,11.5,17,21.5,24] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'Mg')
     
     # Generate fuzzy membership functions
@@ -138,13 +138,13 @@ def plot_MG():
     ax.set_xticklabels(intervals_real)
     # ax.set_ylabel('Membership',**axis_font)
     ax.set_xlabel('Concentration (mM)',**axis_font)
-    tags_x_locs = [intervals[0]+1,intervals[2],intervals[4],intervals[5],intervals[6],intervals[-1]-2]
+    tags_x_locs = [intervals[0]+.5,intervals[2],intervals[4],intervals[5],intervals[6],intervals[-1]-2]
     tags = ['Inhibitory ED','Physiological','Stimulatory ED','Ineffective','Inhibitory','Inhibitory LD']
     return fig,ax,'Mg$^{2+}$ ions',tags_x_locs,tags 
 
 
 def plot_IL10_above48():
-    fig,ax = plt.subplots(figsize=(6, 3))
+    fig,ax = plt.subplots(figsize=(5, 3))
     intervals_real = [0,0.1,1,10,100]
     intervals = [0,6,12,18,20] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'IL10')
@@ -172,12 +172,12 @@ def plot_IL10_above48():
     ax.set_xticklabels(intervals_real)
     # ax.set_ylabel('Membership',**axis_font)
     ax.set_xlabel('Concentration (ng/ml)',**axis_font)
-    tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2],intervals[3]+1]
+    tags_x_locs = [intervals[0],intervals[1],intervals[2],intervals[3]+1]
     tags = ['Negligible','Stimulatory','Favorable','Inhibitory']
     return fig,ax,'IL-10 above 48 h',tags_x_locs,tags 
 
 def plot_IL10_below48():
-    fig,ax = plt.subplots(figsize=(6, 3))
+    fig,ax = plt.subplots(figsize=(5, 3))
     intervals_real = [0,1,10,100]
     intervals = [0,6,12,18] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'IL10')
@@ -205,11 +205,11 @@ def plot_IL10_below48():
     ax.set_xticklabels(intervals_real)
     # ax.set_ylabel('Membership',**axis_font)
     ax.set_xlabel('Concentration (ng/ml)',**axis_font)
-    tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2],intervals[3]]
+    tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2],intervals[3]-.2]
     tags = ['Negligible','Favorable','Stimulatory','Inhibitory']
     return fig,ax,'IL-10 below 48 h',tags_x_locs,tags
 def plot_TNFa():
-    fig,ax = plt.subplots(figsize=(6, 3))
+    fig,ax = plt.subplots(figsize=(5, 3))
     intervals_real = [0,1,10,100]
     intervals = [0,6,12,18] #fake ones
     factor = ctrl.Antecedent(np.arange(0, intervals[-1], .005), 'TNFa')
@@ -236,7 +236,7 @@ def plot_TNFa():
     ax.set_xticks(intervals) 
     ax.set_xticklabels(intervals_real)
     ax.set_xlabel('Concentration (mM)',**axis_font)
-    tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2],intervals[3]]
+    tags_x_locs = [intervals[0]+.5,intervals[1],intervals[2],intervals[3]-.1]
     tags = ['Negligible','Stimulatory','Ineffective', 'Inhibitory']
     return fig,ax,'TNF-$\\alpha$',tags_x_locs,tags
 

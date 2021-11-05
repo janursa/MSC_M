@@ -180,27 +180,27 @@ class Plot_bar:
 	@staticmethod
 	def determine_yrange(study,target):
 		if study == 'Qiao_2021_IL8_IL1b':
-			yrange_value = [0,85]
+			yrange_value = [0,60]
 		elif study == 'Qiao_2021_IL8' :
-			yrange_value = [0,230]
+			yrange_value = [0,160]
 		elif study == 'Qiao_2021_IL1b':
-			yrange_value = [0,90]
+			yrange_value = [0,60]
 		elif study == 'Qiao_2021_Mg':
-			yrange_value = [0,35]
+			yrange_value = [0,30]
 		elif study == 'Chen_2018' and target=='ALP':
 			yrange_value = [0,7]
 		elif study == 'Chen_2018' and target=='ARS':
 			yrange_value = [0,5.5]
 		elif study == 'Valles_2020_TNFa' and target=='ALP':
-			yrange_value = [0,750]
+			yrange_value = [0,600]
 		elif study == 'Valles_2020_TNFa' and target=='ARS':
-			yrange_value = [0,1600]
+			yrange_value = [0,1300]
 		elif study == 'Valles_2020_IL10' and target=='ALP':
-			yrange_value = [0,1000]
+			yrange_value = [0,600]
 		elif study == 'Valles_2020_IL10' and target=='ARS':
-			yrange_value = [0,1800]
+			yrange_value = [0,1200]
 		elif study == 'Ber_2016' and target=='OC':
-			yrange_value = [0,1.7]
+			yrange_value = [0,1.6]
 		elif study == 'Ber_2016' and target=='ALP':
 			yrange_value = [0,.6]
 
@@ -219,13 +219,13 @@ class Plot_bar:
 	def p_values_positions(study,target,xx):
 		if study == 'Qiao_2021_IL8_IL1b':
 			# print(study,xx)
-			Xs = xx[1]
+			Xs = xx[1]+.08
 			Ys = 50
 		elif study == 'Qiao_2021_IL8':
-			Xs = [xx[2],xx[3]]
+			Xs = [xx[2]+.15,xx[3]+.15]
 			Ys = [70,140]
 		elif study == 'Qiao_2021_IL1b':
-			Xs = xx[2]
+			Xs = xx[2]+.14
 			Ys = 50
 		elif study == 'Qiao_2021_Mg':
 			Xs = [[xx[1][0],xx[2][0]],[xx[1][1],xx[2][1]]]
@@ -238,19 +238,19 @@ class Plot_bar:
 			Ys = [2.1,4.6,3.5,.7,.7]
 		elif study == 'Valles_2020_TNFa' and target == 'ALP':
 			Xs = [xx[2]+.1]
-			Ys = [370]
+			Ys = [350]
 		elif study == 'Valles_2020_TNFa' and target == 'ARS':
 			Xs = [xx[2]+.1]
-			Ys = [850]
+			Ys = [750]
 		elif study == 'Valles_2020_IL10' and target == 'ALP':
 			Xs = [xx[2]+.1,xx[3]+.1]
-			Ys = [450,550]
+			Ys = [450,520]
 		elif study == 'Valles_2020_IL10' and target == 'ARS':
 			Xs = [xx[2]+.1,xx[3]+.1]
-			Ys = [900,1050]
+			Ys = [900,980]
 		elif study == 'Ber_2016' and target == 'OC':
 			Xs = xx[1][0]
-			Ys = .9
+			Ys = .4
 		elif study == 'Ber_2016' and target == 'ALP':
 			Xs = None
 			Ys = None
@@ -259,21 +259,21 @@ class Plot_bar:
 	def draw_R2(self,ax,study,target):
 		value = round(1-self.errors[target],2)
 		if study == 'Qiao_2021_Mg':
-			xy = (55,28)
+			xy = (55,22)
 		elif study == 'Ber_2016':
 			if target == 'ALP':
 				xy = (150,.45)
 			elif target == 'OC':
-				xy = (150,1.35)
+				xy = (150,1.2)
 		elif study == 'Qiao_2021_IL8':
 			if target == 'ALP':
-				xy = (-0.1,190)
+				xy = (-0.1,120)
 		elif study == 'Qiao_2021_IL8_IL1b':
 			if target == 'ALP':
-				xy = (-0.1,70)
+				xy = (-0.1,45)
 		elif study == 'Qiao_2021_IL1b':
 			if target == 'ALP':
-				xy = (0,70)
+				xy = (0,45)
 		elif study == 'Chen_2018':
 			if target == 'ALP':
 				xy = (-1,5)
@@ -281,14 +281,14 @@ class Plot_bar:
 				xy = (-1,4)
 		elif study == 'Valles_2020_IL10':
 			if target == 'ALP':
-				xy = (0,750)
+				xy = (0,450)
 			elif target == 'ARS':
-				xy = (0,1400)
+				xy = (0,950)
 		elif study == 'Valles_2020_TNFa':
 			if target == 'ALP':
-				xy = (0,550)
+				xy = (0,450)
 			elif target == 'ARS':
-				xy = (0,1250)
+				xy = (0,1000)
 		else:
 			raise ValueError('draw_R2 is not defined for {}'.format(study))
 
@@ -594,13 +594,13 @@ class Plot_bar_2(Plot_bar):
 			self.graph_size = [5,4]
 			self.bar_width = 8
 			self.error_bar_width = 3
-			self.legend_font_size = 17
-			self.tick_font_size = 20
-			self.title_font_size = 20
-			self.legend_location = [1.7,1.15]
+			self.legend_font_size = 19
+			self.tick_font_size = 22
+			self.title_font_size = 22
+			self.legend_location = [1.75,1.15]
 			self.yaxis_title = ''
 			self.xaxis_title = ''
-			self.R2_font_size  = 18
+			self.R2_font_size  = 20
 			self.D = 85 # the length in which all Mg dosages are plotted in a certain time point
 			self.delta = 5 # gap between exp and sim
 		elif self.study == 'Ber_2016':

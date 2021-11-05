@@ -8,6 +8,7 @@ from dirs import dir_to_MSC_osteogenesis
 sys.path.insert(0,dir_to_MSC_osteogenesis)
 import parameters 
 from MSC_osteogenesis import MSC_model,single_run
+sys.path.insert(0,'/Users/matin/Downloads/testProjs/barneySA')
 from barneySA import tools
 import json
 import copy
@@ -15,12 +16,12 @@ import copy
 class settings:
     results_folder = os.path.join(dir_to_dirs,'results')
     files = {
-    'Qiao_Mg':'Qiao_Mg.json',
-    'Qiao_IL8_IL1b':'Qiao_IL8_IL1b/inferred_params_0_400.json',
-    'Chen_2018':'Chen/inferred_params_0_200.json',
-    'Valles_2020':'Valles/inferred_params_0_200.json',
-    'Ber_2016':'Ber.json',
-    'All':'all.json',
+    'Qiao_2021_Mg': 'Qiao_2021_Mg/inferred_params_0_200.json',
+    'Ber_2016': 'Ber_2016/inferred_params_0_120.json',
+    'Valles_2020': 'Valles_2020/inferred_params_0_200.json',
+    'Chen_2018': 'Chen_2018/inferred_params_0_200.json',
+    'Qiao_2021_ILs': 'Qiao_2021_ILs/inferred_params_0_400.json',
+    'All': 'All/inferred_params_0_200.json',
     }
 
 SA_settings = { # define settings
@@ -30,7 +31,7 @@ SA_settings = { # define settings
     "model":MSC_model, # this runs the mode
     "args": {'fixed_params':parameters.fixed_params,'observations':None}
 }
-tricky_keys = { 'Qiao_IL8_IL1b':['ALP_M_n',  'IL1b_ineffective',  'IL8_favorable',  'a_early_diff_stim', 'diff_time', 'a_Qiao_2021_ALP'],
+tricky_keys = { 'Qiao_2021_ILs':['ALP_M_n',  'IL1b_ineffective',  'IL8_favorable',  'a_early_diff_stim', 'diff_time', 'a_Qiao_2021_ALP'],
                 
                 'Valles_2020':[ 'diff_time', 'a_Valles_2020_ALP', 'a_Valles_2020_ARS'],
                 
@@ -38,7 +39,7 @@ tricky_keys = { 'Qiao_IL8_IL1b':['ALP_M_n',  'IL1b_ineffective',  'IL8_favorable
 
                 'Ber_2016':[  'a_late_diff_inhib'],
 
-                'Qiao_Mg':[   'Mg_stim', 'a_Valles_2020_ALP'],
+                'Qiao_2021_Mg':[ 'ALP_M_n', 'ALP_0', 'Mg_stim', 'Mg_dest', 'maturity_t', 'early_diff_fast', 'a_early_diff_stim', 'diff_time', 'a_Valles_2020_ALP'],
 
                 'All':[ 'a_Valles_2020_ALP', 'a_Valles_2020_ARS', 'a_Chen_2018_ALP',  'a_Qiao_2021_ALP', 'a_early_diff_inhib', 'a_late_diff_stim', 'a_late_diff_inhib',  'IL1b_ineffective', 'ALP_M_n',  'diff_time',]
 
@@ -48,8 +49,8 @@ tricky_keys = { 'Qiao_IL8_IL1b':['ALP_M_n',  'IL1b_ineffective',  'IL8_favorable
 def limit_bounds(study,bounds):
     for key in tricky_keys[study]:
         if key in bounds.keys():
-            # bounds[key] = [int(item) for item in bounds[key]]
-            bounds[key] = parameters.free_params_all[key]
+            bounds[key] = [int(item) for item in bounds[key]]
+            # bounds[key] = parameters.free_params_all[key]
 
     for key,value in bounds.items():
         lower_limit,upper_limit = parameters.free_params_all[key]
@@ -81,10 +82,9 @@ def remove_params(params):
     return params
 
 if __name__ == '__main__':
-    if False:
+    if True:
         PTTSs_studies = {}
         for study,file in settings.files.items():
-            print(study)
             with open(os.path.join(settings.results_folder,file)) as file:
                 inferred_params = json.load(file)
             # inferred_params = remove_params(inferred_params)
@@ -92,8 +92,8 @@ if __name__ == '__main__':
             bounds = {}
             for key,value in inferred_params.items():
                 bounds[key] = [round(value*.5,3),round(value*1.5,3)]
-
-            bounds = limit_bounds(study,bounds)
+            print(bounds)
+            # bounds = limit_bounds(study,bounds)
             obs,_ = parameters.specifications(study)
             SA_settings['args']['observations'] = obs
             PTTSs= sensitivity_analysis(bounds,SA_settings)
@@ -111,7 +111,7 @@ if __name__ == '__main__':
         #// Create bounds by multiplying and dividing to 2
         bounds = {}
         for key,value in inferred_params.items():
-            bounds[key] = [round(value*0.5,3),round(value*1.5,3)]
+            bounds[key] = [round(value*0.85,3),round(value*1.15,3)]
         bounds = limit_bounds(study,bounds)
         #// run the model for each bound
         obs,_ = parameters.specifications(study)

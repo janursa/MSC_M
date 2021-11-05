@@ -278,8 +278,8 @@ struct Fuzzy_IL10:public base_model {
         if (above_48h){
             vector<float> intervals = {0,0.1,1,10,100};
             input->addTerm(new Triangle("Neg", intervals[0], intervals[0],intervals[1]));
-            input->addTerm(new Triangle("Favorable", intervals[0], intervals[1], intervals[2]));
-            input->addTerm(new Triangle("Stimulatory", intervals[1], intervals[2], intervals[3]));
+            input->addTerm(new Triangle("Stimulatory", intervals[0], intervals[1], intervals[2]));
+            input->addTerm(new Triangle("Favorable", intervals[1], intervals[2], intervals[3]));
             input->addTerm(new Trapezoid("Inhib", intervals[2], intervals[3], intervals[4],intervals[4]));
 
         }else{

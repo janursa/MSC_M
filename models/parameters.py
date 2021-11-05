@@ -115,26 +115,37 @@ free_params_Qiao_IL8_IL1b = {
     'diff_time':[15*24,45*24], # days required for full differentiation ---
     'a_Qiao_2021_ALP':[0,200],
 }
-free_params_Chen = [
-    'ALP_M_n',
-    'ARS_M_n',
-    'ALP_0',
-    'ARS_0',
-    'maturity_t',
-    'early_diff_slow',
-    'early_diff_fast',
-    'early_diff_very_fast',
-    'late_diff_slow',
-    'late_diff_fast',
-    'a_early_diff_stim',
-    'a_early_diff_inhib',
-    'a_late_diff_stim',
-    'a_late_diff_inhib',
-    'diff_time',
+free_params_Chen = {
+    
+    'a_Chen_2018_ALP':[0,10],
+    'a_Chen_2018_ARS':[0,10],
 
-    'a_Chen_2018_ALP',
-    'a_Chen_2018_ARS',
-]
+    'a_early_diff_stim':[0,10], # scale factor, upregulatory --
+    'a_early_diff_inhib':[0,20], # scale factor, downregulatory --
+    'a_late_diff_stim':[0,20], # scale factor --
+    'a_late_diff_inhib':[0,10], # scale factor --
+
+
+    'early_diff_slow':[0.1,0.4], # center of low membership function --
+    'early_diff_fast':[0.5,0.75], # center of high membership function --
+    'early_diff_very_fast':[0.6,1], # center of high membership function --
+    'late_diff_slow':[0.1,0.4], # center of low membership function --
+    'late_diff_fast':[0.6,0.9], # center of high membership function --
+
+    'Mg_stim':[2,10], # stimulatory conc of Mg --
+    'Mg_dest':[20,40], # detrimental conc of Mg --
+    'IL1b_ineffective':[30,199], # high threshold IL1b --
+    'IL1b_stim':[1,29], # stimulatory threshold of IL1b --
+    'IL8_favorable':[1,99], # medium threshold for IL8 --
+
+    'ALP_M_n':[0,10], # n in the equation ALP = a*(M^n + ALP_0)
+    'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
+    'ALP_0':[0,1], # the default value of ALP when maturity is zero
+    'ARS_0':[0,1], # the default value of ARS when maturity is zero 
+
+    'diff_time':[15*24,45*24], # days required for full differentiation ---
+    'maturity_t':[0,1] # early maturity threshold.  ---
+}
 free_params_Valles = [
     'ALP_M_n',
     'ARS_M_n',
@@ -192,7 +203,7 @@ free_params_Ber = {
 #     free_params[key] = free_params_all[key]
 def specifications(study):
     
-    if study == 'Qiao_2021_IL':
+    if study == 'Qiao_2021_ILs':
         studies = ['Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b']
         candidate = list(free_params_Qiao_IL8_IL1b.keys())
     elif study == 'Qiao_2021_Mg':
@@ -206,7 +217,7 @@ def specifications(study):
         candidate = free_params_Valles
     elif study == 'Chen_2018':
         studies = ['Chen_2018']
-        candidate = free_params_Chen
+        candidate = list(free_params_Chen.keys())
     elif study == 'All':
         studies = ['Valles_2020_TNFa','Valles_2020_IL10','Chen_2018','Qiao_2021_IL8_IL1b','Qiao_2021_IL8','Qiao_2021_IL1b','Qiao_2021_Mg','Ber_2016']
         candidate = list(free_params_all.keys())
