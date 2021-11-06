@@ -15,7 +15,7 @@ from parameters import specifications, fixed_params
 ##// optimize //##
 class Calibrate:
 	def __init__(self,fixed_params,free_params,observations):
-		self.max_iters = 100
+		self.max_iters = 300
 		self.free_params = free_params
 		self.fixed_params = fixed_params
 		self.obs = observations
@@ -52,7 +52,7 @@ if __name__ == '__main__':
 	##/ calibrate
 	n_proc = sys.argv[1]
 	# study = 'Chen_2018'
-	study = 'Valles_2020'
+	study = 'All'
 	print('number of assigned processers:',n_proc)
 	obs,free_params = specifications(study = study)
 	calibrate(fixed_params = fixed_params,free_params=free_params,observations=obs,n_proc=n_proc)

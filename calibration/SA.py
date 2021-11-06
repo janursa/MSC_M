@@ -16,12 +16,13 @@ import copy
 class settings:
     results_folder = os.path.join(dir_to_dirs,'results')
     files = {
-    'Qiao_2021_Mg': 'Qiao_2021_Mg/inferred_params_0_200.json',
-    'Ber_2016': 'Ber_2016/inferred_params_0_120.json',
-    'Valles_2020': 'Valles_2020/inferred_params_0_200.json',
-    'Chen_2018': 'Chen_2018/inferred_params_0_200.json',
-    'Qiao_2021_ILs': 'Qiao_2021_ILs/inferred_params_0_400.json',
-    'All': 'All/inferred_params_0_200.json',
+    # 'Qiao_2021_Mg': 'Qiao_2021_Mg/inferred_params_0_200.json',
+    # 'Ber_2016': 'Ber_2016/inferred_params_0_120.json',
+    # 'Valles_2020': 'Valles_2020/inferred_params_0_200.json',
+    # 'Chen_2018': 'Chen_2018/inferred_params_0_200.json',
+    # 'Qiao_2021_ILs': 'Qiao_2021_ILs/inferred_params_0_400.json',
+    # 'All': 'All/inferred_params_0_200.json',
+    'All': 'inferred_params.json',
     }
 
 SA_settings = { # define settings
@@ -80,9 +81,39 @@ def remove_params(params):
     # if 'ARS_M_n' in params:
     #     del params['ARS_M_n']
     return params
+def detailed_errors(set1,set2):
+    study_detailed_errors = {}
+    for study_name in set1.keys():
+        if study_name not in set2:
+            raise ValueError('set1 and set2 doent have same study names')
+
+        assert(set1[study_name].keys() == set2[study_name].keys()) # both should have same IDs
+        IDs = list(set1[study_name].keys())
+        set1_results = set1[study_name]
+        set2_results = set2[study_name]
+
+        IDs_detailed_errors = {}
+        for ID in IDs:
+            set1_ID_results = set1_results[ID]
+            set2_ID_results = set2_results[ID]
+            target_detailed_errors = {}
+            for target in set1_ID_results.keys():
+                set1_target_results = set1_ID_results[target]
+                set2_target_results = set2_ID_results[target]
+                assert(len(set1_target_results) == len(set2_target_results))
+                errors = []
+                for i in range(len(set1_target_results)):
+                    error = abs(set1_target_results[i]-set2_target_results[i])/2
+                    errors.append(error)
+                target_detailed_errors[target] = errors
+            IDs_detailed_errors[ID] = target_detailed_errors
+        study_detailed_errors[study_name] = IDs_detailed_errors
+    return study_detailed_errors
+
+
 
 if __name__ == '__main__':
-    if True:
+    if False:
         PTTSs_studies = {}
         for study,file in settings.files.items():
             with open(os.path.join(settings.results_folder,file)) as file:
@@ -92,7 +123,7 @@ if __name__ == '__main__':
             bounds = {}
             for key,value in inferred_params.items():
                 bounds[key] = [round(value*.5,3),round(value*1.5,3)]
-            print(bounds)
+            # print(bounds)
             # bounds = limit_bounds(study,bounds)
             obs,_ = parameters.specifications(study)
             SA_settings['args']['observations'] = obs
@@ -104,6 +135,7 @@ if __name__ == '__main__':
 
     #// run the model for the variation of each parameter and obtain the contribution each paramter make for the accuracy of the results
     study_params_errors = {}
+    study_detailed_errors = {} # errors for each measurement day and item for each scenario of perturbation
     for study,file in settings.files.items():
         print(study)
         with open(os.path.join(settings.results_folder,file)) as file:
@@ -115,8 +147,12 @@ if __name__ == '__main__':
         bounds = limit_bounds(study,bounds)
         #// run the model for each bound
         obs,_ = parameters.specifications(study)
-        original_error = single_run(free_params=inferred_params,fixed_params=parameters.fixed_params,observations=obs)
+        original_error = single_run(free_params=inferred_params,fixed_params=parameters.fixed_params,observations=obs) # get the overall error for SA
+        obj = MSC_model(free_params=inferred_params,fixed_params=parameters.fixed_params,observations=obs) # get the specific errors for each measurement points for standard deviation
+        original_results = obj.simulate_studies()
+
         params_errors = {}
+        study_detailed_errors [study] = [] # we insert results of each variation of paramter perturbation into the study list and then find the max values
         for key,bound in bounds.items():
             errors = []
             free_params =copy.deepcopy(inferred_params)
@@ -124,6 +160,12 @@ if __name__ == '__main__':
                 free_params[key] = item
                 error = single_run(free_params=free_params,fixed_params=parameters.fixed_params,observations=obs)
                 errors.append(error)
+
+                obj = MSC_model(free_params=free_params,fixed_params=parameters.fixed_params,observations=obs) # get the specific errors for each measurement points for standard deviation
+                sub_results = obj.simulate_studies()
+                sub_errors = detailed_errors(sub_results,original_results)
+                study_detailed_errors[study].append(sub_errors)
+
             params_errors[key] = errors
         # print('\n',params_errors)    
         params_errors_nomalized={}
@@ -137,6 +179,8 @@ if __name__ == '__main__':
         study_params_errors[study] = params_errors_nomalized
     with open(os.path.join(settings.results_folder,'contributed_errors.json'),'w') as file:
         file.write(json.dumps(study_params_errors,indent=2))
+    with open(os.path.join(settings.results_folder,'detailed_errors.json'),'w') as file:
+        file.write(json.dumps(study_detailed_errors,indent=2))
             
 
 

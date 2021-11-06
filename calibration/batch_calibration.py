@@ -71,7 +71,7 @@ class Batch_calibrate:
 					with open(output_file,'w') as file:
 						file.write(json.dumps(inferred_params, indent = 4))
 
-				error = single_run(free_params=inferred_params,fixed_params=fixed_params)
+				error = single_run(free_params=inferred_params,fixed_params=fixed_params,observations=obs)
 				inferred_params_list.append(inferred_params)
 				error_list[i] = error
 				print('Iteration %d completed'%i)

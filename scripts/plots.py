@@ -414,11 +414,12 @@ class Plot_bar:
 		return label
 	
 
-	def plot(self,simulation_results):
+	def plot(self,simulation_results,processed_detailed_errors={}):
 		##/ sort out based on the measurement_scheme
 		IDs = list(simulation_results.keys())
 		x_labels = self.adjust_x_label(IDs)
 		exp_target_results,sim_target_results = self.sort(simulation_results)
+		_,processed_detailed_errors_sorted = self.sort(processed_detailed_errors)
 		x_exp,x_sim,base_x = self.bar_positions(simulation_results)
 
 		##/ plot for each target
@@ -434,9 +435,10 @@ class Plot_bar:
 		for target,ii in zip(self.measurement_scheme.keys(),range(target_n)):
 			ax = fig.add_subplot(target_n,1,ii+1)
 			sim_values = [item[0] for item in sim_target_results[target]]
+			processed_detailed_errors_sorted_values = [item[0] for item in processed_detailed_errors_sorted[target]]
 			ax.bar(x=x_sim,height=sim_values,width = self.bar_width, label = "S", 
 					facecolor = self.colors[0],
-					 edgecolor="black", yerr =  0,
+					 edgecolor="black", yerr =  processed_detailed_errors_sorted_values,
 					 error_kw = dict(capsize= self.error_bar_width))
 			exp_values = [exp_target_results[target][i]['mean'] for i in range(len(exp_target_results[target]))]
 			exp_std = [exp_target_results[target][i]['std'] for i in range(len(exp_target_results[target]))]
@@ -640,10 +642,12 @@ class Plot_bar_2(Plot_bar):
 			return '5 mM'
 		else:
 			raise ValueError('invalid entry')
-	def plot(self,simulation_results):
+	def plot(self,simulation_results,processed_detailed_errors={}):
 		
 		##/ sort out based on the targets
 		exp_target_results,sim_target_results = self.sort(simulation_results)
+		_,processed_detailed_errors_sorted = self.sort(processed_detailed_errors)
+		# print(sim_target_results)
 		IDs = simulation_results.keys()
 		# checkpoints = self.observations[self.study]['measurement_scheme'].values()[0]
 		checkpoints = list(self.measurement_scheme.values())[0]
@@ -663,10 +667,10 @@ class Plot_bar_2(Plot_bar):
 				ID = self.observations[self.study]['IDs'][jj]
 				ID_lebel = self.ID_label(ID)
 				# print(xs)
-
+				# print(sim_target_results[target][jj])
 				ax.bar(x=xs[jj][0],height=sim_target_results[target][jj],width = self.bar_width, label = "S-"+ID_lebel, 
 						facecolor = self.colors[jj],
-						 edgecolor="black", yerr =  0,
+						 edgecolor="black", yerr =  processed_detailed_errors_sorted[target][jj],
 						 error_kw = dict(capsize= self.error_bar_width))
 
 				ax.bar(x=xs[jj][1],height=mean_exp_sorted[jj],width = self.bar_width, label = 'E-'+ID_lebel, 

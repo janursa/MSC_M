@@ -50,9 +50,11 @@ class settings:
 	results_folder = os.path.join(dir_to_dirs,'results',study,'batch_calibration_selected')
 	results_file = os.path.join(results_folder,'inferred_params_1.json')
 	output_folder = os.path.join(dir_to_dirs,'results',study)
+
+	detailed_error_file = os.path.join(dir_to_dirs,'results','detailed_errors.json')
 		
 
-def rearrange_errors(errors,targets):
+def rearrange_errors(errors,targets): # by default, errors are categorized according to IDs. This arranges them according to targets
 #     print(errors)
 #     print(targets)
 	target_errors = {}
@@ -64,13 +66,11 @@ def rearrange_errors(errors,targets):
 	return target_errors
 	
 ##/ run test simultions and plot
-
 with open(os.path.join(settings.results_file)) as file:
 	inferred_params = json.load(file)
 # inferred_params['a_late_diff_inhib'] = 10
 all_studies_flag = False
 obs,_ = parameters.specifications(settings.study)
-# print(obs)
 
 obj = MSC_osteogenesis.MSC_model(fixed_params=parameters.fixed_params,free_params = inferred_params,observations=obs, debug=False)
 simulation_results = obj.simulate_studies()

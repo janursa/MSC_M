@@ -272,18 +272,26 @@ class MSC_model:
         for study,study_results in studies_results.items():
             errors[study] = self.cost_study(study,study_results)
         return errors
+    def cost_individual_measurements(self,studies_results):
+        """
+        Calculates overall costs by averaging on each measuremnt item/day
+        """
+        costs = []
+        for study,study_results in studies_results.items():
+            for ID, ID_results in study_results.items():
+                for target,target_results in ID_results.items():
+                    for i in range(len(target_results)):
+                        sim = target_results[i]
+                        exp = self.observations[study][ID]['expectations'][target]['mean'][i]
+                        mean = (sim+exp)/2
+                        diff = abs(sim-exp)
+                        error = diff/mean
+                        costs.append(error)
+        return np.mean(costs)
+
     def run(self):
         results = self.simulate_studies()
-        errors = self.cost_studies(results)
-        errors_list = []
-        for study,study_errors in errors.items():
-            ID_errors = []
-            for ID,ID_error in study_errors.items():
-                ID_errors.append(np.mean(list(ID_error.values())))
-
-            errors_list.append(np.mean(ID_errors))
-        #// to sum up the errors
-        error = np.mean(errors_list) # we put the errors on all of the IDs here and finally just sum them up
+        error = self.cost_individual_measurements(results)
         return error
 def single_run(free_params,fixed_params,observations):
     obj = MSC_model(fixed_params = fixed_params,free_params=free_params,observations=observations)

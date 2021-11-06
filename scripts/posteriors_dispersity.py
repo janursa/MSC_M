@@ -257,7 +257,17 @@ def plot(ax,data,label_flag = False):
 							   alpha = settings.alpha,color = settings.colors_distribution[-1],marker =settings.symbols_distribution[-1])
 				
 		study_i+=1
-
+def normalize(free_params_all,params):
+	normalized_params = {}
+	for key,value in free_params_all.items():
+		norm_value = None
+		if key not in params:
+			pass
+		else:
+			denominator = np.mean([max(free_params_all[key]),min(free_params_all[key])])
+			norm_value = params[key]/denominator
+		normalized_params[key] = norm_value
+	return normalized_params
 if __name__ == '__main__':
 
 	free_params_all = edit_params(free_params_all)
@@ -273,6 +283,7 @@ if __name__ == '__main__':
 	individual_results_folder = os.path.join(settings.results_folder,settings.studies[study]['individual_files'])
 
 	individual_files =  files_func(0,run_count)
+	# individual_files =  files_func(0,20)
 	mean_files = {'1$^{st}$ batch':'inferred_params_0_%d.json'%int(run_count/2),
 		'2$^{nd}$ batch':'inferred_params_%d_%d.json'%(run_count/2,run_count),
 		'All samples':'inferred_params_0_%d.json'%run_count}
@@ -281,31 +292,15 @@ if __name__ == '__main__':
 	for file_ID,file in individual_files.items():
 		with open(os.path.join(individual_results_folder,file)) as ff:
 			params = json.load(ff)
-		normalized_params = {}
-		for key,value in free_params_all.items():
-			norm_value = None
-			if key not in params:
-				pass
-			else:
-				denominator = np.mean([max(free_params_all[key]),min(free_params_all[key])])
-				norm_value = params[key]/denominator
-			normalized_params[key] = norm_value
-		individual_data[file_ID] = normalized_params
+		individual_data[file_ID] = normalize(free_params_all=free_params_all,params=params)
+	
 
 	mean_data = {} # stores data based on study tag
 	for file_ID,file in mean_files.items():
 		with open(os.path.join(mean_results_folder,file)) as ff:
 			params = json.load(ff)
-		normalized_params = {}
-		for key,value in free_params_all.items():
-			norm_value = None
-			if key not in params:
-				pass
-			else:
-				denominator = np.mean([max(free_params_all[key]),min(free_params_all[key])])
-				norm_value = params[key]/denominator
-			normalized_params[key] = norm_value
-		mean_data[file_ID] = normalized_params
+		
+		mean_data[file_ID] = normalize(free_params_all=free_params_all,params=params)
 
 	#// retreive the data for the dispersity plot of individual studies vs each other
 	dispersity_data = {} # stores data based on study tag
@@ -328,14 +323,12 @@ if __name__ == '__main__':
 	ax = axes[0]
 	plot(ax=ax, data=individual_data)
 	plot(ax=ax, data=mean_data,label_flag=True)
-	# ax.set_xlim([-.25,2.25])
 	ax.set_xticks([], [])
 	ax.set_yticks([])
 	# ax.set_yticks([(i) for i in range(len(free_params_all.keys()))])
 	# ax.set_yticklabels(relabel(free_params_all.keys()))
 	# ax.set_title('(A) Dispersity of the inferred values for C1-5',fontdict =settings.title_font,fontweight = 'bold')
-	ax.legend(bbox_to_anchor=(-0.05, 1.15), loc='upper left', borderpad=.7,labelspacing=.5,handlelength=.2,prop=settings.legend_font,ncol=2)
-	
+	ax.legend(bbox_to_anchor=(-0.06, 1.15), loc='upper left', borderpad=.7,labelspacing=.5,handlelength=.05,prop=settings.legend_font,ncol=2)
 	
 	#// plot dispersity
 	ax = axes[1]
@@ -375,13 +368,14 @@ if __name__ == '__main__':
 		for label in (ax.get_xticklabels() + ax.get_yticklabels()):
 			label.set_fontname(settings.axis_font['fontname'])
 			label.set_fontsize(float(settings.axis_font['size']))
+		ax.set_xlim([-.25,2.25])
 	# plt.text(0,-3, "Scaled values",**settings.title_font,
 	#     horizontalalignment='center',
 	#     verticalalignment='bottom')
-	plt.text(-2.15,27,"(A) Inferred values obtained \n during multiple runs of C1-5",**settings.title_font,
+	plt.text(-3,27,"(A) Inferred values obtained \n during multiple runs of C1-5",**settings.title_font,
 		horizontalalignment='left',
 		verticalalignment='center')
-	plt.text(0.05,27,"(B) Inferred values obtained \n during different calibration scenarios",**settings.title_font,
+	plt.text(-.25,27,"(B) Inferred values obtained during \n different calibration scenarios",**settings.title_font,
 		horizontalalignment='left',
 		verticalalignment='center')
 	plt.savefig("posteriors_dispesity.svg",bbox_inches="tight")
