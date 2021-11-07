@@ -16,13 +16,13 @@ import copy
 class settings:
     results_folder = os.path.join(dir_to_dirs,'results')
     files = {
-    # 'Qiao_2021_Mg': 'Qiao_2021_Mg/inferred_params_0_200.json',
-    # 'Ber_2016': 'Ber_2016/inferred_params_0_120.json',
-    # 'Valles_2020': 'Valles_2020/inferred_params_0_200.json',
-    # 'Chen_2018': 'Chen_2018/inferred_params_0_200.json',
-    # 'Qiao_2021_ILs': 'Qiao_2021_ILs/inferred_params_0_400.json',
-    # 'All': 'All/inferred_params_0_200.json',
-    'All': 'inferred_params.json',
+    'Qiao_2021_Mg': 'Qiao_2021_Mg/inferred_params_0_200.json',
+    'Ber_2016': 'Ber_2016/inferred_params_0_120.json',
+    'Valles_2020': 'Valles_2020/inferred_params_0_200.json',
+    'Chen_2018': 'Chen_2018/inferred_params_0_200.json',
+    'Qiao_2021_ILs': 'Qiao_2021_ILs/inferred_params_0_400.json',
+    'All': 'All/inferred_params_0_200.json',
+    # 'All': 'inferred_params.json',
     }
 
 SA_settings = { # define settings

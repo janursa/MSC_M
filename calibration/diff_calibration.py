@@ -15,7 +15,7 @@ from parameters import specifications, fixed_params
 ##// optimize //##
 class Calibrate:
 	def __init__(self,fixed_params,free_params,observations):
-		self.max_iters = 300
+		self.max_iters = 500
 		self.free_params = free_params
 		self.fixed_params = fixed_params
 		self.obs = observations

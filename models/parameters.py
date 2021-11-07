@@ -81,15 +81,15 @@ free_params_all = {
     'IL1b_stim':[1,29], # stimulatory threshold of IL1b --
     'IL8_favorable':[1,99], # medium threshold for IL8 --
 
-    'ALP_M_n':[0,20], # n in the equation ALP = a*(M^n + ALP_0)
-    'ARS_M_n':[0,20], # n in the equation ARS = a*(M^n + ARS_0)
-    'OC_M_n':[0,20], # n in the equation ARS = a*(M^n + ARS_0)
+    'ALP_M_n':[0,10], # n in the equation ALP = a*(M^n + ALP_0)
+    'ARS_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
+    'OC_M_n':[0,10], # n in the equation ARS = a*(M^n + ARS_0)
     'ALP_0':[0,10], # the default value of ALP when maturity is zero
     'ARS_0':[0,10], # the default value of ARS when maturity is zero 
     'OC_0':[0,10], # the default value of ARS when maturity is zero 
 
     'diff_time':[15*24,45*24], # days required for full differentiation ---
-    'maturity_t':[0,1] # early maturity threshold.  ---
+    'maturity_t':[0.2,.8] # early maturity threshold.  ---
 
 }
 free_params_Qiao_Mg = ['ALP_M_n',

@@ -37,9 +37,9 @@ class settings:
 	# study = 'Qiao_2021_Mg'
 	# study = 'Qiao_2021_ILs'
 	# study = 'Ber_2016'
-	# study = 'Chen_2018'
+	study = 'Chen_2018'
 	# study = 'Valles_2020'
-	study = 'All'
+	# study = 'All'
 	# results_folder = os.path.join(dir_to_dirs,'raw_results',study)
 	# results_file = os.path.join(results_folder,results_file(study))
 	# output_folder = results_folder
@@ -47,8 +47,8 @@ class settings:
 	# results_file = os.path.join(dir_to_dirs,'results','inferred_params.json')
 	# output_folder = os.path.join(dir_to_dirs,'results')
 	
-	results_folder = os.path.join(dir_to_dirs,'results',study,'batch_calibration_selected')
-	results_file = os.path.join(results_folder,'inferred_params_1.json')
+	results_folder = os.path.join(dir_to_dirs,'results',study)
+	results_file = os.path.join(results_folder,'inferred_params_0_200.json')
 	output_folder = os.path.join(dir_to_dirs,'results',study)
 
 	detailed_error_file = os.path.join(dir_to_dirs,'results','detailed_errors.json')

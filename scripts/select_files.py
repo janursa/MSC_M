@@ -20,11 +20,11 @@ def determine_cut_off_error(study):
 	elif study == 'Ber_2016':
 		value = 0.01
 	elif study == 'Chen_2018':
-		value = 0.065
+		value = 0.05
 	elif study == 'Valles_2020':
 		value = 0.06
 	elif study == 'All':
-		value = 0.2
+		value = 0.15
 	return value
 
 class PARAMS:
@@ -32,7 +32,7 @@ class PARAMS:
 	study = 'Chen_2018'
 	# study = 'Valles_2020'
 	# study = 'All'
-	main_output_folder = os.path.join(dir_to_dirs,'raw_results',study)
+	main_output_folder = os.path.join(dir_to_dirs,'results',study)
 	results_folder = os.path.join(main_output_folder,'batch_calibration')
 	dest_folder = os.path.join(main_output_folder,'batch_calibration_selected')
 	error_cut_off_value = determine_cut_off_error(study)

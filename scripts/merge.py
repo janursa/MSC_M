@@ -15,10 +15,10 @@ class PARAMS:
 	# study = 'All'
 	# study = 'Valles_2020'
 	study = 'Chen_2018'
-	results_folder = os.path.join(dir_to_dirs,'raw_results',study)
+	results_folder = os.path.join(dir_to_dirs,'results',study)
 	results_file = os.path.join(results_folder,'batch_calibration_selected')
-	n_start = 0
-	n_end = 100
+	n_start = 100
+	n_end = 200
 	inferred_params_mean_file = os.path.join(results_folder,'inferred_params_%d_%d.json'%(n_start,n_end))
 	inferred_params_accumulated_file = os.path.join(results_folder,'inferred_params_accumulated.json')
 

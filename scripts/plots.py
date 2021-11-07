@@ -182,7 +182,7 @@ class Plot_bar:
 		if study == 'Qiao_2021_IL8_IL1b':
 			yrange_value = [0,60]
 		elif study == 'Qiao_2021_IL8' :
-			yrange_value = [0,160]
+			yrange_value = [0,170]
 		elif study == 'Qiao_2021_IL1b':
 			yrange_value = [0,60]
 		elif study == 'Qiao_2021_Mg':
