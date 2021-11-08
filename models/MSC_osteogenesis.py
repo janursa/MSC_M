@@ -297,15 +297,17 @@ class MSC_model:
         results = self.simulate_studies()
         error = self.cost_individual_measurements(results)
         return error
-def single_run(free_params,fixed_params,observations):
+def single_run(fixed_params,free_params,observations):
     obj = MSC_model(fixed_params = fixed_params,free_params=free_params,observations=observations)
     error = obj.run()
     return error
 if __name__ == '__main__':
     # tr = tracker.SummaryTracker()
     # for i in range(100000):
-    obs,free_params = parameters.specification('all')
-    error = single_run(free_params=free_params, fixed_params=parameters.fixed_params,observations=obs)
+    obs,free_params = parameters.specifications('All')
+    # error = single_run(fixed_params=parameters.fixed_params,free_params=free_params, observations=obs)
+    obj = MSC_model(fixed_params = parameters.fixed_params,free_params={},observations=obs)
+    error = obj.run()
         # if i%500==0:
         #     print('Iteration ',i)
         #     tr.print_diff()

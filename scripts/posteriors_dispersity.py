@@ -62,16 +62,16 @@ class settings:
 	fig_size = (6,7)
 def determine_title(study):
 	title = ''
-	if study == 'Qiao_2021_ILs':
-		title = 'C5' 
-	elif study == 'Qiao_2021_Mg':
+	if study == 'Qiao_2021_Mg':
 		title = 'C1'
-	elif study == 'Chen_2018':
-		title = 'C3'
-	elif study == 'Valles_2020':
-		title = 'C4'
 	elif study == 'Ber_2016':
 		title = 'C2'
+	elif study == 'Valles_2020':
+		title = 'C3'
+	elif study == 'Chen_2018':
+		title = 'C4'
+	elif study == 'Qiao_2021_ILs':
+		title = 'C5' 
 	elif study == 'All':
 		title = 'C1-5'
 	return title
@@ -282,8 +282,8 @@ if __name__ == '__main__':
 	mean_results_folder = os.path.join(settings.results_folder,settings.studies[study]['mean_folder'])
 	individual_results_folder = os.path.join(settings.results_folder,settings.studies[study]['individual_files'])
 
-	individual_files =  files_func(0,run_count)
-	# individual_files =  files_func(0,20)
+	# individual_files =  files_func(0,run_count)
+	individual_files =  files_func(0,20)
 	mean_files = {'1$^{st}$ batch':'inferred_params_0_%d.json'%int(run_count/2),
 		'2$^{nd}$ batch':'inferred_params_%d_%d.json'%(run_count/2,run_count),
 		'All samples':'inferred_params_0_%d.json'%run_count}

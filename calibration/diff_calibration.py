@@ -52,7 +52,8 @@ if __name__ == '__main__':
 	##/ calibrate
 	n_proc = sys.argv[1]
 	# study = 'Chen_2018'
-	study = 'All'
+	study = 'Ber_2016'
+	# study = 'All'
 	print('number of assigned processers:',n_proc)
 	obs,free_params = specifications(study = study)
 	calibrate(fixed_params = fixed_params,free_params=free_params,observations=obs,n_proc=n_proc)
