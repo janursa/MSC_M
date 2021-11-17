@@ -188,7 +188,7 @@ class Plot_bar:
 		elif study == 'Qiao_2021_Mg':
 			yrange_value = [0,30]
 		elif study == 'Chen_2018' and target=='ALP':
-			yrange_value = [0,7]
+			yrange_value = [0,8]
 		elif study == 'Chen_2018' and target=='ARS':
 			yrange_value = [0,5.5]
 		elif study == 'Valles_2020_TNFa' and target=='ALP':
@@ -202,7 +202,7 @@ class Plot_bar:
 		elif study == 'Ber_2016' and target=='OC':
 			yrange_value = [0,1.6]
 		elif study == 'Ber_2016' and target=='ALP':
-			yrange_value = [0,.6]
+			yrange_value = [0,.7]
 
 		return yrange_value
 	@staticmethod
@@ -262,7 +262,7 @@ class Plot_bar:
 			xy = (55,22)
 		elif study == 'Ber_2016':
 			if target == 'ALP':
-				xy = (150,.45)
+				xy = (150,.55)
 			elif target == 'OC':
 				xy = (150,1.2)
 		elif study == 'Qiao_2021_IL8':

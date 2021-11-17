@@ -26,7 +26,7 @@ class settings:
 	results_folder = os.path.join(dir_to_dirs,'results')
 	studies = ['Qiao_2021_Mg','Ber_2016','Chen_2018','Valles_2020','Qiao_2021_ILs','All']
 
-	runs = [200,120,200,200,400,200]
+	runs = [200,120,200,200,70,200]
 	# runs = [400]
 	width_ration = [1,1,1,1,1,1]
 	graph_dims = (1,6)
@@ -95,8 +95,8 @@ if __name__ == '__main__':
 		mean_results_file = os.path.join(settings.results_folder,study)
 		individual_results_file = os.path.join(mean_results_file,'batch_calibration')
 
-		individual_files =  files_func(0,20)
-		# individual_files =  files_func(0,settings.runs[study_ii])
+		# individual_files =  files_func(0,20)
+		individual_files =  files_func(0,settings.runs[study_ii])
 		mean_files = {'1$^{st}$ batch':'inferred_params_0_%d.json'%int(run_count/2),
 			'2$^{nd}$ batch':'inferred_params_%d_%d.json'%(run_count/2,run_count),
 			'All samples':'inferred_params_0_%d.json'%run_count}

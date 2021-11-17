@@ -139,8 +139,8 @@ class Osteogenesis:
                 ALP =(adjusted_maturity_t + self.params['ALP_0'])**self.params['ALP_M_n'] * ALP_M_coeff
             # if self.debug:
             #     print('checkpoint {}, fs {}, maturity {}, maturity_t {}, ALP {}'.format(checkpoint,f_values, round(maturity,4),round(adjusted_maturity_t,4),round(ALP,4)))
-            # if study == 'Valles_2020_IL10':
-            #     print('fs {}, maturity {}, maturity_t {}, maturity_t_scalled {} checkpoint {}'.format(round(f_values['early_diff'],3), round(maturity,3),round(adjusted_maturity_t,4),maturity_t_scalled,checkpoint))
+            if study == 'Qiao_2021_IL8':
+                print('fs {}, maturity {}, maturity_t {}, maturity_t_scalled {} '.format(round(f_values['early_diff'],3), round(maturity,3),round(adjusted_maturity_t,4),maturity_t_scalled))
 
             return ALP
         elif target == 'ARS':

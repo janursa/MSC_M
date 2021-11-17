@@ -39,7 +39,7 @@ class settings:
 		'Qiao_2021_ILs':{
 						'individual_files':'Qiao_2021_ILs/batch_calibration',
 						'mean_folder':'Qiao_2021_ILs',
-						'run_count':400},
+						'run_count':70},
 		'All':{
 						'individual_files':'All/batch_calibration',
 						'mean_folder':'All',
@@ -146,49 +146,49 @@ def relabel_description(lables):
 	lables_adjusted = []
 	for label in lables:
 		if label == 'ALP_M_n':
-			adj_label = r'$n_{ALP}$'+r': nonlinearity of ALP-maturity '
+			adj_label = r'$n_{ALP}$'+r': Nonlinearity of ALP-maturity '
 		elif label == 'ARS_M_n':
-			adj_label = '$n_{ARS}$'+': nonlinearity of ARS-maturity '
+			adj_label = '$n_{ARS}$'+': Nonlinearity of ARS-maturity '
 		elif label == 'OC_M_n':
-			adj_label = '$n_{OC}$'+': nonlinearity of OC-maturity '
+			adj_label = '$n_{OC}$'+': Nonlinearity of OC-maturity '
 		elif label == 'ALP_0':
-			adj_label = '$\\beta_{ALP}$'+': ALP baseline'
+			adj_label = '$\\beta_{ALP}$'+': ALP baseline quantity'
 		elif label == 'ARS_0':
-			adj_label = '$\\beta_{ARS}$'+': ARS baseline'
+			adj_label = '$\\beta_{ARS}$'+': ARS baseline quantity'
 		elif label == 'OC_0':
-			adj_label = '$\\beta_{OC}$'+': OC baseline'
+			adj_label = '$\\beta_{OC}$'+': OC baseline quantity'
 		elif label == 'Mg_stim':
-			adj_label = '$p_{ms}$'+': fuzzy Stimulatory Mg$^{2+}$ ions'
+			adj_label = '$p_{ms}$'+': Fuzzy Stimulatory Mg$^{2+}$ ions'
 		elif label == 'Mg_dest':
-			adj_label = '$p_{md}$'+': fuzzy Destructive Mg$^{2+}$ ions'
+			adj_label = '$p_{md}$'+': Fuzzy Destructive Mg$^{2+}$ ions'
 		elif label == 'IL1b_ineffective':
-			adj_label = '$p_{1bie}$'+': fuzzy Ineffective IL-1$\\beta$'
+			adj_label = '$p_{1bie}$'+': Fuzzy Ineffective IL-1$\\beta$'
 		elif label == 'IL1b_stim':
-			adj_label = '$p_{1bs}$'+': fuzzy Stimulatory IL-1$\\beta$'
+			adj_label = '$p_{1bs}$'+': Fuzzy Stimulatory IL-1$\\beta$'
 		elif label == 'IL8_favorable':
-			adj_label = '$p_{8f}$'+': fuzzy Favorable IL-8'
+			adj_label = '$p_{8f}$'+': Fuzzy Favorable IL-8'
 		elif label == 'maturity_t':
-			adj_label = '$M_{t}$'+': early maturity threshold'
+			adj_label = '$M_{t}$'+': Farly maturity threshold'
 		elif label == 'early_diff_slow':
-			adj_label = '$p_{es}$'+': fuzzy Slow early diff.'
+			adj_label = '$p_{es}$'+': Fuzzy Slow ED'
 		elif label == 'early_diff_fast': 
-			adj_label = '$p_{ef}$'+': fuzzy Fast early diff.'
+			adj_label = '$p_{ef}$'+': Fuzzy Fast ED'
 		elif label == 'early_diff_very_fast':
-			adj_label = '$p_{evf}$'+': fuzzy Very fast early diff.'
+			adj_label = '$p_{evf}$'+': Fuzzy Very fast ED'
 		elif label == 'late_diff_slow':
-			adj_label = '$p_{ls}$'+': fuzzy Slow late diff.'
+			adj_label = '$p_{ls}$'+': Fuzzy Slow LD'
 		elif label == 'late_diff_fast':
-			adj_label = '$p_{lf}$'+': fuzzy Fast late diff.'
+			adj_label = '$p_{lf}$'+': Fuzzy Fast LD'
 		elif label == 'a_early_diff_stim':
-			adj_label = '$\\alpha_{es}$'+': scale early diff., stimulatory'
+			adj_label = '$\\alpha_{es}$'+': Sensitivity to stimulatory signals ED'
 		elif label == 'a_early_diff_inhib':
-			adj_label = '$\\alpha_{ei}$'+': scale early diff., inhibitory'
+			adj_label = '$\\alpha_{ei}$'+': Sensitivity to inhibitory signals ED'
 		elif label == 'a_late_diff_stim':
-			adj_label = '$\\alpha_{ls}$'+': scale late diff., stimulatory'
+			adj_label = '$\\alpha_{ls}$'+': Sensitivity to stimulatory signals LD'
 		elif label == 'a_late_diff_inhib':
-			adj_label = '$\\alpha_{li}$'+': scale late diff., inhibitory'
+			adj_label = '$\\alpha_{li}$'+': Sensitivity to inhibitory signals LD'
 		elif label == 'diff_time':
-			adj_label = '$T_{d}$' + ': differentiation time'
+			adj_label = '$T_{d}$' + ': Differentiation time'
 		elif label == 'a_Chen_2018_ALP':
 			adj_label = '$k_{ALP,2}$'+': scale factor of ALP in study 2'
 		elif label == 'a_Chen_2018_ARS':
@@ -208,7 +208,7 @@ def relabel_description(lables):
 		lables_adjusted.append(adj_label)
 	return lables_adjusted
 
-def edit_params(free_params_all): # get rid of this parameters
+def edit_params(free_params_all): # get rid of this parameters for all params
 	del free_params_all['a_Chen_2018_ALP']
 	del free_params_all['a_Chen_2018_ARS']
 	del free_params_all['a_Valles_2020_ALP']
@@ -217,7 +217,16 @@ def edit_params(free_params_all): # get rid of this parameters
 	del free_params_all['a_Ber_2016_OC']
 	del free_params_all['a_Qiao_2021_ALP']
 	return free_params_all
-
+def remove_params(study,params): # get rid of these params from the results
+	if study == 'Chen_2018' and 'IL8_favorable' in params:
+		del params['IL8_favorable']
+	if study == 'Chen_2018' and 'IL1b_stim' in params:
+		del params['IL1b_stim']
+	if study == 'Chen_2018' and 'IL1b_ineffective' in params:
+		del params['IL1b_ineffective']
+	if study == 'Chen_2018' and 'Mg_stim' in params:
+		del params['Mg_stim']
+	return params
 
 def files_func(n1,n2):
 	files = {}
@@ -284,9 +293,9 @@ if __name__ == '__main__':
 
 	# individual_files =  files_func(0,run_count)
 	individual_files =  files_func(0,20)
-	mean_files = {'1$^{st}$ batch':'inferred_params_0_%d.json'%int(run_count/2),
-		'2$^{nd}$ batch':'inferred_params_%d_%d.json'%(run_count/2,run_count),
-		'All samples':'inferred_params_0_%d.json'%run_count}
+	mean_files = {'1$^{st}$ half':'inferred_params_0_%d.json'%int(run_count/2),
+		'2$^{nd}$ half':'inferred_params_%d_%d.json'%(run_count/2,run_count),
+		'All runs':'inferred_params_0_%d.json'%run_count}
 
 	individual_data = {} # stores data based on study tag
 	for file_ID,file in individual_files.items():
@@ -309,6 +318,7 @@ if __name__ == '__main__':
 		mean_file = os.path.join(settings.studies[study]['mean_folder'],'inferred_params_0_%d.json'%run_count)
 		with open(os.path.join(settings.results_folder,mean_file)) as ff:
 			params = json.load(ff)
+		params=remove_params(study,params)
 		normalized_params = {}
 		for key,value in free_params_all.items():
 			norm_value = None
@@ -372,7 +382,7 @@ if __name__ == '__main__':
 	# plt.text(0,-3, "Scaled values",**settings.title_font,
 	#     horizontalalignment='center',
 	#     verticalalignment='bottom')
-	plt.text(-3,27,"(A) Inferred values obtained \n during multiple runs of C1-5",**settings.title_font,
+	plt.text(-3,27,"(A) Inferred values obtained \n during different runs of C1-5",**settings.title_font,
 		horizontalalignment='left',
 		verticalalignment='center')
 	plt.text(-.25,27,"(B) Inferred values obtained during \n different calibration scenarios",**settings.title_font,
